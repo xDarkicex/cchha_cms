@@ -1,0 +1,366 @@
+package controllers
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"regexp"
+	"strconv"
+
+	"github.com/xDarkicex/cchha_server_new/helpers"
+
+	"github.com/go-chi/chi"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
+	"golang.org/x/text/number"
+
+	"github.com/xDarkicex/cchha_server_new/app/models"
+
+	"html/template"
+)
+
+// Reviews type strictly for binding purposes
+type Reviews Controllers
+
+func init() {
+
+}
+
+type review struct {
+	Title            string
+	Rating           int
+	Username         string
+	Email            string
+	Content          string
+	ExternalLink     string
+	ExternalSiteName string
+	UserID           uint
+	NoteID           uint
+}
+
+// Calc struct holds all calculation data
+type Calc struct {
+	Ratings []int
+	Total
+	Avg int
+	Percentages
+}
+
+// Total holds total star rating counts
+type Total struct {
+	Five  int
+	Four  int
+	Three int
+	Two   int
+	One   int
+}
+
+type Percentages struct {
+	Five  string
+	Four  string
+	Three string
+	Two   string
+	One   string
+}
+
+func Percent(total []int) map[int]float64 {
+	var x []int
+	var dict = make(map[int]int)
+	for _, v := range total {
+		x = append(x, v)
+	}
+	for _, num := range x {
+		dict[num] = dict[num] + 1
+	}
+	var percentages = make(map[int]float64)
+	var sum float64
+	for k, v := range dict {
+		sum += float64(v)
+		percentages[k] = (float64(v) / sum) * 1
+	}
+	return percentages
+}
+
+func Sum(c []int) int {
+	var temp int
+	for i := 0; i < len(c); i++ {
+		temp += c[i]
+	}
+	return temp
+}
+
+// Mean is the average of all ratings
+func Mean(c []int) int {
+	var temp int
+	temp = Sum(c)
+	return temp / len(c)
+}
+
+// Index reviews list page
+func (rev Reviews) Index(w http.ResponseWriter, r *http.Request) {
+	var count = 0
+	file, err := ioutil.ReadFile("./app/views/home-health/reviews.html")
+	helpers.HandleError(err)
+	data := models.GetApprovedPosts(fmt.Sprintf("pending=%t", false))
+	if len(data) <= 0 {
+		data = append(data, models.Post{Title: "No Reivews Found"})
+		count = 0
+	} else {
+		count = len(data)
+	}
+
+	var temp = make([]int, 0)
+	for _, post := range data {
+		temp = append(temp, post.Rating)
+	}
+	var dict = make(map[int]int)
+	for _, num := range temp {
+		dict[num] = dict[num] + 1
+	}
+	p := message.NewPrinter(language.English)
+	percentages := Percent(temp)
+	c := Calc{
+		Ratings: temp,
+		Total: Total{
+			One:   dict[1],
+			Two:   dict[2],
+			Three: dict[3],
+			Four:  dict[4],
+			Five:  dict[5],
+		},
+		Avg: Mean(temp),
+		Percentages: Percentages{
+			One:   p.Sprintf("%v", number.Percent(percentages[1])),
+			Two:   p.Sprintf("%v", number.Percent(percentages[2])),
+			Three: p.Sprintf("%v", number.Percent(percentages[3])),
+			Four:  p.Sprintf("%v", number.Percent(percentages[4])),
+			Five:  p.Sprintf("%v", number.Percent(percentages[5])),
+		},
+	}
+
+	s, err := GetNamed(r, "current-session")
+	helpers.HandleError(err)
+
+	user := helpers.GetCurrentUser([]byte(s.Values["Current-User"].(string)))
+	t := template.Must(template.New("home-health").Funcs(funcMAP).Parse(string(file)))
+	err = t.Execute(w, map[string]interface{}{
+		"Title": "Home Health - Reviews",
+		"Data":  data,
+		"Calc":  c,
+		"Count": count,
+		"User":  user,
+	})
+
+	helpers.HandleError(err)
+}
+
+// Create control for crud opperations on reviews datatbase
+func (rev Reviews) Create(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	rawRating := r.Form["rating"]
+
+	rating, err := strconv.Atoi(rawRating[len(rawRating)-1])
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	post := models.CreatePost(models.Post{
+		Title:            r.Form.Get("review_title"),
+		Username:         r.Form.Get("review_name"),
+		Email:            r.Form.Get("review_email"),
+		Content:          r.Form.Get("review_body"),
+		Rating:           rating,
+		ExternalLink:     "https://Compassionatecare.com", // Locally hosted reviews will always have cchha hardcoded
+		ExternalSiteName: "Compassionate-Care-Home-Health",
+		Pending:          true,
+	})
+	note := models.CreateNote(post.ID, nil).AddDetail(models.Detail{
+		Reason: fmt.Sprintf("User submitted from %s", r.Form.Get("review_name")),
+	})
+
+	post.Add("note", note).Update()
+	http.Redirect(w, r, "/home-health/reviews", 302)
+	return
+}
+
+// Show ...
+func (rev Reviews) Show(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "reviewID")
+	sql := fmt.Sprintf("id='%s'", id)
+	p := models.GetPost(sql)
+	sqlNote := fmt.Sprintf("post_id='%d'", p.ID)
+	n, err := models.GetNote(sqlNote)
+	if err != err {
+		fmt.Println(err)
+	}
+	sqlDetails := fmt.Sprintf("note_id='%d'", n.ID)
+	d := models.GetDetails(sqlDetails)
+	data := struct {
+		Post    models.Post
+		Details []models.Detail
+		Note    models.Note
+	}{
+		Post:    p,
+		Details: d,
+		Note:    n,
+	}
+	encode := json.NewEncoder(w)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	err = encode.Encode(data)
+	if err != nil {
+		helpers.HandleError(err)
+	}
+}
+
+func (rev Reviews) Json(w http.ResponseWriter, r *http.Request) {
+	n := models.GetAllNotes()
+	d := models.GetDetails("id='1'")
+	u := models.GetUsers()
+	// p := models.GetPosts()
+
+	data := struct {
+		// Posts   []models.Post
+		Details []models.Detail
+		Notes   []models.Note
+		Users   []models.User
+	}{
+		// Posts:   p,
+		Details: d,
+		Notes:   n,
+		Users:   u,
+	}
+	encode := json.NewEncoder(w)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	helpers.EnableCors(&w)
+	// w.WriteHeader(http.StatusOK)
+	err := encode.Encode(data)
+	if err != nil {
+		helpers.HandleError(err)
+	}
+}
+
+// Details ...
+func (rev Reviews) Details(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "reviewID")
+	sql := fmt.Sprintf("id='%s'", id)
+	p := models.GetPost(sql)
+	sqlNote := fmt.Sprintf("post_id='%d'", p.ID)
+	n, err := models.GetNote(sqlNote)
+	if err != nil {
+		fmt.Println(err)
+	}
+	sqlDetails := fmt.Sprintf("note_id='%d'", n.ID)
+	d := models.GetDetails(sqlDetails)
+	data := struct {
+		Details []models.Detail
+	}{
+		Details: d,
+	}
+	encode := json.NewEncoder(w)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	encode.Encode(data)
+}
+
+func (rev Reviews) Sort(w http.ResponseWriter, r *http.Request) {
+	sorted := chi.URLParam(r, "sort")
+
+	file, err := ioutil.ReadFile("./app/views/home-health/reviews.html")
+	if err != nil {
+		fmt.Println(err)
+	}
+	// splitString := strings.Split(sorted, "")
+	// var newSortedString string
+	// var First = splitString[0]
+	// First = strings.ToUpper(First)
+	// splitString = append(splitString[:0], splitString[1:]...)
+	// splitString = append([]string{First}, splitString...)
+	// newSortedString = strings.Join(splitString, "")
+
+	var regEX = regexp.MustCompile(`^[0-9]+$`)
+	if !regEX.MatchString(sorted) {
+		sql := fmt.Sprintf("external_site_name='%s'", sorted)
+		data := models.GetApprovedPostsSort("pending='false'", sql)
+		if len(data) <= 0 {
+			data = append(data, models.Post{Title: "No Reviews Found"})
+		}
+
+		var temp = make([]int, 0)
+		for _, post := range data {
+			temp = append(temp, post.Rating)
+		}
+		var dict = make(map[int]int)
+		for _, num := range temp {
+			dict[num] = dict[num] + 1
+		}
+		p := message.NewPrinter(language.English)
+		percentages := Percent(temp)
+		c := Calc{
+			Ratings: temp,
+			Total: Total{
+				One:   dict[1],
+				Two:   dict[2],
+				Three: dict[3],
+				Four:  dict[4],
+				Five:  dict[5],
+			},
+			Avg: Mean(temp),
+			Percentages: Percentages{
+				One:   p.Sprintf("%v", number.Percent(percentages[1])),
+				Two:   p.Sprintf("%v", number.Percent(percentages[2])),
+				Three: p.Sprintf("%v", number.Percent(percentages[3])),
+				Four:  p.Sprintf("%v", number.Percent(percentages[4])),
+				Five:  p.Sprintf("%v", number.Percent(percentages[5])),
+			},
+		}
+		t, _ := template.New("home-health").Parse(string(file))
+		t.Execute(w, map[string]interface{}{
+			"Title": "Home Health - Reviews",
+			"Data":  data,
+			"Calc":  c,
+		})
+		return
+	}
+	sql := fmt.Sprintf("rating='%s'", sorted)
+	data := models.GetApprovedPostsSort("pending='false'", sql)
+	if len(data) <= 0 {
+		data = append(data, models.Post{Title: "No Reviews Found"})
+	}
+
+	var temp = make([]int, 0)
+	for _, post := range data {
+		temp = append(temp, post.Rating)
+	}
+	var dict = make(map[int]int)
+	for _, num := range temp {
+		dict[num] = dict[num] + 1
+	}
+	p := message.NewPrinter(language.English)
+	percentages := Percent(temp)
+	c := Calc{
+		Ratings: temp,
+		Total: Total{
+			One:   dict[1],
+			Two:   dict[2],
+			Three: dict[3],
+			Four:  dict[4],
+			Five:  dict[5],
+		},
+		Avg: Mean(temp),
+		Percentages: Percentages{
+			One:   p.Sprintf("%v", number.Percent(percentages[1])),
+			Two:   p.Sprintf("%v", number.Percent(percentages[2])),
+			Three: p.Sprintf("%v", number.Percent(percentages[3])),
+			Four:  p.Sprintf("%v", number.Percent(percentages[4])),
+			Five:  p.Sprintf("%v", number.Percent(percentages[5])),
+		},
+	}
+	t := template.Must(template.New("home-health").Parse(string(file)))
+	t.Execute(w, map[string]interface{}{
+		"Title": "Home Health - Reviews",
+		"Data":  data,
+		"Calc":  c,
+	})
+}

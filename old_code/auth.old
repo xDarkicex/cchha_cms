@@ -1,0 +1,86 @@
+package controllers
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi"
+
+	"github.com/xDarkicex/cchha_server_new/app/models"
+)
+
+// Auth binding type
+type Auth Controllers
+
+var allUsers []models.User
+
+func init() {
+	allUsers = models.GetUsers()
+}
+
+// Authtenicate middleware
+func (a Auth) Authtenicate(fn func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
+	// everything here happpens on server Load
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.Context().Value("requestID"))
+		//Not working because the ID doesnt exist on all routes.
+		if len(allUsers) == 0 && r.RequestURI == "/bd-admin/signup" {
+			fn(w, r)
+			return
+		}
+		ID := chi.URLParam(r, "userID")
+		s, _ := GetNamed(r, "current-session")
+		user := models.User{}
+		current_user, ok := s.Values["Current-User"].(string)
+		if !ok {
+			http.Redirect(w, r, "/", 302)
+			return
+		}
+
+		err := json.Unmarshal([]byte(current_user), &user)
+		if err != nil {
+			http.Error(w, "Not Logged in", http.StatusInternalServerError)
+			return
+		}
+
+		if ID != "" {
+			fmt.Printf("User ID:%s\n", ID)
+			id, err := strconv.Atoi(ID)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			fmt.Println(user, "<<< user struct inside")
+			// check for super user status
+			if user.IsSuperUser == true {
+				fmt.Println("super redirect")
+				fn(w, r)
+				return
+				// check if user has rights to page access
+			}
+			if user.ID == uint(id) {
+				fmt.Println("ids match redirect")
+				fn(w, r)
+				return
+			}
+		}
+
+		// f := fmt.Sprintf("Hello: %s, Super Status: %v\nAdmin Status: %v\n", user.FirstName, user.IsSuperUser, user.IsAdmin)
+		// fmt.Print(f)
+		if user.IsSuperUser == true {
+			// fmt.Printf("super")
+			fn(w, r)
+			return
+		}
+		if user.IsAdmin == true {
+			// fmt.Println("Is admin User")
+			fn(w, r)
+			return
+		}
+		http.Redirect(w, r, "/bd-admin/signin", 302)
+		return
+	}
+}

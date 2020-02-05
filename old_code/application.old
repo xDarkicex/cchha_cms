@@ -1,0 +1,50 @@
+package controllers
+
+import (
+	"io/ioutil"
+	"net/http"
+	"os"
+
+	"github.com/alecthomas/template"
+	"github.com/xDarkicex/cchha_server_new/helpers"
+)
+
+type Application Controllers
+
+func (a Application) Index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Strict-Transport-Security", "max-age=15768000 ; includeSubDomains")
+	file, err := ioutil.ReadFile("./app/views/splash.html")
+	if err != nil {
+		helpers.HandleError(err)
+	}
+	t, err := template.New("index").Parse(string(file))
+	t.Execute(w, map[string]interface{}{
+		"Title": "Compassionate Care - Splash",
+	})
+}
+
+func (a Application) CustomNotFound(w http.ResponseWriter, r *http.Request) {
+	file, err := ioutil.ReadFile("./app/views/404.html")
+	if err != nil {
+		helpers.HandleError(err)
+	}
+	// w.WriteHeader(http.StatusNotFound)
+	t, err := template.New("error_page").Parse(string(file))
+	t.Execute(w, map[string]interface{}{
+		"Error": r.Host + r.URL.EscapedPath() + " page not found",
+	})
+}
+
+func (a Application) SaveFile(fileName string, file []byte) (err error) {
+	err = ioutil.WriteFile("/tmp/"+fileName, file, 0666)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a Application) DeleteFile(fileName string) {
+	os.Remove("/tmp/" + fileName)
+}
+
+var photo := {enc := gob.Encoder(&buf) sum = enc.Write(enc.String(nil)) dec = gob.Decoder(&buf) d = dec.Sum((sum))}

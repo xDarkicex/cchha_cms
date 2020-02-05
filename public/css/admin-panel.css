@@ -1,0 +1,70 @@
+ul {
+  font-family: 'Open Sans', sans-serif; color: white;
+}
+#admin-navbar {
+  background: #222;
+}
+#admin-navbar .uk-navbar-nav > li > a {
+            color: #ffffff;
+            margin-top: -20px;
+          
+}
+
+#admin-navbar > div.uk-navbar-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+}
+
+#admin-navbar .uk-navbar-nav > li > a:hover {
+  color: #3cc2f1;
+  border-bottom: 4px solid #3cc2f1;
+}
+
+#admin-navbar > div.uk-navbar-center.uk-width-5-6 > div.uk-navbar-center-right {
+  position: initial;
+}
+
+#admin-navbar .uk-navbar-center-right {
+  margin: 0;
+  margin-left: 250px;
+  position: initial;
+  margin-right: .5rem;
+}
+.uk-navbar-center-right > span {
+  padding-bottom: 30px;
+  margin-left: 55px;
+  margin-left: 70px;
+  padding-top: 10px;
+}
+
+
+.uk-navbar-nav > li > a {
+  height: initial;
+  padding: 0;
+}
+
+.uk-parent.px1 > a {
+  padding-bottom: 0.7rem;
+}
+
+span.uk-parent.px2 > a {
+  color: white;
+  text-decoration: none;
+  
+}
+
+
+
+.IsEditor {
+  display: none;
+}
+
+.IsAdmin {
+  display: none;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,49 @@
+span.rating-bar svg{
+  width: 40px;
+  height: 40px;
+}
+span.rating-bar svg > polygon {
+  fill: rgb(237, 253, 5);
+  
+  stroke: rgba(31, 30, 16, 0.507)!important;
+  stroke-width: 1;
+}
+
+.stars {
+  padding-bottom: 25px;
+}
+
+.star.stars {
+  font-size: 40px;
+  width: 25px;
+  cursor: default;
+}
+
+.star {
+  margin-left: 15px;
+  visibility: hidden;
+  font-size: 50px;
+  width: 50px;
+  color: gold;
+  cursor: pointer;
+}
+
+.star:before {
+  content: "\2606";
+  position: absolute;
+  visibility: visible;
+}
+
+.star:checked:before {
+  content: "\2605";
+  position: absolute;
+}
+.rating-bar {
+  font-size: 30px;
+  
+  
+}
+.bar-data {
+  display: flex;
+  flex-flow: row-reverse;
+}

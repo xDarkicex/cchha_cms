@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta http-equiv=“Pragma” content=”no-cache”>
+        <meta http-equiv=“Expires” content=”-1″>
+        <meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" viewport-fit="cover">
+        <meta name="description" content="We have been serving the Central Valley community for over a decade, and our commitment to providing the highest quality care shows in every patient we serve.
+            Let us show you what compassionate care truly means.">
+        <link rel="icon" ype="image/png" href="/static/assets/favicon.png">
+        <link rel="stylesheet" href="/static/css/main.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js"></script>
+        <title>{{.Title}}</title>
+        <script src="/static/js/main.js"></script>
+        <!-- Facebook Pixel Code -->
+        <script>
+            ! function(f, b, e, v, n, t, s) {
+                if (f.fbq) return;
+                n = f.fbq = function() {
+                    n.callMethod ?
+                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq) f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
+            }(window, document, 'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '2048222891932812');
+            fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2048222891932812&amp;ev=PageView&amp;noscript=1"></noscript>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133675222-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-133675222-1');
+    </script>
+        <!-- End Facebook Pixel Code -->
+    </head>
+
+    <body>
+        <div class="uk-offcanvas-content" uk-height-viewport="expand:true">
+            <div id="offcanvas" uk-offcanvas="mode: push">
+                <div class="uk-offcanvas-bar uk-flex uk-flex-column uk-background-primary">
+                    <button class="uk-offcanvas-close" type="button" uk-close></button>
+                    <ul class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical"></ul>
+                </div>
+            </div>
+            <div id="header" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
+                <nav class="uk-text-bold uk-navbar-container uk-height-match" uk-navbar>
+                    <div class="uk-navbar-left">
+                        <ul class="uk-navbar-nav">
+                            <li class="uk-hidden@m">
+                                <a href="#offcanvas" uk-toggle uk-icon="icon: menu"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="uk-navbar-center">
+                        <div class="uk-navbar-center-left uk-visible@m">
+                            <ul class="uk-navbar-nav">
+                                <li class="uk-parent"><a href="/home-health/services.html">Services</a></li>
+                                <li class="uk-parent"><a href="/home-health/eligibility.html">Eligibility</a></li>
+                                <li class="uk-parent"><a href="/home-health/resources.html">Resources</a></li>
+                                <li class="uk-parent"><a href="/home-health/community.html">Community</a></li>
+                            </ul>
+                        </div>
+                        <a class="uk-navbar-item uk-logo" href="/"><img src="/static/assets/favicon.png" alt="Compassionate Care Home Health Agency Logo"></a>
+                        <div class="uk-navbar-center-right uk-visible@m">
+                            <ul class="uk-navbar-nav">
+                                <li class="uk-parent uk-nav-divider"></li>
+                                <li class="uk-parent"><a href="/home-health/careers.html">Careers</a></li>
+                                <li class="uk-parent"><a href="/home-health/about.html">About</a></li>
+                                <li class="uk-parent"><a href="/home-health/locations.html">Locations</a></li>
+                                <li class="uk-parent"><a href="/home-health/contact.html">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <style>
+            .checkboxes {
+                padding: 10px;
+            }
+            
+            .IsEditor {
+                display: none;
+            }
+            
+            .IsAdmin {
+                display: none;
+            }
+            
+            #events li {
+                color: white;
+            }
+            
+            .stars {
+                padding-bottom: 25px;
+            }
+            
+            .hidden {
+                display: none;
+            }
+            
+            .star.stars {
+                font-size: 40px;
+                width: 25px;
+                cursor: default;
+            }
+            
+            .star {
+                visibility: hidden;
+                font-size: 50px;
+                width: 50px;
+                color: gold;
+                cursor: pointer;
+            }
+            
+            .star:before {
+                content: "\2606";
+                position: absolute;
+                visibility: visible;
+            }
+            
+            .star:checked:before {
+                content: "\2605";
+                position: absolute;
+            }
+        </style>
+            {{$user := print .User.FirstName " " .User.LastName}}
+            <nav class="uk-navbar-container" uk-navbar>
+                <div class="uk-navbar-left uk-margin-right">
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-nav-item">Welcome! {{$user}}</li>
+                    </ul>
+                </div>
+                <div class="uk-navbar-right uk-margin-right">
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-nav-item"><a href="/bd-admin/signout"><span uk-icon="sign-out"></span>Signout</a></li>
+                        <li class="uk-nav-item"><a href="/bd-admin/user/{{.User.Model.ID}}"><span uk-icon="user"></span>Account</a></li>
+                        <li class="uk-nav-item"><a href="/bd-admin"><span uk-icon="icon: home"></span> Home</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="uk-width-1-1 uk-padding">
+                <h1 class="uk-text-center uk-heading-line"><span>{{.User.FirstName}} {{.User.LastName}}</span></h1></div>
+            <div class="uk-flex-center uk-flex">
+                <form class="uk-padding uk-grid-small" uk-grid action="/bd-admin/user/{{.User.Model.ID}}/edit" method="POST">
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="icon: user"></span>
+                            <input class="uk-input" type="text" placeholder="{{.User.FirstName}}" name="first_name">
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="uk-input" type="text" placeholder="{{.User.LastName}}" name="last_name">
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="input-phone uk-input" type="tel"
+
+                                placeholder="{{if .User.Phone }}{{.User.Phone}}{{else}}Phone Number{{end}}" name="phone" pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$">
+                            <script>
+                                var cleave = new Cleave('.input-phone', {
+                                    numericOnly: true,
+                                    blocks: [0, 3, 0, 3, 4],
+                                    delimiters: ["(", ")", " ", "-"]
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="uk-input" type="text" placeholder="{{if .User.Title }}{{.User.Title}}{{else}}Job Title{{end}}" name="title">
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="uk-input" type="text" placeholder="{{.User.Email}}" name="email">
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="uk-input" type="password" placeholder="password" name="password">
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="uk-checkbox" type="checkbox" name="admin">
+                            <label class="checkboxes" for="admin">Admin</label><span class="IsAdmin">{{.User.IsAdmin}}</span></div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="uk-checkbox" type="checkbox" name="editor">
+                            <label class="checkboxes" for="editor">Editor</label><span class="IsEditor">{{.User.IsEditor}}</span></div>
+                    </div>
+                    <div class="uk-width-1-3">
+                        <input class="uk-input" type="submit">
+                    </div>
+                </form>
+                <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+                <script>
+                document.addEventListener('DOMContentLoaded', function(e) {
+                    let admin = document.querySelector('.IsAdmin')
+                    let adminCheckbox = document.querySelector('input[name="admin"]')
+                    let editor = document.querySelector('.IsEditor')
+                    let editorCheckbox = document.querySelector('input[name="editor"]')
+
+                    if (admin.innerText == "true") {
+                        adminCheckbox.checked = true
+                    }
+                    if (editor.innerText == "true") {
+                        editorCheckbox.checked = true
+                    }
+                    console.log(admin.innerText, editor.innerText)
+                })
+            </script>
+            </div>
+            <footer class="uk-container uk-padding">
+                <div uk-grid>
+                    <div class="uk-width-1-1 uk-text-center"><img src="/static/assets/cchha.svg" style="max-height: 100px;" alt="Compassionate Care Home Health Agency Logo"></div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s">
+                        <p class="uk-text-bold uk-heading-divider">Locations</p><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span
+                            class="uk-text-bold">Fresno, California</span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">7545 N. Del Mar Ave, </span>
+                            <br><span class="uk-text-left">Suite 103, 104 & 204 </span>
+                            <br><span class="uk-text-right">Fresno, California </span>
+                            <br><span class="uk-text-right">93711</span>
+                            <br><span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span></div>
+                        <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Bakersfield, California</span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">5201 California Ave, </span>
+                            <br><span class="uk-text-left">Suite 255 </span>
+                            <br><span class="uk-text-right">Bakersfield, California </span>
+                            <br><span class="uk-text-right">93309</span>
+                            <br><span class="uk-text-right"><a href="tel:661-846-2833">1(661) 846-2833</a></span></div>
+                        <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Modesto, California </span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">1165 Scenic Drive,</span>
+                            <br><span class="uk-text-left">Suite C-1</span>
+                            <br><span class="uk-text-right">Modesto, California</span>
+                            <br><span class="uk-text-right">95350</span>
+                            <br><span class="uk-text-right"><a href="tel:209-622-1058">1(209) 622-1058</a> </span></div>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s">
+                        <br>
+                        <ul class="uk-list uk-text-meta">
+                            <li><span uk-icon="icon: clock"></span><span class="uk-padding-small uk-text-right">Office Hours: Monday - Friday, 8AM to 5PM</span></li>
+                            <li><span uk-icon="icon: comment"></span><span class="uk-padding-small uk-text-right">Referrals accepted 7 days a week</span></li>
+                            <li><span uk-icon="icon: phone"></span><span class="uk-padding-small">Phone: <a href="tel:559-432-2003">1(559) 432-2003</a></span></li>
+                            <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all referrals to: 1(559) 899-0967</span></li>
+                            <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all MD orders to: 1(877) 868-6528</span></li>
+                            <li><span uk-icon="icon: mail"></span><span class="uk-padding-small">Email: <a href="mailto:info@cchha.com">info@cchha.com</a></span></li>
+                            <li> <a
+                                    href="https://www.facebook.com/Compassionate-Care-Home-Health-Agency-1975186136031240/?__tn__=%2Cd%2CP-R&amp;eid=ARCKp7hOtHDDRD0Nr_ZBAj73umHxBCwXFsTwD9eemai1IOX6rLQ55Y6ivxE8wFiSEqEKlah4F-laj66D"><span
+                                        uk-icon="icon: facebook"> </span><span class="uk-padding-small">Facebook</span></a></li>
+                            <li> <a href="https://www.instagram.com/compassionatecarehh/"><span uk-icon="icon: instagram"></span><span class="uk-padding-small">Instagram</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s uk-text-center">
+                        <p class="uk-text-bold">We Believe in Compassionate Care</p>
+                        <p>We have been serving the Central Valley community for over fifteen years, and our commitment to providing the highest quality care shows in every patient we serve. Let us
+                            show you what compassionate care truly means.</p>
+                        <div uk-grid>
+                            <div class="uk-width-1-3@m uk-width-1-1@s">
+                                <a href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick" target="_blank" rel="nofollow"><img
+                                        src="https://seal-cencal.bbb.org/seals/blue-seal-120-61-bbb-89049202.png" style="border: 0;" alt="Compassionate Care Home Health Agency, LLC BBB Business
+                                        Review" /></a>
+                            </div>
+                            <div class="uk-width-1-3@m uk-width-1-1@s"><img src="/static/assets/ACHC-logo-65.png" style="margin-top:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </body>
+
+</html>

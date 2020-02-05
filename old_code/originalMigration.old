@@ -1,0 +1,138 @@
+{
+			ID: "eret test",
+			Migrate: func(tx *gorm.DB) error {
+				type Detail struct {
+					gorm.Model
+					ApprovalTime  time.Time
+					RejectionTime time.Time
+					ReviewID      uint
+					Title         string
+					Body          string
+				}
+				type Review struct {
+					gorm.Model
+					Title            string
+					Rating           int
+					Username         string
+					UserID           uint
+					Email            string
+					Content          string
+					ExternalLink     string
+					ExternalSiteName string
+					Pending          bool
+					Details          []Detail `gorm:"many2many:review_details;"`
+				}
+				type Profile struct {
+					Avatar
+					FirstName string `gorm:"not null"`
+					LastName  string `gorm:"not null"`
+					Age       int
+					Phone     string
+					Country   string
+					Language  string
+					Zip       string
+					State     string
+					City      string
+					Street    string
+					Photos    []Photo `gorm:"many2many:profile_photos;"`
+				}
+				type User struct {
+					gorm.Model
+					Career   Career
+					Profile  Profile
+					Security Security
+					Reviews  []Review  `gorm:"many2many:user_reviews;"`
+					Messages []Message `gorm:"many2many:user_messages;"`
+				}
+				type Career struct {
+					Title string
+					Years int
+					Bio   string
+				}
+				type Photo struct {
+					gorm.Model
+					FileName string
+					Ext      string
+					Path     string
+					Small    string
+					Medium   string
+					Large    string
+					Hash     string `gorm:"unique;not null"`
+				}
+				type Avatar struct {
+					gorm.Model
+					Photo Photo
+				}
+				type Security struct {
+					Email         string `gorm:"unique;not null"`
+					Password      string `gorm:"not null"`
+					IsSuperUser   bool   `gorm:"default:false"`
+					IsAdmin       bool   `gorm:"default:false"`
+					IsEditor      bool   `gorm:"default:false"`
+					Location      `gorm:"type:json;"`
+					LastLogin     time.Time
+					LastIP        string
+					LoginAttempts int
+				}
+				type Location struct {
+					Lat string
+					Lng string
+				}
+				// -- important soon -- //
+				type Message struct {
+					gorm.Model
+					Title      string
+					Type       uint
+					Body       string
+					SenderID   uint
+					RecevierID uint
+					UserID     uint
+					SentTime   time.Time
+					Status     uint
+				}
+				err := tx.Debug().CreateTable(&Career{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 110")
+				}
+				err = tx.Debug().CreateTable(&Profile{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 114")
+				}
+				err = tx.Debug().CreateTable(&Security{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 1118")
+				}
+				err = tx.Debug().CreateTable(&Photo{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 122")
+				}
+				err = tx.Debug().CreateTable(&Avatar{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 126")
+				}
+				err = tx.Debug().CreateTable(&Message{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 130")
+				}
+				err = tx.Debug().CreateTable(&Location{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 134")
+				}
+				err = tx.Debug().CreateTable(&Review{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 138")
+				}
+				err = tx.Debug().CreateTable(&Detail{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 142")
+				}
+				err = tx.Debug().CreateTable(&User{}).Error
+				if err != nil {
+					fmt.Println("====", err, "==== line 146")
+				}
+				return db.DB.Error
+			},
+			Rollback: func(tx *gorm.DB) error {
+				return tx.DropTable("photos").Error
+			},
+		},

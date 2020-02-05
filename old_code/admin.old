@@ -1,0 +1,84 @@
+package old
+
+// import (
+// 	"bytes"
+// 	"encoding/json"
+// 	"fmt"
+// 	"io/ioutil"
+// 	"net/http"
+// 	"net/mail"
+// 	"net/smtp"
+// 	"reflect"
+// 	"strconv"
+// 	"time"
+
+// 	"github.com/satori/go.uuid"
+
+// 	"html/template"
+
+// 	e "github.com/scorredoira/email"
+// 	"github.com/xDarkicex/cchha_server_new/helpers"
+
+// 	"github.com/go-chi/chi"
+
+// 	"github.com/xDarkicex/cchha_server_new/app/models"
+
+// 	"golang.org/x/crypto/bcrypt"
+// )
+
+// // Admin ...
+// type Admin Controllers
+
+// type Command struct {
+// 	ReviewID uint   `json: "reviewID"`
+// 	UserID   uint   `json: userID`
+// 	Reason   string `json: reason`
+// }
+
+// type Res struct {
+// 	Status string `json: "status"`
+// }
+
+// var funcMAP = template.FuncMap{
+// 	"GetFlashes": func(flashes []models.Flash) []models.Flash {
+// 		// var flashes []models.Flash
+// 		// for _, k := range flashes {
+// 		// 	var flash models.Flash
+// 		// 	json.Unmarshal([]byte(k.(string)), &flash)
+// 		// 	flashes = append(flashes, flash)
+// 		// }
+// 		return flashes
+// 	},
+// 	"GetNewestFlashes": func(flashes []models.Flash) map[string]models.Flash {
+// 		var MostRecent = make(map[string]models.Flash)
+// 		for k, v := range flashes {
+
+// 			if len(flashes)-1 == k {
+// 				MostRecent[v.Type] = flashes[k]
+// 			}
+// 			if len(flashes)-2 == k {
+// 				MostRecent[v.Type] = flashes[k]
+// 			}
+// 			if len(flashes)-3 == k {
+// 				MostRecent[v.Type] = flashes[k]
+// 			}
+// 		}
+// 		return MostRecent
+// 	},
+// 	"ToDate": func(t time.Time) string {
+// 		return t.Format("January 2, 2006")
+// 	},
+// 	"ToTime": func(t time.Time) string {
+// 		return t.Format("3:04PM")
+// 	},
+// }
+
+// // Todo build all admin related func crud style updating of reviews maybe or do an approval style system
+
+
+// func IsEmpty(key string) bool {
+	if key != "" {
+		return true
+	}
+	return false
+}

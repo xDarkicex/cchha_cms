@@ -1,0 +1,85 @@
+<div class="uk-flex uk-flex-wrap uk-flex-center">
+                <div class="left-rating-box uk-width-1-1@s uk-width-1-1@m">
+                    <table id="review_scores" class="uk-table-hover p2 mx-auto">
+                        <caption><span><p class="uk-text-center" style="font-family:font-family: 'Open Sans', sans-serif;">{{.Calc.Avg}} Average Rating out of {{.Count}} reviews.</p></span></caption>
+                        <tr onClick="window.location= '/home-health/reviews/5'">
+                            <td>5 Star </td>
+                            <td class="review_ratings">{{.Calc.Total.Five}}</td>
+                            <td>{{.Calc.Percentages.Five}}</td>
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/4'">
+                            <td>4 Star </td>
+                            <td class="review_ratings">{{.Calc.Total.Four}}</td>
+                            <td>{{.Calc.Percentages.Four}}</td>
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/3'">
+                            <td>3 Star </td>
+                            <td class="review_ratings">{{.Calc.Total.Three}}</td>
+                            <td>{{.Calc.Percentages.Three}}</td>
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/2'">
+                            <td>2 Star </td>
+                            <td class="review_ratings">{{.Calc.Total.Two}}</td>
+                            <td>{{.Calc.Percentages.Two}}</td>
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/1'">
+                            <td>1 Star </td>
+                            <td class="review_ratings">{{.Calc.Total.One}}</td>
+                            <td>{{.Calc.Percentages.One}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="right-rating uk-width-1-1@s uk-width-expand@m  mx-auto">
+                    <div class="uk-section uk-section-muted p3 mx-auto mb4" style="max-width: 600px;">
+                        <div id="root">
+                        <div>
+                            <div class="uk-card uk-card-default uk-padding-small reviews uk-animation-fade" "="">
+                                <div class="uk-card-header" style="padding-bottom: 30px; background: white; padding-top:0px; padding-left:0;">
+                                    <div style="margin-top: -15px;">
+                                        <input class="star stars" type="checkbox" disabled="disabled" checked="checked">
+                                        <input class="star stars" type="checkbox" disabled="disabled" checked="checked">
+                                        <input class="star stars" type="checkbox" disabled="disabled" checked="checked">
+                                        <input class="star stars" type="checkbox" disabled="disabled" checked="checked">
+                                        <input class="star stars" type="checkbox" disabled="disabled" checked="checked">
+                                    </div>
+
+                                    <div>
+                                        <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
+                                            <li><a href="#" uk-icon="icon: file-edit" class="uk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" ratio="1"> <path fill="none" stroke="#000" d="M18.65,1.68 C18.41,1.45 18.109,1.33 17.81,1.33 C17.499,1.33 17.209,1.45 16.98,1.68 L8.92,9.76 L8,12.33 L10.55,11.41 L18.651,3.34 C19.12,2.87 19.12,2.15 18.65,1.68 L18.65,1.68 L18.65,1.68 Z"></path> <polyline fill="none" stroke="#000" points="16.5 8.482 16.5 18.5 3.5 18.5 3.5 1.5 14.211 1.5"></polyline></svg></a></li>
+                                            <li><a href="#" uk-icon="icon: copy" class="uk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" ratio="1"> <rect fill="none" stroke="#000" x="3.5" y="2.5" width="12" height="16"></rect> <polyline fill="none" stroke="#000" points="5 0.5 17.5 0.5 17.5 17"></polyline></svg></a></li>
+                                            <li><span uk-icon="icon: trash" onclick="deleteReview(event, 22)" class="uk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" ratio="1"> <polyline fill="none" stroke="#000" points="6.5 3 6.5 1.5 13.5 1.5 13.5 3"></polyline> <polyline fill="none" stroke="#000" points="4.5 4 4.5 18.5 15.5 18.5 15.5 4"></polyline> <rect x="8" y="7" width="1" height="9"></rect> <rect x="11" y="7" width="1" height="9"></rect> <rect x="2" y="3" width="16" height="1"></rect></svg></span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="uk-card-body p1" style="max-height: 200px; overflow: scroll;">
+                                    <div class="uk-child-width-1-4 uk-grid" uk-grid="">
+                                        <div class="uk-first-column">
+                                            <div>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div class="flex items-start items-baseline" style="margin-bottom:-20px;" >
+                                        <div>
+                                            <h3 class="h2 mb0">Awesome Company!!</h3>
+                                        </div>
+                                        <div>
+                                            <p class="uk-text-muted uk-text-small pl1">
+                                                February 2, 2020 6:58PM
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <p class="uk-custom mt1 mb1">Gentry Rolofson</p>
+                                    <p class="uk-text-meta  mt1 mb1"><a href="https://google.com">GOOGLE</a></p>
+                                    <p id="my-id" class="mt1">When my great grandmother needed care we went to many agencies within fresno, none of them impressed me like compassionate care. Their team was extremely professional, the care they provided for my family was above all expectations, time and time again they went above and beyond to make sure my family was taken care of. Their office staff took care of everything of us and took out so much of the complexity that we faced with many other local agencies. we are truly lucky to have such a great resource in the valley.</p>
+                                    {{/* <div id="trunc" class="uk-button" uk-toggle="target: #my-id; cls: truncate">show more</div> */}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
