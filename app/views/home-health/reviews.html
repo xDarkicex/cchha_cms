@@ -10,18 +10,24 @@
         <meta name="description" content="We have been serving the Central Valley community for over a decade, and our commitment to providing the highest quality care shows in every patient we serve.
             Let us show you what compassionate care truly means.">
         <link rel="icon" ype="image/png" href="/static/assets/favicon.png">
-        <link rel="stylesheet" href="/static/css/main.css">
+
         <title>{{.Title}}</title>
-        <script src="/static/js/main.js"></script>
 
         <link rel="stylesheet" href="/static/css/ratingbar.css">
         <link rel="stylesheet" href="/static/css/stars.css">
         <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="/static/js/jquery.ratingbar.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.0/dist/js/uikit.min.js"></script>
+        <script type="text/javascript" src="/static/js/jquery.easing.1.3.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.0/dist/js/uikit-icons.min.js"></script>
+        <link rel="stylesheet" href="/static/css/main.css">
+        <script src="/static/js/main.js"></script>
+        <script src="/static/js/stars.js"></script>
+        <!-- <script src="/static/js/animate.js"></script> -->
         <!-- Facebook Pixel Code -->
         <script>
+            // ($(".uk-table-hover").hover($('tr').animate({transform: scale(2)}, 1000, function() {
+            //     console.log("log")
+            // }))())
         ! function(f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function() {
@@ -94,7 +100,7 @@
                             </ul>
                         </div>
                         <a class="uk-navbar-item uk-logo" href="/"><img src="/static/assets/favicon.png" alt="Compassionate Care Home Health Agency Logo"></a>
-                        <div class="uk-navbar-center-right uk-visible@m" style="position: initial;">
+                        <div class="uk-navbar-center-right uk-visible@m">
                             <ul class="uk-navbar-nav">
                                 <li class="uk-parent uk-nav-divider"></li>
                                 <li class="uk-parent"><a href="/home-health/careers.html">Careers</a></li>
@@ -111,11 +117,6 @@
             <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
             {{/* style="font-family:font-family: 'Lato', sans-serif;" */}}
             <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
-            <style>
-            #events li {
-                color: white;
-            } 
-        </style>
             <div class="uk-width-1-1">
                 <div>
                     <h1 class="bold pl4 pt2"">Reviews</h1>
@@ -125,40 +126,42 @@
                 </div>
             </div>
             <div class="uk-width-1-1 pl2 pr2">
-                <table id="review_scores" class="uk-table uk-table-hover mx-auto">
-                    <caption><span><p class="uk-text-center" style="font-family:'Open Sans', sans-serif;">{{.Calc.Avg}} Average Rating out of {{.Count}} reviews.</p></span></caption>
-                    <tr onClick="window.location= '/home-health/reviews/5'">
-                        <td class="bar-data mxn2 pt1"><p class="rating">5 Star</p></td>
-                        <td id="calc5" class="review_ratings">{{.Calc.Percentages.Five}}</td>
-                        <td style="margin-left: -20px;">{{.Calc.Percentages.Five}}</td>
-                    </tr>
-                    <tr onClick="window.location= '/home-health/reviews/4'">
-                        <td class="bar-data mxn2 pt1"><p class="rating">4 Star</p></td>
-                        <td id="calc4" class="review_ratings">{{.Calc.Percentages.Four}}</td>
-                        <td class="mrn4 pt1">{{.Calc.Percentages.Four}}</td>
-                    </tr>
-                    <tr onClick="window.location= '/home-health/reviews/3'">
-                        <td class="bar-data mxn2 pt1"><p class="rating">3 Star</p></td>
-                        <td id="calc3" class="review_ratings">{{.Calc.Percentages.Three}}</td>
-                        <td class="mrn4 pt1">{{.Calc.Percentages.Three}}</td>
-                    </tr>
-                    <tr onClick="window.location= '/home-health/reviews/2'">
-                        <td class="bar-data mxn2 pt1"><p class="rating">2 Star</p></td>
-                        <td id="calc2" class="review_ratings">{{.Calc.Percentages.Two}}</td>
-                        <td class="mrn4 pt1">{{.Calc.Percentages.Two}}</td>
-                    </tr>
-                    <tr onClick="window.location= '/home-health/reviews/1'">
-                        <td class="bar-data mxn2 pt1"><p class="rating">1 Star</p></td>
-                        <td id="calc1" class="review_ratings">{{.Calc.Percentages.One}}</td>
-                        <td class="mrn4 pt1">{{.Calc.Percentages.One}}</td>
-                    </tr>
+                <!-- uk-animation-fade -->
+                <table id="review_scores" class="uk-table uk-table-hover mx-auto uk-animation-fade">
+                    <caption><p class="uk-text-center" style="font-family:'Open Sans', sans-serif; margin: 0px;line-height: 30px;">{{.Calc.Avg}} Average Rating out of {{.Count}} reviews.</p></caption>
+                    <tbody>
+                        <tr onClick="window.location= '/home-health/reviews/5'">
+                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">5 Star</p></td>
+                            <td id="calc5" class="review_ratings">{{.Calc.Percentages.Five}}</td>
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/4'" style="line-height: 30px;">
+                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">4 Star</p></td>
+                            <td id="calc4" class="review_ratings">{{.Calc.Percentages.Four}}</td>
+                            <!-- <td class="mrn4 pt1">{{.Calc.Percentages.Four}}</td> -->
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/3'" style="line-height: 30px;">
+                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">3 Star</p></td>
+                            <td id="calc3" class="review_ratings">{{.Calc.Percentages.Three}}</td>
+                            <!-- <td class="mrn4 pt1">{{.Calc.Percentages.Three}}</td> -->
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/2'" style="line-height: 30px;">
+                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">2 Star</p></td>
+                            <td id="calc2" class="review_ratings">{{.Calc.Percentages.Two}}</td>
+                            <!-- <td class="mrn4 pt1">{{.Calc.Percentages.Two}}</td> -->
+                        </tr>
+                        <tr onClick="window.location= '/home-health/reviews/1'" style="line-height: 30px;">
+                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">1 Star</p></td>
+                            <td id="calc1" class="review_ratings">{{.Calc.Percentages.One}}</td>
+                            <!-- <td class="mrn4 pt1">{{.Calc.Percentages.One}}</td> -->
+                        </tr>
+                    </tbody>
                 </table>
             </div>
-            {{/* uk-child-width-1-1@m uk-child-width-1-1@s uk-flex-center */}}
-            <div id="options" uk-filter="target: #js-filter">
+
+            <div id="options" uk-filter="#js-filter">
                 <div style="padding-left: 40px;" class="uk-tile uk-tile-secondary">
                     <ul class="uk-subnav uk-subnav-pill">
-                        <li uk-filter-control>
+                        <li class="uk-active" uk-filter-control>
                             <a href="#">
                                 <div class="uk-flex" style="padding: 10px;">
                                     <span></span>
@@ -209,44 +212,167 @@
                     </ul>
                 </div>
                 {{if le $count 1}}
-                <ul id="js-filter" class="uk-child-width-1-1@m uk-child-width-1-1@m p2" uk-grid>
-                    {{else}}
-                    <ul id="js-filter" class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-flex-center" uk-grid>
-                        {{end}}
-
-                        {{range .Data}}
-                        <li class="tag-{{.ExternalSiteName}}">
-                            <div class="p1">
-                                <div class="uk-card uk-card-default uk-padding-small reviews uk-animation-fade"">
-                                    <div class="uk-card-body p2">
-                                        {{if $count }}
-                                        <div class="uk-child-width-1-2 uk-grid" uk-grid>
-                                            <div>
-                                                <div>
-                                                    <p class="rating">{{.Rating}}</p>
-                                                </div>
-                                            </div>
-                                            {{if $IsSuperUser }}
-                                            <div>
-                                                <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
-                                                    <li><span id="heart-{{.Model.ID}}" uk-icon="icon: heart" onClick="setDataFeatured('{{.Model.ID}}')" data-featured="{{.Featured}}"></span></li>
-                                                </ul>
-                                            </div>
-                                            <script>
-                                            
-                                            (function() {
-                                                let favorited = document.getElementById('heart-{{.Model.ID}}')
-                                                    if (favorited.dataset.featured == "true") {
-                                                        
-                                                        favorited.childNodes[0].childNodes[1].setAttribute('fill', 'red')
-                                                    }
-                                            }())
-                                        </script>
-                                            {{end}}
+                <ul id="js-filter" class="uk-child-width-1-1@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
+                    <li>
+                        <div class="p1">
+                            <div class="uk-card uk-card-default uk-padding-small reviews">
+                                <span class="uk-icon ml2 rating-bar" uk-icon="star"></span>
+                                <div class="uk-card-body p2 uk-grid-match" uk-grid>
+                                    <h2 class="uk-text-lead uk-text-center@s uk-text-middle">{{.Title}}</h2>
+                                    <p class="uk-text-lead uk-text-center@s uk-text-middle"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                {{end}}
+                <script>
+                   
+                    function star(rating, tag) {                  
+                        let review = document.querySelector(tag)
+                         
+                        let ratingvalue = rating;
+                        let t = review.querySelector('div.p1 > div.uk-card')
+                        // let thing = document.querySelector('.uk-text-meta > a')
+                        // console.log(thing)
+                        // console.log(t)
+                        
+                        // review.querySelector('.uk-text-meta > a').innerText.replace(/-/g, " ").toUpperCase()
+                       
+                        
+                        var div = document.createElement('div')
+                        
+                        for (i = 0; i < rating; i++) {
+                            var el = document.createElement('span')
+                            el.setAttribute('class', 'uk-icon ml2 rating-bar')
+                            el.setAttribute('uk-icon', 'star')
+                            div.appendChild(el)
+                        }
+                        t.prepend(div)
+                     }
+                    </script>
+                <ul id="js-filter" class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
+                    {{range .Data}}
+                    <!-- uk-scrollspy="target: &gt; * &gt; *; cls:uk-animation-slide-left-medium; delay: 800; repeat:true;"> -->
+                    <li class="tag-{{.ExternalSiteName}} review-{{.Model.ID}}" uk-scrollspy="cls: uk-animation-scale-up uk-transform-origin-top-center; delay: 500; repeat: true">
+                        <div class="p1">
+                            <div class="uk-card uk-card-default uk-padding-small reviews">
+                                <div class="uk-card-body p2">
+                                    <div>
+                                        <div>
+                                            <p class="rating">
+                                                <script>
+                                                   document.addEventListener('"DOMContentLoaded"', star('{{.Rating}}',".review-{{.Model.ID}}"))      
+                                                </script>
+                                            </p>
                                         </div>
-                                        <div class="flex items-start items-baseline">
+                                    </div>
+                                    {{if $IsSuperUser }}
+                                    <div>
+                                        <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
+                                            <li>
+                                                <div class="px1">
+                                                    <span id="heart-{{.Model.ID}}" uk-icon="icon: heart; ratio: 1" onClick="setDataFeatured('{{.Model.ID}}')" data-featured="{{.Featured}}"></span>
+                                                </div>
+
+                                            </li>
+                                            <li>
+                                                <div class="px1">
+                                                    <a href="#modal-full-{{.Model.ID}}" uk-toggle>
+                                                        <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
+                                                        </span>
+                                                    </a>
+
+                                                </div>
+
+                                            </li>
+                                            <li>
+                                                <div class="px1">
+                                                    <span uk-icon="icon: close" onclick="rejection({{.Model.ID}})"></span>
+                                                </div>
+
+                                            </li>
+
+                                        </ul>
+
+                                        <script>
+                                                (function() {
+                                                    let favorited = document.getElementById('heart-{{.Model.ID}}')
+                                                        if (favorited.dataset.featured == "true") {
+                                                            favorited.childNodes[0].childNodes[1].setAttribute('fill', 'red')
+                                                        }
+                                                }())
+                                                function setDataFeatured(id) {
+                                                let featured = document.getElementById("heart-"+id)
+                                                    
+                                                    if (featured.dataset.featured == "false") {
+                                                        featured.childNodes[0].childNodes[1].setAttribute('fill', 'red')
+                                                        featured.dataset.featured = true
+                                                    } else {
+                                                        featured.dataset.featured = false
+                                                        featured.childNodes[0].childNodes[1].setAttribute('fill', 'white')
+                                                    }
+                                                        featureReview(id ,featured.dataset.featured)
+                                            } 
+                                            function featureReview(ID, featured) {
+                                            var xhr = new XMLHttpRequest(); 
+                                            xhr.open("POST", "/bd-admin/review/feature", true)
+                                            xhr.setRequestHeader("Content-Type", "application/json")
+                                            xhr.onreadystatechange = function () {
+                                                if (xhr.readyState == 4 && xhr.status == 200) {
+                                                
+                                                }
+                                            }
+                                            var bool_value = featured == "true" ? true : false
+                                            var data = {review_id: parseInt(ID), user_id: parseInt('{{$userID}}'), featured: bool_value}
+                                            console.log(data)
+                                            xhr.send(JSON.stringify(data))
+                                            }
+                                        </script>
+                                    </div>
+                                    {{end}}
+                                    <div class="flex items-start items-baseline uk-flex-column">
+                                        {{if ne .Title ""}}
+                                        <div>
+                                            <h3 class="uk-text-capitalize" style="font-size: 1.4rem;">{{.Title}}</h3>
+                                        </div>
+                                        {{else}}
+                                        <div>
+                                            <h3 class="h2 uk-text-capitalize">{{.ExternalSiteName}} Review</h3>
+                                        </div>
+                                        {{end}}
+                                        <div>
+                                            <p class="uk-text-muted uk-text-small pl1">
+                                                {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {{if ne .Username ""}}
+                                    <p class="uk-custom">{{.Username}}</p>
+                                    {{else}}
+                                    <p class="uk-custom">Anonymous review</p>
+                                    {{end}}
+                                    {{if ne .ExternalSiteName ""}}
+                                    <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                                    {{else}}
+                                    <p class="uk-text-meta">No Referral</p>
+                                    {{end}}
+                                    <p class="truncate">{{.Body}}</p>
+
+                                    <div class="uk-flex uk-flex-right">
+                                        <span class="uk-button uk-button-default" style="z-index: 999;" uk-toggle="target: #modal-{{.Model.ID}}">Read More</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="modal-full-{{.Model.ID}}" class="uk-modal uk-modal-full" style="background: white;" uk-modal>
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close-default" uk-close></button>
+
+                                    <div class="uk-modal-header">
+                                        <div class="flex uk-flex-wrap items-start items-baseline">
                                             <div>
-                                                <h3 class="h2">{{.Title}}</h3>
+                                                <h3 class="uk-modal-title">{{.Title}}</h3>
                                             </div>
                                             <div>
                                                 <p class="uk-text-muted uk-text-small pl1">
@@ -254,17 +380,26 @@
                                                 </p>
                                             </div>
                                         </div>
-
-                                        <p class="uk-custom">{{.Username}}</p>
-                                        <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
-                                        <p class="truncate">{{.Body}}</p>
-                                        {{else}}
-                                        <h2 class="uk-text-lead uk-text-center@s uk-text-middle">{{.Title}}</h2>
-                                        <p class="uk-text-lead uk-text-center@s uk-text-middle"></p>
-                                        {{end}}
-                                        <div class="uk-flex uk-flex-right">
-                                            <span class="uk-button uk-button-default" uk-toggle="target: #modal-{{.Model.ID}}">Read More</span>
+                                    </div>
+                                    <div class="uk-modal-body">
+                                        {{if ne .Username ""}}
+                                        <div class="uk-section-muted">
+                                            <p class="uk-custom">{{.Username}}</p>
                                         </div>
+                                        {{else}}
+                                        <div class="uk-section-muted">
+                                            <p class="uk-custom">Anonymous review</p>
+                                        </div>
+
+                                        {{end}}
+
+                                        <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                                        <div class="uk-section-muted">
+                                            <div class="uk-section-default">
+                                                <p>{{.Body}}</p>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -273,7 +408,7 @@
                                     <button class="uk-modal-close-default uk-modal-close" type="button" uk-close></button>
 
                                     <div class="uk-modal-header">
-                                        <div class="flex items-start items-baseline">
+                                        <div class="flex uk-flex-wrap items-start items-baseline">
                                             <div>
                                                 <h3 class="uk-modal-title">{{.Title}}</h3>
                                             </div>
@@ -286,9 +421,11 @@
 
                                     </div>
                                     <div class="uk-modal-body">
-
-
+                                        {{if ne .Username ""}}
                                         <p class="uk-custom">{{.Username}}</p>
+                                        {{else}}
+                                        <p class="uk-custom">Anonymous review</p>
+                                        {{end}}
                                         <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
                                         <p>{{.Body}}</p>
                                     </div>
@@ -297,314 +434,186 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                        {{end}}
-                        <script>    
-                        function setDataFeatured(id) {
-                            let featured = document.getElementById("heart-"+id)
-                                console.log(featured)
-                                if (featured.dataset.featured == "false") {
-                                    featured.childNodes[0].childNodes[1].setAttribute('fill', 'red')
-                                    featured.dataset.featured = true
-                                } else {
-                                    featured.dataset.featured = false
-                                    featured.childNodes[0].childNodes[1].setAttribute('fill', 'white')
-                                }
-                                    featureReview(id ,featured.dataset.featured)
-                            } 
-                        function featureReview(ID, featured) {
-                        var xhr = new XMLHttpRequest(); 
-                        xhr.open("POST", "/bd-admin/review/feature", true)
-                        xhr.setRequestHeader("Content-Type", "application/json")
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState == 4 && xhr.status == 200) {
-                            
-                            }
-                        }
-                        var bool_value = featured == "true" ? true : false
-                        var data = {review_id: parseInt(ID), user_id: {{$userID}}, featured: bool_value}
-                        console.log(data)
-                        xhr.send(JSON.stringify(data))
-                        }
+                        </div>
+                    </li>
 
-                    </script>
-                    </ul>
-                </div>
+                    {{end}}
+                </ul>
+            </div>
+            <div class="uk-width-1-1 uk-padding">
+                <h1 class="uk-text-center uk-heading-line"><span>Leave Us A Review</span></h1>
+            </div>
+            <div class="uk-flex-center uk-flex">
+                <form class="uk-padding uk-grid-small" uk-grid action="/home-health/reviews" method="POST">
+                    <div class="uk-width-1-1">
+                        <div class="uk-flex uk-flex-center stars">
+                            <input class="star starRating" type="checkbox" value="1" name="rating">
+                            <input class="star starRating" type="checkbox" value="2" name="rating">
+                            <input class="star starRating" type="checkbox" value="3" name="rating">
+                            <input class="star starRating" type="checkbox" value="4" name="rating">
+                            <input class="star starRating" type="checkbox" value="5" name="rating">
+                        </div>
+                        <br>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="icon: user"></span>
+                            <input class="uk-input" type="text" placeholder="Full Name" name="review_name" required>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2">
+                        <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="icon: mail"></span>
+                            <input class="uk-input" type="text" placeholder="E-Mail (Will not be published)" name="review_email" required>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-1">
+                        <div class="uk-inline uk-width-1-1">
+                            <input class="uk-input" type="text" placeholder="Review Title" name="review_title" required>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-1">
+                        <textarea class="uk-textarea" placeholder="Review" rows="5" style="resize:none; overflow-x:hidden;" name="review_body" required></textarea>
+                    </div>
+                    <div class="uk-width-1-3">
+                        <div class="g-recaptcha" data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div>
+                        <input class="uk-input" type="submit">
+                    </div>
+                </form>
+            </div>
+            <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 
-
-                <div class="uk-width-1-1 uk-padding">
-                    <h1 class="uk-text-center uk-heading-line"><span>Leave Us A Review</span></h1></div>
-                <div class="uk-flex-center uk-flex">
-                    <form class="uk-padding uk-grid-small" uk-grid action="/home-health/reviews" method="POST">
-                        <div class="uk-width-1-1">
-                            <div class="uk-flex uk-flex-center stars">
-                                <input class="star starRating" type="checkbox" value="1" name="rating">
-                                <input class="star starRating" type="checkbox" value="2" name="rating">
-                                <input class="star starRating" type="checkbox" value="3" name="rating">
-                                <input class="star starRating" type="checkbox" value="4" name="rating">
-                                <input class="star starRating" type="checkbox" value="5" name="rating">
-                            </div>
-                            <br>
-                        </div>
-                        <div class="uk-width-1-2">
-                            <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="icon: user"></span>
-                                <input class="uk-input" type="text" placeholder="Full Name" name="review_name" required>
-                            </div>
-                        </div>
-                        <div class="uk-width-1-2">
-                            <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="icon: mail"></span>
-                                <input class="uk-input" type="text" placeholder="E-Mail" name="review_email" required>
-                            </div>
-                        </div>
-                        <div class="uk-width-1-1">
-                            <div class="uk-inline uk-width-1-1">
-                                <input class="uk-input" type="text" placeholder="Review Title" name="review_title" required>
-                            </div>
-                        </div>
-                        <div class="uk-width-1-1">
-                            <textarea class="uk-textarea" placeholder="Review" rows="5" style="resize:none; overflow-x:hidden;" name="review_body" required></textarea>
-                        </div>
-                        <div class="uk-width-1-3">
-                            <div class="g-recaptcha" data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div>
-                            <input class="uk-input" type="submit">
-                        </div>
-                    </form>
-                    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-                    <script>
-            
-            document.addEventListener('DOMContentLoaded', function(e) {
-                
-                {{/* let rating_chart  = document.querySelectorAll('table td.bar-data')
-                console.log(rating_chart)
-
-                rating_chart.forEach(bar => {
-                    let rating_chart_data  = bar.querySelector('p.rating')
-                    var r = rating_chart_data.innerText
-                    console.log(r)
-                    rating_chart_data.parentNode.removeChild(rating_chart_data)
-                    var div = document.createElement('div')
-                    div.classList.add('ml3')
-                     for (i = 0; i < r; i++) {
-                        var el = document.createElement('span')
-                        el.setAttribute('class', 'uk-icon mx2 rating-bar')
-                        el.setAttribute('uk-icon', 'star')
-                        bar.append(el) */}}
-                        {{/* div.append(el) */}}
-                    {{/* } */}}
-                    {{/* for (i = 0; i < r; i++) {
-                        var el = document.createElement('input')
-                        el.setAttribute('class', 'star stars rating-bar')
-                        el.setAttribute('type', 'checkbox')
-                        el.setAttribute('disabled', 'disabled')
-                        el.setAttribute('checked', 'checked')
-                        bar.prepend(div)
-                        div.append(el)
-                    } */}}
-                {{/* }) */}}
-                let reviews = document.querySelectorAll('.uk-card.reviews')
-                reviews.forEach(review => {
-                    
-                    let rating_data = review.querySelector('p.rating')
-                    
-                    if (rating_data != null) {
-                        var r = rating_data.innerText
-                        rating_data.parentNode.removeChild(rating_data)
-                    }
-                    
-                    review.querySelector('.uk-text-meta > a').innerText = review.querySelector('.uk-text-meta > a').innerText.replace(/-/g, " ").toUpperCase()
-                    
-                    var div = document.createElement('div')
-                    div.classList.add('ml3')
-                    for (i = 0; i < r; i++) {
-                        var el = document.createElement('span')
-                        el.setAttribute('class', 'uk-icon ml2 rating-bar')
-                        el.setAttribute('uk-icon', 'star')
-                        review.prepend(el)
-                        
-                        // var el = document.createElement('input')
-                        // el.setAttribute('class', 'star stars')
-                        // el.setAttribute('type', 'checkbox')
-                        // el.setAttribute('disabled', 'disabled')
-                        // el.setAttribute('checked', 'checked')
-                        // review.prepend(div)
-                        // div.append(el)
-                    }
-                })
-            })
-            document.addEventListener('DOMContentLoaded', function() {
-                let stars = document.querySelectorAll('.star.starRating')
-                stars.forEach(star => {
-                    star.checked = true
-                })
-                let currentRating = 5;
-                stars.forEach(star => {
-                    star.addEventListener('click', (e) => {
-                        currentRating = e.target.value
-                        if (currentRating === '5') {
-                            stars[4].checked = true
-                            stars[3].checked = true
-                            stars[2].checked = true
-                            stars[1].checked = true
-                            stars[0].checked = true
-                        } else if (currentRating === '4') {
-                            // remove check on higher values
-                            stars[4].checked = false
-                                // add current values
-                            stars[3].checked = true
-                            stars[2].checked = true
-                            stars[1].checked = true
-                            stars[0].checked = true
-                        } else if (currentRating === '3') {
-                            // remove check on higher values
-                            stars[4].checked = false
-                            stars[3].checked = false
-                                // add current values
-                            stars[2].checked = true
-                            stars[1].checked = true
-                            stars[0].checked = true
-                        } else if (currentRating === '2') {
-                            // remove check on higher values
-                            stars[4].checked = false
-                            stars[3].checked = false
-                            stars[2].checked = false
-                                // add current values
-                            stars[1].checked = true
-                            stars[0].checked = true
-                        } else if (currentRating === '1') {
-                            // remove check on higher values
-                            stars[4].checked = false
-                            stars[3].checked = false
-                            stars[2].checked = false
-                            stars[1].checked = false
-                                // add current values
-                            stars[0].checked = true
-                        }
-
-                    })
-
-                })
-                
-            })
-        </script>
-                </div>
-                <!--Start of Tawk.to Script-->
-                <script>
-        var Tawk_API = Tawk_API || {},
-            Tawk_LoadStart = new Date();
-        (function() {
-            var s1 = document.createElement("script"),
-                s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/5d38b65d9b94cd38bbe91af2/default';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
-            </script>
-                <script>
-                 
-                        var config = {
-                        maxRating: 100,
-                        showText: false,
-                        wrapperWidth: $(document).width() - 200,
-                        }
-                    var obj = $('.review_ratings').ratingbar(config)
-                   
-                    
-                     
-                    $(window).resize(function(e) {
-                       
-                      var w = $(document).width()  - 200
-                    
-                      $("#calc5 .ratingbar_wrapper").attr('style', w)
-                      $("#calc4 .ratingbar_wrapper").attr('style', w)
-                      $("#calc3 .ratingbar_wrapper").attr('style', w)
-                      $("#calc2 .ratingbar_wrapper").attr('style', w)
-                      $("#calc1 .ratingbar_wrapper").attr('style', w)
-                        obj.ratingbar('update', config)
-                    })
-                    
-               
-                function update(w) {
-                    var config = {
-                        maxRating: 100,
-                        showText: false,
-                        wrapperWidth: w,
-                    }
-                    obj.ratingbar(config)
-                }
-                    
-                        
-                       
-                        
-                    
-            </script>
-                <footer class="uk-container uk-padding">
-                    <div uk-grid>
-                        <div class="uk-width-1-1 uk-text-center"><img src="/static/assets/cchha.svg" style="max-height: 100px;" alt="Compassionate Care Home Health Agency Logo"></div>
-                        <div class="uk-width-1-3@m uk-width-1-1@s">
-                            <p class="uk-text-bold uk-heading-divider">Locations</p><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span
-                                class="uk-text-bold">Fresno, California</span>
-                            <br>
-                            <div style="padding-left:55px;"><span class="uk-text-right">7545 N. Del Mar Ave, </span>
-                                <br><span class="uk-text-left">Suite 103, 104 & 204 </span>
-                                <br><span class="uk-text-right">Fresno, California </span>
-                                <br><span class="uk-text-right">93711</span>
-                                <br><span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span></div>
-                            <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Bakersfield, California</span>
-                            <br>
-                            <div style="padding-left:55px;"><span class="uk-text-right">5201 California Ave, </span>
-                                <br><span class="uk-text-left">Suite 255 </span>
-                                <br><span class="uk-text-right">Bakersfield, California </span>
-                                <br><span class="uk-text-right">93309</span>
-                                <br><span class="uk-text-right"><a href="tel:661-846-2833">1(661) 846-2833</a></span></div>
-                            <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Modesto, California </span>
-                            <br>
-                            <div style="padding-left:55px;"><span class="uk-text-right">1165 Scenic Drive,</span>
-                                <br><span class="uk-text-left">Suite C-1</span>
-                                <br><span class="uk-text-right">Modesto, California</span>
-                                <br><span class="uk-text-right">95350</span>
-                                <br><span class="uk-text-right"><a href="tel:209-622-1058">1(209) 622-1058</a> </span></div>
-                        </div>
-                        <div class="uk-width-1-3@m uk-width-1-1@s">
-                            <br>
-                            <ul class="uk-list uk-text-meta">
-                                <li><span uk-icon="icon: clock"></span><span class="uk-padding-small uk-text-right">Office Hours: Monday - Friday, 8AM to 5PM</span></li>
-                                <li><span uk-icon="icon: comment"></span><span class="uk-padding-small uk-text-right">Referrals accepted 7 days a week</span></li>
-                                <li><span uk-icon="icon: phone"></span><span class="uk-padding-small">Phone: <a href="tel:559-432-2003">1(559) 432-2003</a></span></li>
-                                <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all referrals to: 1(559) 899-0967</span></li>
-                                <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all MD orders to: 1(877) 868-6528</span></li>
-                                <li><span uk-icon="icon: mail"></span><span class="uk-padding-small">Email: <a href="mailto:info@cchha.com">info@cchha.com</a></span></li>
-                                <li> <a
-                                        href="https://www.facebook.com/Compassionate-Care-Home-Health-Agency-1975186136031240/?__tn__=%2Cd%2CP-R&amp;eid=ARCKp7hOtHDDRD0Nr_ZBAj73umHxBCwXFsTwD9eemai1IOX6rLQ55Y6ivxE8wFiSEqEKlah4F-laj66D"><span
-                                            uk-icon="icon: facebook"> </span><span class="uk-padding-small">Facebook</span></a></li>
-                                <li> <a href="https://www.instagram.com/compassionatecarehh/"><span uk-icon="icon: instagram"></span><span class="uk-padding-small">Instagram</span></a></li>
-                            </ul>
-                        </div>
-                        <div class="uk-width-1-3@m uk-width-1-1@s uk-text-center">
+            <footer class="uk-container uk-padding">
+                <div class="unnamed-grid" uk-grid>
+                    <div class="uk-width-1-1 uk-text-center"><img src="/static/assets/cchha.svg" style="max-height: 100px;" alt="Compassionate Care Home Health Agency Logo"></div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s">
+                        <p class="uk-text-bold uk-heading-divider">Locations</p><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span
+                            class="uk-text-bold">Fresno, California</span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">7545 N. Del Mar Ave, </span>
+                            <br><span class="uk-text-left">Suite 103, 104 & 204 </span>
+                            <br><span class="uk-text-right">Fresno, California </span>
+                            <br><span class="uk-text-right">93711</span>
+                            <br><span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span></div>
+                        <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Bakersfield,
+                            California</span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">5201 California Ave, </span>
+                            <br><span class="uk-text-left">Suite 255 </span>
+                            <br><span class="uk-text-right">Bakersfield, California </span>
+                            <br><span class="uk-text-right">93309</span>
+                            <br><span class="uk-text-right"><a href="tel:661-846-2833">1(661) 846-2833</a></span></div>
+                        <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Modesto,
+                            California
+                        </span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">1165 Scenic Drive,</span>
+                            <br><span class="uk-text-left">Suite C-1</span>
+                            <br><span class="uk-text-right">Modesto, California</span>
+                            <br><span class="uk-text-right">95350</span>
+                            <br><span class="uk-text-right"><a href="tel:209-622-1058">1(209) 622-1058</a> </span></div>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s">
+                        <br>
+                        <ul class="uk-list uk-text-meta">
+                            <li><span uk-icon="icon: clock"></span><span class="uk-padding-small uk-text-right">Office Hours: Monday - Friday, 8AM to 5PM</span></li>
+                            <li><span uk-icon="icon: comment"></span><span class="uk-padding-small uk-text-right">Referrals accepted 7 days a week</span></li>
+                            <li><span uk-icon="icon: phone"></span><span class="uk-padding-small">Phone: <a href="tel:559-432-2003">1(559) 432-2003</a></span></li>
+                            <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all referrals to: 1(559) 899-0967</span></li>
+                            <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all MD orders to: 1(877) 868-6528</span></li>
+                            <li><span uk-icon="icon: mail"></span><span class="uk-padding-small">Email: <a href="mailto:info@cchha.com">info@cchha.com</a></span></li>
+                            <li> <a
+                                    href="https://www.facebook.com/Compassionate-Care-Home-Health-Agency-1975186136031240/?__tn__=%2Cd%2CP-R&amp;eid=ARCKp7hOtHDDRD0Nr_ZBAj73umHxBCwXFsTwD9eemai1IOX6rLQ55Y6ivxE8wFiSEqEKlah4F-laj66D"><span
+                                        uk-icon="icon: facebook"> </span><span class="uk-padding-small">Facebook</span></a></li>
+                            <li> <a href="https://www.instagram.com/compassionatecarehh/"><span uk-icon="icon: instagram"></span><span class="uk-padding-small">Instagram</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s uk-text-center">
+                        <div>
                             <p class="uk-text-bold">We Believe in Compassionate Care</p>
-                            <p>We have been serving the Central Valley community for over fifteen years, and our commitment to providing the highest quality care shows in every patient we serve. Let
-                                us
-                                show you what compassionate care truly means.</p>
-                            <div uk-grid>
-                                <div class="uk-width-1-3@m uk-width-1-1@s">
-                                    <a href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick" target="_blank"
-                                        rel="nofollow"><img
-                                            src="https://seal-cencal.bbb.org/seals/blue-seal-120-61-bbb-89049202.png" style="border: 0;" alt="Compassionate Care Home Health Agency, LLC BBB Business
-                                            Review" /></a>
-                                </div>
-                                <div class="uk-width-1-3@m uk-width-1-1@s"><img src="/static/assets/ACHC-logo-65.png" style="margin-top:10px;"></div>
-                            </div>
+                            <p>We have been serving the Central Valley community for over
+                                fifteen years, and our commitment to providing the highest
+                                quality care shows in every patient we serve. Let us show you
+                                what compassionate care truly means.</p>
                         </div>
-                    </footer>
+                        <div class="unnamed-grid" uk-grid>
+                            <div class="uk-width-1-3@m uk-width-1-1@s"><a
+                                    href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick"
+                                    target="_blank" rel="nofollow"><img
+                                        src="https://seal-cencal.bbb.org/seals/blue-seal-120-61-bbb-89049202.png"
+                                        style="border: 0;" alt="Compassionate Care Home Health
+                                        Agency, LLC BBB Business Review" /></a>
+                            </div>
+                            <div class="uk-width-1-3@m uk-width-1-1@s"><img
+                                    src="/static/assets/ACHC-logo-65.png"
+                                    style="margin-top:10px;">
+                            </div>
+                        </div><!-- end of bbb grid -->
+                    </div>
+                    <script>
+                        var config = {
+                            maxRating: 100,
+                            showText: true,
+                            animate:		true,
+                            duration:		1000,
+                            ease:			"easeOutBounce",
+                            wrapperClass: "ratingbar_wrapper_custom", 
+                            innerClass: "ratingbar_inner_custom", 
+                            textClass: "ratingbar_text_custom",
+                            wrapperWidth: $(document).width() - 170,
+                        }
+                        var obj = $('.review_ratings').ratingbar(config)
+                        $(window).resize(function(e) {
+                            var w = $(document).width()  - 170
+                            $("#calc5 .ratingbar_wrapper_custom").attr('style', w)
+                            $("#calc4 .ratingbar_wrapper_custom").attr('style', w)
+                            $("#calc3 .ratingbar_wrapper_custom").attr('style', w)
+                            $("#calc2 .ratingbar_wrapper_custom").attr('style', w)
+                            $("#calc1 .ratingbar_wrapper_custom").attr('style', w)
+                            obj.ratingbar('update', config)
+                            
+                        })
+                        // useless function
+                        function update(w) {
+                            var config = {
+                                // maxRating: 100,
+                                // showText: true,
+                                // wrapperClass: "ratingbar_wrapper_custom", 
+                                // innerClass: "ratingbar_inner_custom", 
+                                // textClass: "ratingbar_text_custom",
+                                wrapperWidth: w,
+                            }
+                            obj.ratingbar(config)
+                            }
+
+                            function rejection(id) {
+                     
+                     var xhr = new XMLHttpRequest();
+                     xhr.open("POST", "/bd-admin/review/reject", true)
+                     xhr.setRequestHeader("Content-Type", "application/json")
+                     xhr.onreadystatechange = function() {
+                         if (xhr.readyState == 4 && xhr.status == 200) {
+
+                         }
+                     }
+                     
+                     var data = {review_id: parseInt('{{.Model.ID}}'), user_id: parseInt('{{$userID}}'), body: "val"}
+                     xhr.send(JSON.stringify(data))
+                   }
+             
+                    </script>
+                    <script>
+
+                        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+                        (function(){
+                        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+                        s1.async=true;
+                        s1.src='https://embed.tawk.to/5d38b65d9b94cd38bbe91af2/default';
+                        s1.charset='UTF-8';
+                        s1.setAttribute('crossorigin','*');
+                        s0.parentNode.insertBefore(s1,s0);
+                        })();
+                    </script>
                 </div>
-
-                <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.3/js/uikit.min.js"></script> -->
-                <script>
-                var filter = document.querySelector('.js-filter');
-                UIkit.filter(filter)
-                
-            </script>
-            </body>
-
-        </html>
+            </footer>
+        </div>
+    </body>
+</html>

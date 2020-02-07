@@ -14,6 +14,9 @@ import (
 	"github.com/xDarkicex/cchha_server_new/helpers"
 )
 
+// change rating post time format
+const customFormat = `January _2, 2006`
+
 var funcMAP = template.FuncMap{
 	"GetFlashes": func(flashes []models.Flash) []models.Flash {
 		var buf bytes.Buffer
@@ -44,7 +47,7 @@ var funcMAP = template.FuncMap{
 		return MostRecent
 	},
 	"ToDate": func(t time.Time) string {
-		return t.Format("January 2, 2006")
+		return t.Format(customFormat)
 	},
 	"ToTime": func(t time.Time) string {
 		return t.Format("3:04PM")

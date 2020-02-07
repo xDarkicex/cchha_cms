@@ -1,0 +1,26 @@
+	date := strings.Split(t.Format(customFormat), " ")
+		b := strings.Builder{}
+		b.WriteString(date[0] + " ")
+		b.WriteString("the ")
+		date[1] = "30"
+		b.WriteString(" " + date[1])
+
+		a, _ := strconv.Atoi(date[1])
+
+		if a > 20 {
+			c := strings.Split(date[1], "")
+			a, _ = strconv.Atoi(c[1])
+		}
+		if a == 4 {
+			b.WriteString("th ")
+		} else if a == 3 {
+			b.WriteString("rd ")
+		} else if a == 2 {
+			b.WriteString("nd")
+		} else if a == 1 {
+			b.WriteString("st ")
+		} else if a == 0 {
+			b.WriteString("th ")
+		}
+		b.WriteString(date[2])
+		return b.String()

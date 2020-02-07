@@ -24,8 +24,13 @@ func CreateReview(review Review) (rev Review) {
 	return rev
 }
 
-func DeleteReview(review Review) error {
-	return db.Delete(&review).Error
+func (r Review) Delete() error {
+	return db.Debug().Unscoped().Delete(&r).Error
+}
+
+func DeleteReview(sql string) error {
+	review := Review{}
+	return db.Debug().Delete(&review, sql).Error
 }
 
 func GetReviews() (reviews []Review) {
@@ -42,6 +47,12 @@ func GetReview(sql string) (review Review) {
 func GetReviewWithDetails(id uint) (details []Detail) {
 	review := Review{}
 	db.Preload("Details").Find(&review, id)
+	return review.Details
+}
+
+func GetSeedReviews() (details []Detail) {
+	review := Review{}
+	db.Preload("Details").Find(&review, "user_id = 2")
 	return review.Details
 }
 
@@ -76,7 +87,7 @@ func GetRejectedReviewsByUser(id uint) (reviews []Review) {
 
 func GetApprovedReviewsSorted(num int) (reviews []Review) {
 	ordered_reviews := []Review{}
-	err := db.Preload("Details").Where("rating = $1", num).Order("rating desc").Find(&ordered_reviews).Error
+	err := db.Preload("Details").Where("rating = $1", num).Not("pending = $2", true).Order("rating desc").Find(&ordered_reviews).Error
 	if err != nil {
 		pc, fn, line, _ := runtime.Caller(1)
 		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
@@ -112,17 +123,8 @@ func GetApprovedReviews() (reviews []Review) {
 	return reviews
 }
 
-func ApproveReview() {
-
-}
-
-// RejectReview -- Good function
-func RejectReview() {
-
-}
-
 func UpdateReview(review Review) error {
-	err := db.Save(&review).Error
+	err := db.Debug().Save(&review).Error
 	if err != nil {
 		fmt.Println("<< Update Review")
 		fmt.Println()

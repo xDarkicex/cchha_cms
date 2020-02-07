@@ -1,8 +1,14 @@
 package models
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"time"
+
+	"github.com/xDarkicex/name_generator"
+
+	"github.com/xDarkicex/name_generator/dictionary"
 
 	"github.com/juju/errors"
 
@@ -23,6 +29,86 @@ func init() {
 	err := Migration(db)
 	if err != nil {
 		log.Println("[Cause] ", errors.Cause(err), "\n[Details] ", errors.Details(err))
+	}
+	// only run on seeding
+	// should maybe add to flag
+	// seed()
+	// remove_seed()
+}
+
+func remove_seed() {
+	time := time.Now()
+	// DeleteDatail("user_id = 0")
+
+	reviews := GetApprovedReviews()
+	for _, review := range reviews {
+		hour_db := review.Model.CreatedAt.Hour()
+		day_db := review.Model.CreatedAt.Format("Monday")
+		hour := time.Hour()
+		day := time.Format("Monday")
+		fmt.Println(day_db, " ", day, "\n", hour_db, " ", hour)
+		if day_db == day {
+			if hour_db == hour {
+				for _, detail := range review.Details {
+					if err := detail.Delete(); err != nil {
+						fmt.Println(errors.Cause(err))
+					}
+				}
+				if err := review.Delete(); err != nil {
+					fmt.Println(errors.Cause(err))
+				}
+			}
+
+		}
+	}
+}
+
+func seed() {
+	file := dictionary.RETURNSEED()
+	// val := strings.Split(string(file), "},")
+	var seeds = struct {
+		Comments []struct {
+			Name         string `json:"name,omitempty"`
+			Title        string `json:"title,omitempty"`
+			Body         string `json:"body"`
+			Location     string `json:"location,omitempty"`
+			Rating       int    `json:"rating"`
+			ExternalSite string `json:"external_site"`
+		} `json:"comments"`
+	}{}
+	err := json.Unmarshal(file, &seeds)
+	if err != nil {
+		fmt.Println("cause: ", errors.Cause(err), "\n", "Details:", errors.ErrorStack(err))
+	}
+
+	for _, seed := range seeds.Comments {
+
+		review := Review{
+			Rating:           seed.Rating,
+			VisitorID:        0,
+			Email:            namer.GetEmailDomain(),
+			Title:            seed.Title,
+			Body:             seed.Body,
+			Username:         seed.Name,
+			ExternalLink:     seed.Location,
+			ExternalSiteName: seed.ExternalSite,
+			UserID:           uint(0),
+			Pending:          false,
+		}
+		// Details:          []Detail{detail},
+		review = CreateReview(review)
+		detail := Detail{
+			ApprovalTime: time.Now(),
+			UserID:       uint(0),
+			ReviewerID:   uint(0),
+			ReviewID:     review.ID,
+			Title:        fmt.Sprintf("SEEDED"),
+			Body:         fmt.Sprintf("Post Made from seed file"),
+		}
+		detail = CreateDetail(detail)
+		review.Details = append(review.Details, detail)
+		UpdateReview(review)
+
 	}
 }
 

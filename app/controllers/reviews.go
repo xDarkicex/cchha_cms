@@ -148,7 +148,6 @@ func (rev Reviews) Index(w http.ResponseWriter, r *http.Request) {
 	} else {
 		count = len(data)
 	}
-
 	var temp = make([]int, 0)
 	for _, post := range data {
 		temp = append(temp, post.Rating)

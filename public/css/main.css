@@ -66,6 +66,19 @@ a:hover,
   color: #0f6ecd;
   text-decoration: underline; }
 
+#options > div > ul > li:hover {
+  transform: scale(1.2, 1.2);
+  color: #00b1f1;
+  border-bottom: #11b1e9 3px solid;
+}
+
+
+#options > div > ul > li {
+  transition: all 0.3s ease-out;
+  padding-left: 0;
+  margin-left: 20px;
+}
+
 
 
 /* Text-level semantics
@@ -926,6 +939,7 @@ a.uk-link-reset:hover,
 /* line 64, node_modules/uikit/src/scss/components/table.scss */
 .uk-table {
   /* 1 */
+  transition: all .2s ease-in-out;
   border-collapse: collapse;
   border-spacing: 0;
   /* 2 */
@@ -936,7 +950,8 @@ a.uk-link-reset:hover,
 /* Add margin if adjacent element */
 /* line 76, node_modules/uikit/src/scss/components/table.scss */
 * + .uk-table {
-  margin-top: 20px; }
+  margin-top: 20px; 
+}
 
 /* Header cell
  ========================================================================== */
@@ -958,6 +973,7 @@ a.uk-link-reset:hover,
  ========================================================================== */
 /* line 101, node_modules/uikit/src/scss/components/table.scss */
 .uk-table td {
+  transition: box-shadow 1s, background 1s;
   padding: 16px 12px;
   vertical-align: top; }
 
@@ -1023,7 +1039,11 @@ a.uk-link-reset:hover,
 /* line 179, node_modules/uikit/src/scss/components/table.scss */
 .uk-table-hover > tr:hover,
 .uk-table-hover tbody tr:hover {
-  background: #ffd; }
+  background:white;
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  transform: scale(1.01, 1.2);
+  
+}
 
 /* Size modifier
  ========================================================================== */
@@ -1066,7 +1086,7 @@ a.uk-link-reset:hover,
 /* line 222, node_modules/uikit/src/scss/components/table.scss */
 .uk-table-link > a {
   display: block;
-  padding: 16px 12px; }
+  padding: 10px 12px; }
 
 /* line 227, node_modules/uikit/src/scss/components/table.scss */
 .uk-table-small .uk-table-link > a {
@@ -1112,9 +1132,11 @@ a.uk-link-reset:hover,
 
 /* line 1907, node_modules/uikit/src/scss/mixins-theme.scss */
 .uk-table tbody tr {
+  
   -webkit-transition: background-color 0.1s linear;
-  transition: background-color 0.1s linear; }
-
+  transition: background-color 0.1s linear; 
+  transition: all .2s ease-in-out; 
+}
 /* ========================================================================
    Component: Icon
  ========================================================================== */
@@ -10962,3 +10984,8 @@ p.rating {
   #steps div div p {
     font-size: 1.3rem;
     line-height: 1.3; }
+
+
+
+
+

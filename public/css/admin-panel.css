@@ -2,7 +2,7 @@ ul {
   font-family: 'Open Sans', sans-serif; color: white;
 }
 #admin-navbar {
-  background: #222;
+  background: #263238;
 }
 #admin-navbar .uk-navbar-nav > li > a {
             color: #ffffff;
@@ -16,7 +16,6 @@ ul {
     align-items: center;
    
 }
-
 #admin-navbar .uk-navbar-nav > li > a:hover {
   color: #3cc2f1;
   border-bottom: 4px solid #3cc2f1;

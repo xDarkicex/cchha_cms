@@ -147,17 +147,17 @@ func (a Admin) Edit(w http.ResponseWriter, r *http.Request) {
 // Show ...
 func (a Admin) Show(w http.ResponseWriter, r *http.Request) {
 	s, _ := GetNamed(r, "current-session")
-	userID := chi.URLParam(r, "userID")
-	sql := fmt.Sprintf("id = '%s'", userID)
-	exists, err := models.GetUser(sql)
-	if err != nil {
-		helpers.HandleError(errors.New(errors.Details(err)))
-	}
+	// userID := chi.URLParam(r, "userID")
+	// sql := fmt.Sprintf("id = '%s'", userID)
+	// exists, err := models.GetUser(sql)
+	// if err != nil {
+	// 	helpers.HandleError(errors.New(errors.Details(err)))
+	// }
 	user := helpers.GetCurrentUser("user-id", s)
-	if exists.ID != user.ID {
-		http.Redirect(w, r, "/", 302)
-		return
-	}
+	// if exists.ID != user.ID {
+	// 	http.Redirect(w, r, "/", 302)
+	// 	return
+	// }
 
 	fmt.Println(user.ID, "<< in admin controller ===")
 	rejected := models.GetRejectedReviewsByUser(user.ID)
@@ -193,7 +193,6 @@ func (a Admin) Create(w http.ResponseWriter, r *http.Request) {
 	user := helpers.GetCurrentUser("user-id", s)
 	r.ParseForm()
 	rawRating := r.Form["rating"]
-	spew.Dump(rawRating)
 	rating, err := strconv.Atoi(rawRating[len(rawRating)-1])
 
 	if err != nil {
@@ -388,7 +387,7 @@ func (a Admin) DeleteReview(w http.ResponseWriter, r *http.Request) {
 		helpers.HandleError(err)
 	}
 	review := models.GetReview(fmt.Sprintf("id = '%d'", msg.ReviewID))
-	err = models.DeleteReview(review)
+	err = review.Delete()
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)

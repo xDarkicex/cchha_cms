@@ -53,7 +53,7 @@ func NewRouter() http.Handler {
 	router.Post("/bd-admin/signup", admin.Signup)
 	router.Get("/bd-admin/user/{userID}/edit", auth.Authtenicate(admin.Edit))
 	router.Post("/bd-admin/user/{userID}/edit", admin.Edit)
-	router.Get("/bd-admin/user/{userID:\\d{1,200}$}", auth.Authtenicate(admin.Show))
+	router.Get("/bd-admin/user/{userID:\\d{1,200}$}", admin.Show)
 	router.Get("/bd-admin", auth.Authtenicate(admin.Index))
 	router.Post("/bd-admin/review/create", admin.Create)
 	// router.Get("/bd-admin/account/forgot", admin.Forgot)
