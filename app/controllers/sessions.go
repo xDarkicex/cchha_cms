@@ -31,6 +31,9 @@ type Config struct {
 	KEY string `json:"key"`
 }
 
+type cookie struct {
+}
+
 var _store *gs.CookieStore
 
 func init() {
@@ -92,8 +95,7 @@ func GetNamed(req *http.Request, name string) (*gs.Session, error) {
 }
 
 func GetCookie(name string, s *gs.Session) interface{} {
-	val := s.Values[name]
-	return val
+	return s.Values[name]
 }
 
 func SetCookie(name string, value interface{}, s *gs.Session) {

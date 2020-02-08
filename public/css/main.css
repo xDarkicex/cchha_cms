@@ -11,7 +11,7 @@
 /* line 91, node_modules/uikit/src/scss/components/base.scss */
 html {
   /* 1 */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   font-weight: normal;
   line-height: 1.5;
@@ -59,6 +59,8 @@ a,
   color: #1e87f0;
   text-decoration: none;
   cursor: pointer; }
+
+
 
 /* line 147, node_modules/uikit/src/scss/components/base.scss */
 a:hover,
@@ -281,7 +283,7 @@ h4, .uk-h4,
 h5, .uk-h5,
 h6, .uk-h6 {
   margin: 0 0 20px 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: normal;
   color: #333;
   text-transform: none; }
@@ -3089,6 +3091,16 @@ select.uk-form-width-xsmall {
   transition: box-shadow 0.1s ease-in-out;
   transition: box-shadow 0.1s ease-in-out, -webkit-box-shadow 0.1s ease-in-out; }
 
+  .uk-container > p {
+    text-indent: 2em;
+  }
+  .uk-custom {
+    text-align: left;
+  }
+  .uk-card-body {
+    padding: 30px 20px;
+  }
+
 /* Sections
  ========================================================================== */
 /* line 100, node_modules/uikit/src/scss/components/card.scss */
@@ -4518,7 +4530,7 @@ ul.uk-nav-sub {
   padding: 0 15px;
   /* 3 */
   font-size: 0.875rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   /* 4 */
   text-decoration: none; }
 
@@ -8998,7 +9010,7 @@ td.uk-text-break {
 /* line 431, node_modules/uikit/src/scss/components/utility.scss */
 .uk-logo {
   font-size: 1.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: #666;
   /* 1 */
   text-decoration: none; }

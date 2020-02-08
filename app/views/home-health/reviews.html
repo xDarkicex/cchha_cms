@@ -78,7 +78,8 @@
             <div id="offcanvas" uk-offcanvas="mode: push">
                 <div class="uk-offcanvas-bar uk-flex uk-flex-column uk-background-primary">
                     <button class="uk-offcanvas-close" type="button" uk-close></button>
-                    <ul class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical"></ul>
+                    <ul class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical">
+                    </ul>
                 </div>
             </div>
             <div id="header" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
@@ -113,9 +114,6 @@
                 </nav>
             </div>
             <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-            {{/* style="font-family:'Open Sans', sans-serif;" */}}
-            <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
-            {{/* style="font-family:font-family: 'Lato', sans-serif;" */}}
             <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
             <div class="uk-width-1-1">
                 <div>
@@ -226,31 +224,6 @@
                     </li>
                 </ul>
                 {{end}}
-                <script>
-                   
-                    function star(rating, tag) {                  
-                        let review = document.querySelector(tag)
-                         
-                        let ratingvalue = rating;
-                        let t = review.querySelector('div.p1 > div.uk-card')
-                        // let thing = document.querySelector('.uk-text-meta > a')
-                        // console.log(thing)
-                        // console.log(t)
-                        
-                        // review.querySelector('.uk-text-meta > a').innerText.replace(/-/g, " ").toUpperCase()
-                       
-                        
-                        var div = document.createElement('div')
-                        
-                        for (i = 0; i < rating; i++) {
-                            var el = document.createElement('span')
-                            el.setAttribute('class', 'uk-icon ml2 rating-bar')
-                            el.setAttribute('uk-icon', 'star')
-                            div.appendChild(el)
-                        }
-                        t.prepend(div)
-                     }
-                    </script>
                 <ul id="js-filter" class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
                     {{range .Data}}
                     <!-- uk-scrollspy="target: &gt; * &gt; *; cls:uk-animation-slide-left-medium; delay: 800; repeat:true;"> -->
@@ -260,13 +233,15 @@
                                 <div class="uk-card-body p2">
                                     <div>
                                         <div>
-                                            <p class="rating">
-                                                <script>
-                                                   document.addEventListener('"DOMContentLoaded"', star('{{.Rating}}',".review-{{.Model.ID}}"))      
-                                                </script>
-                                            </p>
+                                            <p class="rating"></p>
                                         </div>
                                     </div>
+                                    <script>
+                                        document.addEventListener('"DOMContentLoaded"', star('{{.Rating}}',".review-{{.Model.ID}}"))      
+                                    </script>
+                                            
+                                        
+                                    
                                     {{if $IsSuperUser }}
                                     <div>
                                         <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
@@ -274,7 +249,6 @@
                                                 <div class="px1">
                                                     <span id="heart-{{.Model.ID}}" uk-icon="icon: heart; ratio: 1" onClick="setDataFeatured('{{.Model.ID}}')" data-featured="{{.Featured}}"></span>
                                                 </div>
-
                                             </li>
                                             <li>
                                                 <div class="px1">
@@ -282,19 +256,14 @@
                                                         <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
                                                         </span>
                                                     </a>
-
                                                 </div>
-
                                             </li>
                                             <li>
                                                 <div class="px1">
                                                     <span uk-icon="icon: close" onclick="rejection({{.Model.ID}})"></span>
                                                 </div>
-
                                             </li>
-
                                         </ul>
-
                                         <script>
                                                 (function() {
                                                     let favorited = document.getElementById('heart-{{.Model.ID}}')
@@ -359,10 +328,12 @@
                                     <p class="uk-text-meta">No Referral</p>
                                     {{end}}
                                     <p class="truncate">{{.Body}}</p>
-
+                                    {{if $IsSuperUser }}
+                                    {{else}}
                                     <div class="uk-flex uk-flex-right">
                                         <span class="uk-button uk-button-default" style="z-index: 999;" uk-toggle="target: #modal-{{.Model.ID}}">Read More</span>
                                     </div>
+                                    {{end}}
                                 </div>
                             </div>
                             <div id="modal-full-{{.Model.ID}}" class="uk-modal uk-modal-full" style="background: white;" uk-modal>
@@ -376,7 +347,7 @@
                                             </div>
                                             <div>
                                                 <p class="uk-text-muted uk-text-small pl1">
-                                                    {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
+                                        {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
                                                 </p>
                                             </div>
                                         </div>
@@ -436,7 +407,6 @@
                             </div>
                         </div>
                     </li>
-
                     {{end}}
                 </ul>
             </div>

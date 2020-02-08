@@ -1,6 +1,9 @@
 ul {
   font-family: 'Open Sans', sans-serif; color: white;
 }
+#events li {
+  color: white;
+}
 #admin-navbar {
   background: #263238;
 }
@@ -14,6 +17,7 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 4px solid transparent;
    
 }
 #admin-navbar .uk-navbar-nav > li > a:hover {
@@ -53,8 +57,6 @@ span.uk-parent.px2 > a {
   text-decoration: none;
   
 }
-
-
 
 .IsEditor {
   display: none;

@@ -12,19 +12,28 @@
       quality care shows in every patient we serve. Let us show you what
       compassionate care truly means.">
     <link rel="icon" ype="image/png" href="/static/assets/favicon.png">
-    <link rel="stylesheet" href="/static/css/main.css">
+
 
     <title>{{.Title}}</title>
+    <!-- forgin imports -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js"></script> for phone numbers -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/static/css/ratingbar.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/stars.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/admin-panel.css" />
-    <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.ratingbar.js"></script>
-    <script src="/static/js/main.js"></script>
-    <!-- Facebook Pixel Code -->
+    {{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.3/js/uikit.min.js"></script> */}}
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133675222-1"></script>
+    <!-- forgin imports end -->
+
+
+    <!-- local imports -->
+    <link rel="icon" ype="image/png" href="/static/assets/favicon.png">
+    <link rel="stylesheet" href="/static/css/admin-panel.css">
+    <link rel="stylesheet" href="/static/css/stars.css">
+    <script type="text/javascript" src="/static/js/stars.js"></script>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/ratingbar.css" />
+    <script type="text/javascript" src="/static/js/main.js"></script>
+    <!-- local imports end -->
     <script>
       window.dataLayer = window.dataLayer || [];
          function gtag(){dataLayer.push(arguments);}
@@ -41,14 +50,8 @@
     {{range $CURRENT}}
     {{if eq .Type "Auth"}}
     <script>
-        UIkit.notification("<span uk-icon='icon: warning'></span> {{.Message}}")
-      </script>
-    {{end}}
-    {{if eq .Type "reset"}}
-    <script>
-        UIkit.notification("<span uk-icon='icon: check'></span> {{.Message}}")
-      </script>
-    {{end}}
+          UIkit.notification("<span uk-icon='icon: warning'></span> {{.Message}}")
+        </script>
     {{end}}
     {{end}} <!-- end of flash loop -->
     {{$count := .Count}}
@@ -84,7 +87,7 @@
             </a>
 
             <div class="uk-navbar-center-right uk-visible@m mr2">
-              <span>
+              <span class="82">
                 <span class="uk-parent px2">
                   <a href="/bd-admin/user/{{.User.ID}}" class="uk-link-heading">Welcome! {{$user}}</a>
                 </span>
@@ -113,15 +116,8 @@
         </nav>
       </div>
       <div class="uk-width-1-1 uk-padding">
-        <h1 class="uk-text-center uk-heading-line">
-          <span>
-            {{if ne $count 0}}
-            New Pending Reviews: {{$count}}
-            {{else}}
-            No Pending Reviews
-            {{end}}
-          </span>
-        </h1>
+        <h1 class="uk-text-center uk-heading-line">{{if ne $count 0}}New Pending Reviews: {{$count}}{{else}}No Pending Reviews
+          {{end}}</h1>
       </div>
       {{if le $count 1}}
       <div class="uk-child-width-1-1@m uk-child-width-1-1@s p2 uk-grid-match" uk-grid>
@@ -132,78 +128,116 @@
           <div class="reviews" id="review-{{.Model.ID}}">
             <div class="uk-card uk-card-default p1" id="top-level">
               <div class="uk-card-body">
-                <p class="rating">{{.Rating}}</p>
-                {{if $count }}
-                <h3>{{.Title}}</h3>
-                {{else}}
-                <h2 class="uk-text-lead uk-text-center@s uk-text-middle">{{.Title}}</h2>
-                <p class="uk-text-lead uk-text-center@s uk-text-middle">Please
-                  Contact your System Administrator</p>
-                <br>
-                <p class="uk-text-lead uk-text-center@s uk-text-middle
-                  uk-text-meta review-source"><a href="mainto: admin@cchha.com">System
-                    Administrator</a></p>
-                {{end}}
-                <span class="hidden">{{.Model.ID}}</span>
-                <p class="uk-custom">{{.Username}}</p>
-                <p class="uk-text-meta review-source"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
-                <p>{{.Body}}</p>
-                {{if $count }}
-                <div class="uk-flex">
-                  <button class="uk-icon-button uk-button-danger uk-position-top-right uk-position-small" uk-toggle="target: #deleteReview-{{.Model.ID}}" type="button" uk-icon="icon:close"></button>
-                  <button class="uk-button uk-button-default" uk-toggle="target: #rejectReview-{{.Model.ID}}" type="button">Reject</button>
-                  <button class="uk-button uk-button-default" uk-toggle="target: #approveReview-{{.Model.ID}}" type="button">Approve</button>
-                  {{else}}
-
-                  {{ end }}
-
-                </div>
-              </div>
-              <div class="uk-modal" id="rejectReview-{{.Model.ID}}" uk-modal>
-                <div class="uk-modal-dialog">
-                  <button class="uk-modal-close-default" type="button" uk-close></button>
-                  <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Review: {{.Title}}</h2>
-                    <p class="uk-text-meta">Customer Email: <span id="email">{{.Email}}</span></p>
-                    <p class="uk-text-meta">Customer Name: <span id="username">{{.Username}}</span></p>
-                    <div id="html_element"></div>
-                  </div>
-                  <div class="uk-modal-body">
-                    <p class="h2">Reason for Rejection.</p>{{$rejectText := print "rejectText-" .Model.ID}}
-                    <div>
-                      <textarea class="uk-textarea" name="reasonForRejection" placeholder="short description of violation" rows="3"
-                        style="resize:none;"></textarea>
-                    </div>
-                    <p class="h2">Replay to {{.Username}}.</p>
-                    <hr>
-                    <form class="uk-form" id="rejectReview-email-{{.Model.ID}}"
-                      name="rejectReview-{{.Model.ID}}"
-                      action="/bd-admin/review/reject" method="post">
-                      <div class="uk-margin">
-                        <input class="uk-input" type="text" name="title" placeholder="title">
+                <span>
+                  <p class="rating"></p>
+                  <script>
+                      document.addEventListener('DOMContentLoaded', star('{{.Rating}}',"#review-{{.Model.ID}})")     
+                    </script>
+                </span>
+                <div class="145">
+                  <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
+                    <li>
+                      <div class="px1">
+                        <span id="heart-{{.Model.ID}}" uk-icon="icon: heart; ratio: 1" onClick="setDataFeatured('{{.Model.ID}}')" data-featured="{{.Featured}}"></span>
                       </div>
-                      <textarea class="uk-textarea" placeholder="Email" rows="5"
-                        style="resize:none;" name="contact_body"
-                        id="{{$rejectText}}"></textarea>
-                      <input type="hidden" value="{{.Email}}"
-                        name="contact_email" />
-                      <input type="hidden" value="{{.Username}}"
-                        name="contact_name" />
-                      <div class="uk-align-left uk-margin-top">
-                        <div class="g-recaptcha"
-                          data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv">
-                        </div>
+                    </li>
+                    <li>
+                      <div class="px1">
+                        <a href="#modal-full-{{.Model.ID}}" uk-toggle>
+                          <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
+                          </span>
+                        </a>
                       </div>
-                    </form>
-                  </div>
-                  <div class="uk-modal-footer">
-                    <button type="submit" class="uk-button-default uk-button"
-                      name="rejectReview-{{.Model.ID}}"
-                      onclick="rejection()">Reject</button>
-                    {{/* <button class="uk-button uk-button-primary" type="submit" for="#rejectReview-{{.Model.ID}}">Reply<span uk-icon="icon:mail"></span></button> */}}
-                  </div>
+                    </li>
+                    <li>
+                      <div class="px1">
+                        <span uk-icon="icon: close" onclick="rejection('{{.Model.ID}}')"></span>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
                 <script>
+                    (function() {
+                        let favorited = document.getElementById('heart-{{.Model.ID}}')
+                            if (favorited.dataset.featured == "true") {
+                                favorited.childNodes[0].childNodes[1].setAttribute('fill', 'red')
+                            }
+                    }())
+                  </script>
+              </div>
+              <p class="rating">{{.Rating}}</p>
+              {{if $count }}
+              <h3>{{.Title}}</h3>
+              {{else}}
+              <h2 class="uk-text-lead uk-text-center@s uk-text-middle">{{.Title}}</h2>
+              <p class="uk-text-lead uk-text-center@s uk-text-middle">Please
+                Contact your System Administrator</p>
+              <br>
+              <p class="uk-text-lead uk-text-center@s uk-text-middle
+                uk-text-meta review-source"><a href="mainto: admin@cchha.com">System
+                  Administrator</a></p>
+              {{end}}
+              <span class="hidden">{{.Model.ID}}</span>
+              <p class="uk-custom">{{.Username}}</p>
+              <p class="uk-text-meta review-source"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+              <p>{{.Body}}</p>
+              {{if $count }}
+              <div class="uk-flex">
+                <button class="uk-button uk-button-default" uk-toggle="target: #rejectReview-{{.Model.ID}}" type="button">Reject</button>
+                <button class="uk-button uk-button-default" uk-toggle="target: #approveReview-{{.Model.ID}}" type="button">Approve</button>
+                {{else}}
+
+                {{ end }}
+
+              </div>
+            </div>
+            <div class="uk-modal" id="rejectReview-{{.Model.ID}}" uk-modal>
+              <div class="uk-modal-dialog">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <div class="uk-modal-header">
+                  <h2 class="uk-modal-title">Review: {{.Title}}</h2>
+                  <p class="uk-text-meta">Customer Email: <span id="email">{{.Email}}</span></p>
+                  <p class="uk-text-meta">Customer Name: <span id="username">{{.Username}}</span></p>
+                  <div id="html_element"></div>
+                </div>
+                <div class="uk-modal-body">
+                  <p class="h2">Reason for Rejection.</p> /* {{$rejectText := print "rejectText-" .Model.ID}} */
+                  <div>
+                    <textarea class="uk-textarea" name="reasonForRejection" placeholder="short description of violation" rows="3"
+                      style="resize:none;" id="rejectText-{{.Model.ID}}"></textarea>
+                  </div>
+                  <p class="h2">Replay to {{.Username}}.</p>
+                  <hr>
+                  <form class="uk-form" id="rejectReview-email-{{.Model.ID}}"
+                    name="rejectReview-{{.Model.ID}}"
+                    action="/bd-admin/review/reject" method="post">
+                    <div class="uk-margin">
+                      <input class="uk-input" type="text" name="title" placeholder="title">
+                    </div>
+                    <textarea class="uk-textarea" placeholder="Email" rows="5"
+                      style="resize:none;" name="contact_body"
+                      id="replyText-" +'{{.Model.ID}}'"></textarea>
+                    <input type="hidden" value="{{.Email}}"
+                      name="contact_email" />
+                    <input type="hidden" value="{{.Username}}"
+                      name="contact_name" />
+                    <div class="uk-align-left uk-margin-top">
+                      <div class="g-recaptcha"
+                        data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv">
+                      </div>
+                    </div>
+                    <button class="uk-button uk-button-primary" type="submit" for="#rejectReview-email-{{.Model.ID}}">Reply<span uk-icon="icon:mail"></span></button>
+                  </form>
+                </div>
+                <div class="uk-modal-footer">
+                  <span uk-icon="icon:minus-circle"></span>
+                  <button type="submit" class="uk-button-default uk-button"
+                    name="rejectReview-{{.Model.ID}}"
+                    onclick="rejection('{{.Model.ID}}')">Reject</button>
+                  {{/* <button class="uk-button uk-button-primary" type="submit" for="#rejectReview-{{.Model.ID}}">Reply<span uk-icon="icon:mail"></span></button> */}}
+                </div>
+              </div>
+              <script>
                     function rejection(id) {
                      
                       var xhr = new XMLHttpRequest();
@@ -215,38 +249,39 @@
                           }
                       }
                       
-                      var data = {review_id: parseInt('{{.Model.ID}}'), user_id: parseInt('{{$userID}}'), body: "val"}
+                      var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: }
                       xhr.send(JSON.stringify(data))
                     }
                 </script>
-              </div>
+            </div>
 
-              <div class="uk-modal" id="deleteReview-{{.Model.ID}}" uk-modal>
-                <div class="uk-modal-dialog">
-                  <button class="uk-modal-close-default" type="button" uk-close></button>
-                  <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Review: {{.Title}}</h2>
+            <div class="uk-modal" id="deleteReview-{{.Model.ID}}" uk-modal>
+              <div class="uk-modal-dialog">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <div class="uk-modal-header">
+                  <h2 class="uk-modal-title">Review: {{.Title}}</h2>
+                </div>
+                <div class="uk-modal-body" style="border-radius: 50px;">
+                  <p>Reason for Deletion</p>
+                  <textarea class="uk-textarea" placeholder="Note about deletion" rows="5"
+                    style="resize:none;" name="note" id="deleteText"></textarea>
+                </div>
+                <div class="uk-modal-footer">
+                  <div class="uk-section-muted uk-padding">
+                    <p class="uk-text-meta">By Checking the box below you
+                      agree to all terms and conditions.</p>
+                    <label class="checkboxes IsChecked" for="deleted">
+                      <input class="uk-checkbox checkboxForDelete"
+                        type="checkbox" name="deleted">
+                    </label>
+                    <button class="uk-button-danger uk-button delete
+                      uk-align-right" onClick="deleteReview('{{.Model.ID}}')"
+                      disabled>
+                      <span clas="uk-icon" uk-icon="icon: trash"></span>
+                    </button>
                   </div>
-                  <div class="uk-modal-body" style="border-radius: 50px;">
-                    <p>Reason for Deletion</p>
-                    <textarea class="uk-textarea" placeholder="Note about deletion" rows="5"
-                      style="resize:none;" name="note" id="deleteText"></textarea>
-                  </div>
-                  <div class="uk-modal-footer">
-                    <div class="uk-section-muted uk-padding">
-                      <p class="uk-text-meta">By Checking the box below you
-                        agree to all terms and conditions.</p>
-                      <label class="checkboxes IsChecked" for="deleted">
-                        <input class="uk-checkbox checkboxForDelete"
-                          type="checkbox" name="deleted">
-                      </label>
-                      <button class="uk-button-danger uk-button delete
-                        uk-align-right" onClick="deleteReview('{{.Model.ID}}')"
-                        disabled>
-                        <span clas="uk-icon" uk-icon="icon: trash"></span></button>
-                    </div>
-                  </div>
-                  <script>
+                </div>
+                <script>
                           function deleteReview(ID) {
                               var xhr = new XMLHttpRequest(); 
                               xhr.open("POST", "/bd-admin/review/delete", true)
@@ -256,10 +291,9 @@
                                 
                                 }
                               }
-                              var deleted = document.querySelector('input[name="deleted"]').value
+                              var deleted = document.querySelector('deleteReview-'+ID+'input[name="deleted"]').value
                               let note = document.getElementById('deleteText').value
-                              console.log(note)
-                              var data = {review_id: parseInt('{{.Model.ID}}'), user_id: parseInt('{{$userID}}'), body: "Review Removed from website by" + "{{$user}}"}
+                              var data = {review_id: parseInt('ID'), user_id: parseInt('{{$userID}}'), body: "Review Removed from website by" + "{{$user}}"}
                               xhr.send(JSON.stringify(data))
                             }
               
@@ -321,146 +355,124 @@
                         })
                       })  
                     </script>
-                </div>
               </div>
-
-
-              <div class="uk-modal" id="approveReview-{{.Model.ID}}" uk-modal>
-                <div class="uk-modal-dialog">
-                  <button class="uk-modal-close-default" type="button"
-                    uk-close></button>
-                  <div class="uk-modal-header">
-                    <h2 class="uk-modal-title">Review: {{.Title}}</h2>
-                    <p class="uk-text-meta">Customer Email: <span id="email">{{.Email}}</span></p>
-                    <p class="uk-text-meta">Customer Name: <span
-                        id="username">{{.Username}}</span></p>
-                    <div id="html_element"></div>
-                  </div>
-                  <div class="uk-modal-body">
-                    <p>Respond to customer Reviews.</p>{{$approvedText := print "approveText-" .Model.ID}}
-                    <form class="uk-form" id="emailReply-{{.Model.ID}}"
-                      name="emailReply-{{.Model.ID}}"
-                      action="/bd-admin/review/response" method="post">
-                      <textarea class="uk-textarea" placeholder="Email"
-                        rows="5" style="resize:none;" name="contact_body"
-                        id="{{$approvedText}}"></textarea>
-                      <input type="hidden" value="{{.Email}}"
-                        name="contact_email" />
-                      <input type="hidden" value="{{.Username}}"
-                        name="contact_name" />
-                      <input type="hidden" value="{{$user}}"
-                        name="contact_sender" />
-                      <input type="hidden" value="{{$userPhone}}"
-                        name="contact_sender_phone" />
-                      <input type="hidden" value="{{$userTitle}}"
-                        name="contact_sender_title" />
-                      <div class="uk-align-left uk-margin-top">
-                        <div class="g-recaptcha"
-                          data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="uk-modal-footer">
-                    {{/* <div class="uk-padding"> */}}
-                      <button class="uk-button-default uk-button"
-                        onClick="submitApproval('{{.Model.ID}}')">Approve</button>
-                      <button type="submit" form="emailReply-{{.Model.ID}}"
-                        for="emailReply-{{.Model.ID}}" class="uk-button
-                        uk-button-default reply">Reply</button>
-                      <!-- </div> -->
+            </div>
+            <div class="uk-modal" id="approveReview-{{.Model.ID}}" uk-modal>
+              <div class="uk-modal-dialog">
+                <button class="uk-modal-close-default" type="button"
+                  uk-close></button>
+                <div class="uk-modal-header">
+                  <h2 class="uk-modal-title">Review: {{.Title}}</h2>
+                  <p class="uk-text-meta">Customer Email: <span id="email">{{.Email}}</span></p>
+                  <p class="uk-text-meta">Customer Name: <span
+                      id="username">{{.Username}}</span></p>
+                  <div id="html_element"></div>
+                </div>
+                <div class="uk-modal-body">
+                  <p>Respond to customer Reviews.</p>
+                  <form class="uk-form" id="emailReply-{{.Model.ID}}"
+                    name="emailReply-{{.Model.ID}}"
+                    action="/bd-admin/review/response" method="post">
+                    <textarea class="uk-textarea" placeholder="Email"
+                      rows="5" style="resize:none;" name="contact_body"
+                      id="approvedText-{{.Model.ID}}"></textarea>
+                    <input type="hidden" value="{{.Email}}"
+                      name="contact_email" />
+                    <input type="hidden" value="{{.Username}}"
+                      name="contact_name" />
+                    <input type="hidden" value="{{$user}}"
+                      name="contact_sender" />
+                    <input type="hidden" value="{{$userPhone}}"
+                      name="contact_sender_phone" />
+                    <input type="hidden" value="{{$userTitle}}"
+                      name="contact_sender_title" />
+                    <div class="uk-align-left uk-margin-top">
+                      <div class="g-recaptcha"
+                        data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div>
                     </div>
+                    <button type="submit" form="emailReply-{{.Model.ID}}"
+                      for="emailReply-{{.Model.ID}}" class="uk-button
+                      uk-button-default reply">Reply</button>
+                  </form>
+                </div>
+                <div class="uk-modal-footer">
+                  <div class="uk-padding">
+                    <button class="uk-button-default uk-button"
+                      onClick="submitApproval('{{.Model.ID}}')">Approve
+                    </button>
                   </div>
-                  <script>
-                   
-                      function submitApproval(id) {
-                        let note = document.getElementById('{{$approvedText}}').value
-                        var xhr = new XMLHttpRequest(); 
-                        xhr.open("POST", "/bd-admin/review/approve", true)
-                        xhr.setRequestHeader("Content-Type", "application/json")
-                        xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                        
-                            }
-                          }
-                          var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: "wow thats crazy"}
-                          xhr.send(JSON.stringify(data))
-                        }
-                      </script>
                 </div>
               </div>
             </div>
-            {{end}}
-
           </div>
-          <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-          <div class="uk-width-1-1 uk-padding">
-            <h1 class="uk-text-center uk-heading-line"><span>Add External Review</span></h1>
-          </div>
-          <div class="uk-flex-center uk-flex">
-            <form class="uk-padding uk-grid-small" uk-grid
-              action="/bd-admin/review/create" method="POST">
-              <div class="uk-width-1-1">
-                <div class="uk-flex uk-flex-center stars">
-                  <input class="star starRating" type="checkbox" value="1"
-                    name="rating">
-                  <input class="star starRating" type="checkbox" value="2"
-                    name="rating">
-                  <input class="star starRating" type="checkbox" value="3"
-                    name="rating">
-                  <input class="star starRating" type="checkbox" value="4"
-                    name="rating">
-                  <input class="star starRating" type="checkbox" value="5"
-                    name="rating">
-                </div>
-                <br>
-              </div>
-              <div class="uk-width-1-2">
-                <div class="uk-inline uk-width-1-1">
-                  <span class="uk-form-icon" uk-icon="icon: user"></span>
-                  <input class="uk-input" type="text" placeholder="Full Name"
-                    name="review_name" required>
-                </div>
-              </div>
-              <div class="uk-width-1-2">
-                <div class="uk-inline uk-width-1-1">
-                  <input class="uk-input" type="text" placeholder="External Site Name" name="external_site_name" required>
-                </div>
-              </div>
-              <div class="uk-width-1-1">
-                <div class="uk-inline uk-width-1-1">
-                  <input class="uk-input" type="text" placeholder="External Site Link" name="external_site_link" required>
-                </div>
-              </div>
-              <div class="uk-width-1-1">
-                <div class="uk-inline uk-width-1-1">
-                  <input class="uk-input" type="text" placeholder="Review Title"
-                    name="review_title">
-                </div>
-              </div>
-              <div class="uk-width-1-1">
-                <textarea class="uk-textarea" placeholder="Review" rows="5"
-                  style="resize:none; overflow-x:hidden;" name="review_body"
-                  required></textarea>
-              </div>
-              <div class="uk-width-1-3">
-                <input class="uk-input" type="submit">
-              </div>
-            </form>
-          </div>
-          <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+          {{end}}
         </div>
-
+        <div class="uk-width-1-1 uk-padding">
+          <h1 class="uk-text-center uk-heading-line"><span>Add External Review</span></h1>
+        </div>
+        <div class="uk-flex-center uk-flex">
+          <form class="uk-padding uk-grid-small" uk-grid
+            action="/bd-admin/review/create" method="POST">
+            <div class="uk-width-1-1">
+              <div class="uk-flex uk-flex-center stars">
+                <input class="star starRating" type="checkbox" value="1"
+                  name="rating">
+                <input class="star starRating" type="checkbox" value="2"
+                  name="rating">
+                <input class="star starRating" type="checkbox" value="3"
+                  name="rating">
+                <input class="star starRating" type="checkbox" value="4"
+                  name="rating">
+                <input class="star starRating" type="checkbox" value="5"
+                  name="rating">
+              </div>
+              <br>
+            </div>
+            <div class="uk-width-1-2">
+              <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="icon: user"></span>
+                <input class="uk-input" type="text" placeholder="Full Name"
+                  name="review_name" required>
+              </div>
+            </div>
+            <div class="uk-width-1-2">
+              <div class="uk-inline uk-width-1-1">
+                <input class="uk-input" type="text" placeholder="External Site Name" name="external_site_name" required>
+              </div>
+            </div>
+            <div class="uk-width-1-1">
+              <div class="uk-inline uk-width-1-1">
+                <input class="uk-input" type="text" placeholder="External Site Link" name="external_site_link" required>
+              </div>
+            </div>
+            <div class="uk-width-1-1">
+              <div class="uk-inline uk-width-1-1">
+                <input class="uk-input" type="text" placeholder="Review Title"
+                  name="review_title">
+              </div>
+            </div>
+            <div class="uk-width-1-1">
+              <textarea class="uk-textarea" placeholder="Review" rows="5"
+                style="resize:none; overflow-x:hidden;" name="review_body"
+                required></textarea>
+            </div>
+            <div class="uk-width-1-3">
+              <input class="uk-input" type="submit">
+            </div>
+          </form>
+        </div>
       </div>
+
       <footer class="uk-container uk-padding">
-        <div class="uk-grid uk-width-1-1@m" uk-grid>
+        <div class="uk-grid uk-width-1-1@m 467" uk-grid>
           <div class="uk-width-1-1 uk-text-center">
             <img src="/static/assets/cchha.svg" style="max-height: 100px;"
               alt="Compassionate Care Home Health Agency Logo">
           </div>
-          <div class="uk-width-1-3@m" uk-width-1-1@s>
+          <div class="uk-width-1-3@m">
             <p class="uk-text-bold uk-heading-divider">Locations</p>
             <div uk-grid class="uk-grid">
-              <div class="uk-width-1-1@m" uk-width-1-4@s>
+              <div class="uk-width-1-1@m">
                 <span>
                   <img src="/static/assets/mapicon.png" style="max-width:
                     45px;">
@@ -480,7 +492,7 @@
                 </div>
               </div>
             </div>
-            <div class="uk-width-1-1@m" uk-width-1-4@s>
+            <div class="uk-width-1-1@m">
               <span>
                 <img src="/static/assets/mapicon.png" style="max-width: 45px;">
               </span>
@@ -500,7 +512,7 @@
                 </span>
               </div>
             </div>
-            <div class="uk-width-1-1@m" uk-width-1-4@s>
+            <div class="uk-width-1-1@m">
               <span><img src="/static/assets/mapicon.png" style="max-width:
                   45px;"></span>
               <span style="padding: 5px; margin-bottom: 20px;"
@@ -520,6 +532,47 @@
               </div>
             </div>
           </div>
+          <script>
+          function setDataFeatured(id) {
+            let featured = document.getElementById("heart-"+id)
+            if (featured.dataset.featured == "false") {
+                featured.childNodes[0].childNodes[1].setAttribute('fill', 'red')
+                featured.dataset.featured = true
+            } else {
+                featured.dataset.featured = false
+                featured.childNodes[0].childNodes[1].setAttribute('fill', 'white')
+            }
+                featureReview(id ,featured.dataset.featured)
+            } 
+            function featureReview(id, featured) {
+              var xhr = new XMLHttpRequest(); 
+              xhr.open("POST", "/bd-admin/review/feature", true)
+              xhr.setRequestHeader("Content-Type", "application/json")
+              xhr.onreadystatechange = function () {
+                  if (xhr.readyState == 4 && xhr.status == 200) {
+                  
+                  }
+              }
+              var bool_value = featured == "true" ? true : false
+              var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), featured: bool_value}
+              console.log(data)
+              xhr.send(JSON.stringify(data))
+            }
+                                      
+            function submitApproval(id) {
+              let note = document.getElementById('"approveText-"'+'id').value
+              var xhr = new XMLHttpRequest(); 
+              xhr.open("POST", "/bd-admin/review/approve", true)
+              xhr.setRequestHeader("Content-Type", "application/json")
+              xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4 && xhr.status == 200) {
+              
+                  }
+                }
+                var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: "wow thats crazy"}
+                xhr.send(JSON.stringify(data))
+              }
+            </script>
           <div class="uk-width-1-3@m uk-width-1-1@s">
             <br>
             <ul class="uk-list uk-text-meta">
@@ -556,7 +609,7 @@
               fifteen years, and our commitment to providing the highest
               quality care shows in every patient we serve. Let us show you
               what compassionate care truly means.</p>
-            <div>
+            <div class="572">
               <div uk-grid>
                 <div class="uk-width-1-3@m uk-width-1-1@s"><a
                     href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick"
@@ -569,11 +622,11 @@
                     src="/static/assets/ACHC-logo-65.png"
                     style="margin-top:10px;">
                 </div>
+
               </div>
             </div>
           </div>
         </div>
-        <script src="/static/js/stars.js"></script>
       </footer>
     </div>
 

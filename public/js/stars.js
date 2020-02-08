@@ -1,4 +1,30 @@
 
+function star(rating, tag) {
+  let review = document.querySelector(tag)
+  console.log(tag)
+  console.log(review)
+
+  let ratingvalue = rating;
+  let t = review.querySelector('div.p1 > div.uk-card')
+  // let thing = document.querySelector('.uk-text-meta > a')
+  // console.log(thing)
+  // console.log(t)
+
+  // review.querySelector('.uk-text-meta > a').innerText.replace(/-/g, " ").toUpperCase()
+
+
+  var div = document.createElement('div')
+
+  for (i = 0;i < rating;i++) {
+    var el = document.createElement('span')
+    el.setAttribute('class', 'uk-icon ml2 rating-bar')
+    el.setAttribute('uk-icon', 'star')
+    div.appendChild(el)
+  }
+  t.prepend(div)
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
   let reviews = document.querySelectorAll('.uk-card')
   reviews.forEach(review => {
