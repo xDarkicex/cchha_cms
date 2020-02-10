@@ -15,7 +15,7 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
         {{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.3/js/uikit.min.js"></script> */}}
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133675222-1"></script>
-        <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
+        
         <!-- forgin imports end -->
 
 
@@ -25,7 +25,9 @@
         <script src="/static/js/stars.js"></script>
         <link rel="icon" ype="image/png" href="/static/assets/favicon.png">
         <link rel="stylesheet" href="/static/css/main.css">
+        <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
         <script src="/static/js/main.js"></script>
+        <link rel="stylesheet" href="/static/css/stars.css">
         <!-- local imports end -->
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -42,19 +44,19 @@
         {{$userID := .User.Model.ID}}
         {{$user := print .User.FirstName " " .User.LastName}}
         {{if .Flashes}}
-        {{$CURRENT := GetNewestFlashes .Flashes}}
-        {{range $CURRENT}}
-        {{if eq .Type "Auth"}}
-        <script>
-                            UIkit.notification("<span uk-icon='icon: warning'></span> {{.Message}}")
-                        </script>
-        {{end}}
-        {{if eq .Type "reset"}}
-        <script>
-                            UIkit.notification("<span uk-icon='icon: check'></span> {{.Message}}")
-                        </script>
-        {{end}}
-        {{end}}
+            {{$CURRENT := GetNewestFlashes .Flashes}}
+            {{range $CURRENT}}
+                {{if eq .Type "Auth"}}
+                <script>
+                    UIkit.notification("<span uk-icon='icon: warning'></span> {{.Message}}")
+                </script>
+                {{end}}
+                {{if eq .Type "reset"}}
+                <script>
+                    UIkit.notification("<span uk-icon='icon: check'></span> {{.Message}}")
+                </script>
+                {{end}}
+            {{end}}
         {{end}}
         <!-- end of flash loop -->
         {{$user := print .User.FirstName " " .User.LastName}}
@@ -117,17 +119,19 @@
                 <h2 class="uk-heading-line uk-text-center"><span>Approved Reviews</span></h2>
             </div>
             {{if le $count 1}}
-            <div class="uk-padding uk-child-width-1-1@m uk-child-width-1-1@s uk-grid-match" uk-grid>
-                {{else}}
+                <div class="uk-padding uk-child-width-1-1@m uk-child-width-1-1@s uk-grid-match" uk-grid>
+            {{else}}
                 <div class="uk-padding uk-child-width-1-2@m uk-child-width-1-1@s uk-grid-match" uk-grid>
-                    {{end}}
-                    {{range .Approved}}
-                    <div class="128">
-                        <div class="uk-card uk-card-default">
+            {{end}}
+                {{range .Approved}}
+                    <div class="review">
+                        <div class="uk-card uk-card-default uk-padding-small" id="review-{{.Model.ID}}">
+                            
                             <div class="uk-card-body p2">
-                                <div class="p2">
-                                    <p class="rating">{{.Rating}}</p>
-                                </div>
+                            <span class="uk-badge">Approved</span>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', star('{{.Rating}}', "#review-{{.Model.ID}}"))
+                                </script>
                                 {{if $count }}
                                 <h3>{{.Title}}</h3>
                                 {{else}}
@@ -157,10 +161,28 @@
                                     <div class="uk-section-muted uk-padding">
                                         <p class="uk-text-meta">By Checking the box below you agree to all terms and conditions.</p>
                                         <label class="checkboxes IsChecked" for="deleted">
-                                            <input class="uk-checkbox checkboxForDelete" type="checkbox" name="deleted">
+                                            <input class="uk-checkbox checkboxForDelete-{{.Model.ID}}" type="checkbox" name="deleted">
                                         </label>
-                                        <button class="uk-button-danger uk-button uk-align-right delete" onClick="deleteReview('{{.Model.ID}}')" disabled>
-                                            <span class="uk-icon" uk-icon="icon: trash"></span></button>
+                                        <button class="uk-button-danger uk-button uk-align-right delete-{{.Model.ID}}" onClick="deleteReview('{{.Model.ID}}')" disabled>
+                                            <span class="uk-icon" uk-icon="icon: trash"></span>
+                                        </button>
+                                        <script>
+                                            document.querySelector('.checkboxForDelete-{{.Model.ID}}').addEventListener('change', function(e) {
+                                                var deleteButton = document.querySelector('.delete-{{.Model.ID}}')
+                                                if (e.target.checked == true) {
+                                                    deleteButton.disabled = false
+                                                    deleteButton.classList.remove("uk-button-disabled")
+                                                    deleteButton.classList.add("uk-button-default")
+                                                } else {
+                                                    deleteButton.disabled = true
+                                                    deleteButton.classList.add("uk-button-disabled")
+                                                    deleteButton.classList.remove("uk-button-default")
+                                                }
+                                                
+
+                                            })
+                                                                                      
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -196,20 +218,21 @@
                             </div>
                         </div>
                     </div>
-                    {{end}}
+                {{end}}
                 </div>
                 <div class="uk-padding"></div>
                 <div class="uk-width-1-1 uk-padding">
                     <h2 class="uk-heading-line uk-text-center"><span>Rejected Reviews</span></h2>
                     {{/* <p class="uk-text-center uk-text-bold">Pending Deletion</p> */}}
                 </div>
-                <{{/* Starting Second Loop */}}
-                    {{if le $count 1}}
+            {{/* Starting Second Loop */}}
+                {{if le $count 1}}
                 <div class="uk-padding uk-child-width-1-1@m uk-child-width-1-1@s uk-grid-match" uk-grid>
                     {{else}}
                     <div class="uk-padding uk-child-width-1-2@m uk-child-width-1-1@s uk-grid-match" uk-grid>
                         {{end}}
                         {{range .Rejected}}
+                        {{.Pending}} I expect true
                         <div class="246">
                             <div class="uk-card uk-card-default">
                                 <div class="uk-card-body">
@@ -224,7 +247,6 @@
                                     <p class="uk-custom">{{.Username}}</p>
                                     <p class="uk-text-meta review-source"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
                                     <p>{{.Body}}</p>
-                                    <p>{{.}}</p>
                                     <div class="uk-flex">
                                         <button class="uk-button uk-button-danger" type="button" uk-toggle="target: #deleteReview-{{.Model.ID}}"><span uk-icon="close"></span>Delete</button>
                                         <button class="uk-button uk-button-default" uk-toggle="target: #rejectReview-{{.Model.ID}}" type="button">Reject</button>
@@ -245,11 +267,16 @@
                                         <div class="uk-section-muted uk-padding">
                                             <p class="uk-text-meta">By Checking the box below you agree to all terms and conditions.</p>
                                             <label class="checkboxes IsChecked" for="deleted">
-                                                <input class="uk-checkbox checkboxForDelete" type="checkbox" name="deleted">
+                                                <input class="uk-checkbox checkboxForDelete-{{.Model.ID}}" type="checkbox" name="deleted">
                                             </label>
-                                            <button class="uk-button-danger uk-button uk-align-right delete" onClick="deleteReview('{{.Model.ID}}')" disabled>
-                                                <span clas="uk-icon" uk-icon="icon: trash"></span></button>
-
+                                            
+                                            <button class="uk-button-danger uk-button uk-align-right delete {{$deleteText}}" onClick="deleteReview('{{.Model.ID}}')" >
+                                                <span clas="uk-icon" uk-icon="icon: trash"></span>
+                                            </button>
+                                            <script>
+                                                var check = document.querySelector('.checkboxForDelete-{{.Model.ID}}')
+                                                console.log(check)                                                
+                                            </script>
                                         </div>
                                     </div>
                                 </div>
@@ -265,7 +292,7 @@
                                     </div>
                                     <div class="uk-modal-body">
                                         <p>Reason for Rejection.</p>{{$rejectText := print "rejectText-" .Model.ID}}
-                                        <form class="uk-form" id="rejectReview-{{.Model.ID}}" name="rejectReview-{{.Model.ID}}" action="/bd-admin/review/reject" method="post">
+                                        <form class="uk-form" id="rejectReview-{{.Model.ID}}" name="rejectReview-{{.Model.ID}}"     action="/bd-admin/review/reject" method="post">
                                             <textarea class="uk-textarea" placeholder="Email" rows="5" style="resize:none;" name="contact_body" id="{{$rejectText}}"></textarea>
                                             <input type="hidden" value="{{.Email}}" name="contact_email" />
                                             <input type="hidden" value="{{.Username}}" name="contact_name" />
@@ -286,6 +313,22 @@
                     </div>
 
                     <script>
+                        
+                        function deleteReview(ID) {
+                            var xhr = new XMLHttpRequest(); 
+                            xhr.open("POST", "/bd-admin/review/delete", true)
+                            xhr.setRequestHeader("Content-Type", "application/json")
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState == 4 && xhr.status == 200) {
+                                
+                                }
+                            }
+                            var deleted = document.querySelector('deleteReview-'+ID+'input[name="deleted"]').value
+                            let note = document.getElementById('deleteText').value
+                            var data = {review_id: parseInt(ID), user_id: parseInt('{{$userID}}'), body: "Review Removed from website by" + "{{$user}}"}
+                            return 
+                            xhr.send(JSON.stringify(data))
+                        }
                         function rejection(id) {
                             var xhr = new XMLHttpRequest();
                             xhr.open("POST", "/bd-admin/review/reject", true)
@@ -296,7 +339,6 @@
                                 }
                             }
                             let note = document.getElementById("rejectText-"+id).value
-                            console.log(note)
                             var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note}
                             xhr.send(JSON.stringify(data)) 
                         }
@@ -313,7 +355,8 @@
                                 var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note}
                                 xhr.send(JSON.stringify(data))
                             }
-                            function deleteReview(id) {
+                            {{/* function deleteReview(id) {
+
                                 var xhr = new XMLHttpRequest(); 
                                 xhr.open("POST", "/bd-admin/review/delete", true)
                                 xhr.setRequestHeader("Content-Type", "application/json")
@@ -322,57 +365,46 @@
                                 
                                     }
                                 }
+                                
+
                                 var deleted = document.querySelector("deleteReview-"+id+" input[name='deleted']").value
                                 let note = document.getElementById('deleteText').value
                                 console.log(note)
                                 var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note}
                                 xhr.send(JSON.stringify(data))
                             }
-
-                            
                             var modals = []  
+                            var checkboxes = []
                             document.addEventListener('DOMContentLoaded', function(e) {
-                                var reviews = document.querySelectorAll('.uk-card')
-                                console.log(reviews)
-                                
+                                var reviews = document.querySelectorAll('.review')
                             reviews.forEach(review => {
-                                modals.push(review)
+                                mods = review.querySelectorAll('.uk-modal')
+                                modals.push(mods)
                                 modals.forEach(modal => {
-                                    console.log(modal.childNodes)
-                                    checkbox = modal.childNodes[1].querySelector('input.checkboxForDelete')
-                                    checkbox.addEventListener('change', (e) => {
-                                    check = e.target.checked
-                                    var deleteButton = document.querySelector("button.uk-button.delete")
-                                    console.log(deleteButton)
-                                    if (check == true) {
-                                        deleteButton.disabled = false
-                                        deleteButton.classList.remove("uk-button-disabled")
-                                        deleteButton.classList.add("uk-button-default")
-                                    } else {
-                                        deleteButton.disabled = true
-                                        deleteButton.classList.add("uk-button-disabled")
-                                        deleteButton.classList.remove("uk-button-default")
-                                    }
-                                    })  
+                                    checkboxes.push(modal[0].querySelectorAll('input.checkboxForDelete'))
+                                    checkboxes.forEach(checkbox => {
+                                    
+                                    
+                                    checkbox[0].addEventListener('change', (e) => {
+                                        check = e.target.checked
+                                            console.log(check)
+                                        var deleteButton = document.querySelector("button.uk-button.delete")
+                                        if (check == true) {
+                                            deleteButton.disabled = false
+                                            deleteButton.classList.remove("uk-button-disabled")
+                                            deleteButton.classList.add("uk-button-default")
+                                        } else {
+                                            deleteButton.disabled = true
+                                            deleteButton.classList.add("uk-button-disabled")
+                                            deleteButton.classList.remove("uk-button-default")
+                                        }
+                                        }) 
+                                    }) 
                                 })
                             })
-                        })
+                        }) */}}
                         
-                                function deleteReview(id) {
-                                    var xhr = new XMLHttpRequest(); 
-                                    xhr.open("POST", "/bd-admin/review/delete", true)
-                                    xhr.setRequestHeader("Content-Type", "application/json")
-                                    xhr.onreadystatechange = function () {
-                                    if (xhr.readyState == 4 && xhr.status == 200) {
-
-                                        }
-                                    }
-                                    var deleted = document.querySelector("deleteReview-"+id+"input[name='deleted']").value
-                                    let note = document.getElementById("deleteText-"+id).value
-                                    console.log(note)
-                                    var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note}
-                                    xhr.send(JSON.stringify(data))
-                                }
+                              
                                 function rejection(id) {
                                     var xhr = new XMLHttpRequest();
                                     xhr.open("POST", "/bd-admin/review/reject", true)

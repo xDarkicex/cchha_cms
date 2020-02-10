@@ -56,10 +56,10 @@ func NewRouter() http.Handler {
 	router.Get("/bd-admin/user/{userID:\\d{1,200}$}", admin.Show)
 	router.Get("/bd-admin", auth.Authtenicate(admin.Index))
 	router.Post("/bd-admin/review/create", admin.Create)
-	// router.Get("/bd-admin/account/forgot", admin.Forgot)
-	// router.Get("/bd-admin/account/reset", admin.Reset)
-	// router.Get("/bd-admin/account/reset/token={value:^.{24}$}", admin.Reset)
-	// router.Post("/bd-admin/account/forgot", admin.Forgot)
+	// router.Get("/bd-admin/user/forgot", admin.Forgot)
+	// router.Get("/bd-admin/user/reset", admin.Reset)
+	// router.Get("/bd-admin/user/reset/token={value:^.{24}$}", admin.Reset)
+	// router.Post("/bd-admin/user/forgot", admin.Forgot)
 
 	// review
 
@@ -86,6 +86,7 @@ func NewRouter() http.Handler {
 	// reviews
 	reviews := controllers.Reviews{}
 	router.Get("/home-health/reviews", reviews.Index)
+	router.Get("/home-health/reviews?", reviews.Index)
 	router.Get("/home-health/reviews/json", reviews.Json)
 	router.Get("/home-health/reviews.html", reviews.Index)
 	router.Post("/home-health/reviews", reviews.Create)

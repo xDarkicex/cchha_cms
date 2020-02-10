@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"time"
 
@@ -173,10 +174,17 @@ func (a Admin) Signin(w http.ResponseWriter, r *http.Request) {
 
 	}
 	if r.Method == "POST" {
-		fmt.Println(r.Form)
+		var user models.User
 		err = r.ParseForm()
 		if err != nil {
 			helpers.HandleError(err)
+		}
+		fmt.Println(r.Form)
+		if m, _ := regexp.MatchString(`^([\w\.\_]{2,10})@(\w{1,}).([a-z]{2,4})$`, r.Form.Get("email")); !m {
+			AddFlash(r, w, models.Flash{Type: "Danger", Message: "No account email"}, f)
+			f.Save(r, w)
+			http.Redirect(w, r, "/bd-admin/signin", 302)
+			return
 		}
 		email := r.Form.Get("email")
 		fmt.Println(email)

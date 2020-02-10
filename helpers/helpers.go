@@ -13,7 +13,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	gs "github.com/gorilla/sessions"
 
-	"github.com/xDarkicex/todos"
+	elephant "github.com/xDarkicex/todos"
 
 	"github.com/juju/errors"
 

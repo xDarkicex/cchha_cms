@@ -7962,6 +7962,8 @@ ul.uk-nav-sub {
 /* line 108, node_modules/uikit/src/scss/components/text.scss */
 .uk-text-background {
   /* 1 */
+  background-clip:text;
+  -moz-background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   /* 2 */
@@ -8744,7 +8746,12 @@ td.uk-text-break {
   /* 4 */
   vertical-align: middle;
   /* 5 */
-  -webkit-backface-visibility: hidden; }
+  
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+  
 
 /* line 210, node_modules/uikit/src/scss/components/utility.scss */
 .uk-inline-clip {
@@ -8865,7 +8872,10 @@ td.uk-text-break {
  */
 /* line 308, node_modules/uikit/src/scss/components/utility.scss */
 .uk-inline-clip[class*='uk-border-'] {
-  -webkit-transform: translateZ(0); }
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  transform: translateZ(0);
+}
 
 /* Box-shadow
  ========================================================================== */

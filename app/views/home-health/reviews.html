@@ -20,6 +20,7 @@
         <script type="text/javascript" src="/static/js/jquery.easing.1.3.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.0/dist/js/uikit-icons.min.js"></script>
         <link rel="stylesheet" href="/static/css/main.css">
+        <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
         <script src="/static/js/main.js"></script>
         <script src="/static/js/stars.js"></script>
         <!-- <script src="/static/js/animate.js"></script> -->
@@ -51,25 +52,18 @@
     </script>
         <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2048222891932812&amp;ev=PageView&amp;noscript=1"></noscript>
         <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133675222-1"></script>
         <script>
-        window.dataLayer = window.dataLayer || [];
+            window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
 
-        gtag('config', 'UA-133675222-1');
-    </script>
-        <!-- End Facebook Pixel Code -->
+            gtag('config', 'UA-133675222-1');
+        </script>
     </head>
-
     <body>
-
-
-
-
         {{$IsSuperUser := .User.IsSuperUser}}
         {{$IsAdmin := .User.IsAdmin}}
         {{$userID := .User.ID}}
@@ -113,8 +107,6 @@
                     </div>
                 </nav>
             </div>
-            <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-            <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
             <div class="uk-width-1-1">
                 <div>
                     <h1 class="bold pl4 pt2"">Reviews</h1>
@@ -131,26 +123,29 @@
                         <tr onClick="window.location= '/home-health/reviews/5'">
                             <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">5 Star</p></td>
                             <td id="calc5" class="review_ratings">{{.Calc.Percentages.Five}}</td>
+                            <td>{{.Calc.Total.Five}}</td>
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/4'" style="line-height: 30px;">
                             <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">4 Star</p></td>
                             <td id="calc4" class="review_ratings">{{.Calc.Percentages.Four}}</td>
+                            <td>{{.Calc.Total.Five}}</td>
                             <!-- <td class="mrn4 pt1">{{.Calc.Percentages.Four}}</td> -->
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/3'" style="line-height: 30px;">
                             <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">3 Star</p></td>
                             <td id="calc3" class="review_ratings">{{.Calc.Percentages.Three}}</td>
-                            <!-- <td class="mrn4 pt1">{{.Calc.Percentages.Three}}</td> -->
+                            <td>{{.Calc.Total.Five}}</td>
+                            
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/2'" style="line-height: 30px;">
                             <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">2 Star</p></td>
                             <td id="calc2" class="review_ratings">{{.Calc.Percentages.Two}}</td>
-                            <!-- <td class="mrn4 pt1">{{.Calc.Percentages.Two}}</td> -->
+                            <td>{{.Calc.Total.Two}}</td>
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/1'" style="line-height: 30px;">
                             <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">1 Star</p></td>
                             <td id="calc1" class="review_ratings">{{.Calc.Percentages.One}}</td>
-                            <!-- <td class="mrn4 pt1">{{.Calc.Percentages.One}}</td> -->
+                            <td>{{.Calc.Total.One}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -209,207 +204,179 @@
                         </li>
                     </ul>
                 </div>
-                {{if le $count 1}}
-                <ul id="js-filter" class="uk-child-width-1-1@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
-                    <li>
-                        <div class="p1">
-                            <div class="uk-card uk-card-default uk-padding-small reviews">
-                                <span class="uk-icon ml2 rating-bar" uk-icon="star"></span>
-                                <div class="uk-card-body p2 uk-grid-match" uk-grid>
-                                    <h2 class="uk-text-lead uk-text-center@s uk-text-middle">{{.Title}}</h2>
-                                    <p class="uk-text-lead uk-text-center@s uk-text-middle"></p>
-                                </div>
+            </div>
+            {{if eq $count 0}}
+            <ul class="uk-child-width-1-1@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
+                <li>
+                    <div class="p1">
+                        <div class="uk-card uk-card-default uk-padding-small reviews">
+                            <div class="uk-card-body p2 uk-grid-match" uk-grid>
+                                <h2 class="uk-text-lead uk-text-center@s uk-text-center" 
+                                    style="transform: capitilize">
+                                    {{.Data.Title}}</h2>
+                                <p class="uk-text-lead uk-text-center@s uk-text-middle"></p>
                             </div>
                         </div>
-                    </li>
-                </ul>
-                {{end}}
-                <ul id="js-filter" class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
-                    {{range .Data}}
-                    <!-- uk-scrollspy="target: &gt; * &gt; *; cls:uk-animation-slide-left-medium; delay: 800; repeat:true;"> -->
-                    <li class="tag-{{.ExternalSiteName}} review-{{.Model.ID}}" uk-scrollspy="cls: uk-animation-scale-up uk-transform-origin-top-center; delay: 500; repeat: true">
-                        <div class="p1">
-                            <div class="uk-card uk-card-default uk-padding-small reviews">
-                                <div class="uk-card-body p2">
-                                    <div>
-                                        <div>
-                                            <p class="rating"></p>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        document.addEventListener('"DOMContentLoaded"', star('{{.Rating}}',".review-{{.Model.ID}}"))      
-                                    </script>
+                    </div>
+                </li>
+            </ul>
+            {{end}}
+            {{if ge $count 1}}
+            <ul id="js-filter" class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
+            {{range .Data}}
+                <li id="review-{{.Model.ID}}" class="tag-{{.ExternalSiteName}}" uk-scrollspy="cls: uk-animation-scale-up uk-transform-origin-top-center; delay: 500; repeat: true">
+                    <div class="uk-card uk-card-default uk-padding-small reviews" id="review-{{.Model.ID}}">
+                        <div class="uk-card-body p2">
+                            {{if $IsSuperUser }}
+                            <div>
+                                <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
+                                    <li>
+                                        <div class="px1">
+                                            <span id="heart-{{.Model.ID}}" data-featured={{.Featured}}
+                                                onClick="setDataFeatured({{.Model.ID}});"
+                                                uk-icon="icon: heart; ratio: 1">
+                                            </span>
                                             
-                                        
-                                    
-                                    {{if $IsSuperUser }}
-                                    <div>
-                                        <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
-                                            <li>
-                                                <div class="px1">
-                                                    <span id="heart-{{.Model.ID}}" uk-icon="icon: heart; ratio: 1" onClick="setDataFeatured('{{.Model.ID}}')" data-featured="{{.Featured}}"></span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="px1">
-                                                    <a href="#modal-full-{{.Model.ID}}" uk-toggle>
-                                                        <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="px1">
-                                                    <span uk-icon="icon: close" onclick="rejection({{.Model.ID}})"></span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <script>
-                                                (function() {
-                                                    let favorited = document.getElementById('heart-{{.Model.ID}}')
-                                                        if (favorited.dataset.featured == "true") {
-                                                            favorited.childNodes[0].childNodes[1].setAttribute('fill', 'red')
-                                                        }
-                                                }())
-                                                function setDataFeatured(id) {
-                                                let featured = document.getElementById("heart-"+id)
-                                                    
-                                                    if (featured.dataset.featured == "false") {
-                                                        featured.childNodes[0].childNodes[1].setAttribute('fill', 'red')
-                                                        featured.dataset.featured = true
-                                                    } else {
-                                                        featured.dataset.featured = false
-                                                        featured.childNodes[0].childNodes[1].setAttribute('fill', 'white')
-                                                    }
-                                                        featureReview(id ,featured.dataset.featured)
-                                            } 
-                                            function featureReview(ID, featured) {
-                                            var xhr = new XMLHttpRequest(); 
-                                            xhr.open("POST", "/bd-admin/review/feature", true)
-                                            xhr.setRequestHeader("Content-Type", "application/json")
-                                            xhr.onreadystatechange = function () {
-                                                if (xhr.readyState == 4 && xhr.status == 200) {
-                                                
-                                                }
-                                            }
-                                            var bool_value = featured == "true" ? true : false
-                                            var data = {review_id: parseInt(ID), user_id: parseInt('{{$userID}}'), featured: bool_value}
-                                            console.log(data)
-                                            xhr.send(JSON.stringify(data))
-                                            }
-                                        </script>
-                                    </div>
-                                    {{end}}
-                                    <div class="flex items-start items-baseline uk-flex-column">
-                                        {{if ne .Title ""}}
-                                        <div>
-                                            <h3 class="uk-text-capitalize" style="font-size: 1.4rem;">{{.Title}}</h3>
                                         </div>
-                                        {{else}}
-                                        <div>
-                                            <h3 class="h2 uk-text-capitalize">{{.ExternalSiteName}} Review</h3>
+                                    </li>
+                                    <li>
+                                        <div class="px1">
+                                            <a href="#modal-full-{{.Model.ID}}" uk-toggle>
+                                                <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
+                                                </span>
+                                            </a>
                                         </div>
-                                        {{end}}
-                                        <div>
-                                            <p class="uk-text-muted uk-text-small pl1">
-                                                {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
-                                            </p>
+                                    </li>
+                                    <li>
+                                        <div class="px1">
+                                            <span uk-icon="icon: close" onclick="rejection({{.Model.ID}})"></span>
                                         </div>
-                                    </div>
-
-                                    {{if ne .Username ""}}
-                                    <p class="uk-custom">{{.Username}}</p>
-                                    {{else}}
-                                    <p class="uk-custom">Anonymous review</p>
-                                    {{end}}
-                                    {{if ne .ExternalSiteName ""}}
-                                    <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
-                                    {{else}}
-                                    <p class="uk-text-meta">No Referral</p>
-                                    {{end}}
-                                    <p class="truncate">{{.Body}}</p>
-                                    {{if $IsSuperUser }}
-                                    {{else}}
-                                    <div class="uk-flex uk-flex-right">
-                                        <span class="uk-button uk-button-default" style="z-index: 999;" uk-toggle="target: #modal-{{.Model.ID}}">Read More</span>
-                                    </div>
-                                    {{end}}
-                                </div>
+                                    </li>
+                                </ul>
                             </div>
-                            <div id="modal-full-{{.Model.ID}}" class="uk-modal uk-modal-full" style="background: white;" uk-modal>
-                                <div class="uk-modal-dialog">
-                                    <button type="button" class="uk-modal-close-default" uk-close></button>
-
-                                    <div class="uk-modal-header">
-                                        <div class="flex uk-flex-wrap items-start items-baseline">
-                                            <div>
-                                                <h3 class="uk-modal-title">{{.Title}}</h3>
-                                            </div>
-                                            <div>
-                                                <p class="uk-text-muted uk-text-small pl1">
+                            <script>
+                                (function() {
+                                    let favorited = document.getElementById('heart-{{.Model.ID}}')
+                                        if (favorited.dataset.featured == "true") {
+                                            favorited.childNodes[1].childNodes[1].setAttribute('fill', 'red')
+                                        }
+                                }())
+                                document.addEventListener('DOMContentLoaded', star('{{.Rating}}',"#review-{{.Model.ID}}"))
+                            </script>
+                            {{end}}
+                            <div class="flex items-start items-baseline uk-flex-column">
+                                {{if ne .Title ""}}
+                                <div>
+                                    <h3 class="uk-text-capitalize" style="font-size: 1.4rem;">{{.Title}}</h3>
+                                </div>
+                                {{else}}
+                                <div>
+                                    <h3 class="h2 uk-text-capitalize" style="visibility: hidden;">Untitled</h3>
+                                </div>
+                                {{end}}
+                                <div>
+                                    <p class="uk-text-muted uk-text-small pl1">
                                         {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
-                                                </p>
-                                            </div>
-                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{if ne .Username ""}}
+                            <p class="uk-custom">{{.Username}}</p>
+                            {{else}}
+                            <p class="uk-custom" style="visibility: hidden;">Anonymous review</p>
+                            {{end}}
+
+                            {{if ne .ExternalSiteName ""}}
+                            <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                            {{else}}
+                            <p class="uk-text-meta" style="visibility: hidden;">No Referral</p>
+                            {{end}}
+                            <p class="truncate">{{.Body}}</p>
+                            {{if $IsSuperUser }}
+                                <div class="uk-flex uk-flex-right">
+                                    <span class="uk-button uk-button-default"
+                                        style="z-index: 999;" uk-toggle="target: #modal-{{.Model.ID}}">Read More</span>
+                                </div>
+                            {{end}}
+                        </div>
+                    </div>
+
+                    <div id="modal-full-{{.Model.ID}}" class="uk-modal uk-modal-full" style="background: white;" uk-modal>
+                        <div class="uk-modal-dialog">
+                            <button type="button" class="uk-modal-close-default" uk-close></button>
+                            <div class="uk-modal-header">
+                                <div class="flex uk-flex-wrap items-start items-baseline">
+                                    <div>
+                                        
+                                     {{if eq .Title ""}}
+                                     <div class="uk-section-muted">
+                                        <p class="uk-custom" style="display: none">Anonymous review</p>
                                     </div>
-                                    <div class="uk-modal-body">
-                                        {{if ne .Username ""}}
-                                        <div class="uk-section-muted">
-                                            <p class="uk-custom">{{.Username}}</p>
-                                        </div>
-                                        {{else}}
-                                        <div class="uk-section-muted">
-                                            <p class="uk-custom">Anonymous review</p>
-                                        </div>
-
-                                        {{end}}
-
-                                        <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
-                                        <div class="uk-section-muted">
-                                            <div class="uk-section-default">
-                                                <p>{{.Body}}</p>
-                                            </div>
-                                        </div>
-
+                                    {{else}}
+                                         <h3 class="uk-modal-title">{{.Title}}</h3>
+                                    {{end}}                                 
+                                    </div>
+                                    <div>
+                                        <p class="uk-text-muted uk-text-small pl1">
+                                            {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            <div id="modal-{{.Model.ID}}" class="uk-modal" uk-modal>
-                                <div class="uk-modal-dialog">
-                                    <button class="uk-modal-close-default uk-modal-close" type="button" uk-close></button>
-
-                                    <div class="uk-modal-header">
-                                        <div class="flex uk-flex-wrap items-start items-baseline">
-                                            <div>
-                                                <h3 class="uk-modal-title">{{.Title}}</h3>
-                                            </div>
-                                            <div>
-                                                <p class="uk-text-muted uk-text-small pl1">
-                                                    {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="uk-modal-body">
-                                        {{if ne .Username ""}}
-                                        <p class="uk-custom">{{.Username}}</p>
-                                        {{else}}
-                                        <p class="uk-custom">Anonymous review</p>
-                                        {{end}}
-                                        <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                            <div class="uk-modal-body">
+                                {{if eq .Username "Anonymous review"}}
+                                <div class="uk-section-muted">
+                                    <p class="uk-custom">{{.Username}} well?</p>
+                                </div>
+                                {{else}}
+                                <div class="uk-section-muted">
+                                    <p class="uk-custom" style="display: none;">Anonymous review</p>
+                                </div>
+                                {{end}}
+                                <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                                <div class="uk-section-muted">
+                                    <div class="uk-section-default">
                                         <p>{{.Body}}</p>
                                     </div>
-                                    <div class="uk-modal-footer uk-text-right">
-                                        <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </li>
-                    {{end}}
-                </ul>
-            </div>
+                    </div>
+                    <div id="modal-{{.Model.ID}}" class="uk-modal" uk-modal>
+                        <div class="uk-modal-dialog">
+                            <button class="uk-modal-close-default uk-modal-close" type="button" uk-close></button>
+                            <div class="uk-modal-header">
+                                <div class="flex uk-flex-wrap items-start items-baseline">
+                                    <div>
+                                        <h3 class="uk-modal-title">{{.Title}}</h3>
+                                    </div>
+                                    <div>
+                                        <p class="uk-text-muted uk-text-small pl1">
+                                            {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-modal-body">
+                                {{if ne .Username ""}}
+                                    <p class="uk-custom">{{.Username}}</p>
+                                {{else}}
+                                    <p class="uk-custom">Anonymous review</p>
+                                {{end}}
+                                <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                                <p>{{.Body}}</p>
+                            </div>
+                            <div class="uk-modal-footer uk-text-right">
+                                <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {{end}} <!-- range -->
+
+            </ul>
+            {{end}} <!-- if count > 1 -->
             <div class="uk-width-1-1 uk-padding">
                 <h1 class="uk-text-center uk-heading-line"><span>Leave Us A Review</span></h1>
             </div>
@@ -449,22 +416,39 @@
                     </div>
                 </form>
             </div>
-            <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 
             <footer class="uk-container uk-padding">
-                <div class="unnamed-grid" uk-grid>
-                    <div class="uk-width-1-1 uk-text-center"><img src="/static/assets/cchha.svg" style="max-height: 100px;" alt="Compassionate Care Home Health Agency Logo"></div>
+                <div uk-grid>
+                    <div class="uk-width-1-1 uk-text-center">
+                        <img src="/static/assets/cchha.svg" style="max-height: 100px;" alt="Compassionate Care Home Health Agency Logo">
+                    </div>
                     <div class="uk-width-1-3@m uk-width-1-1@s">
-                        <p class="uk-text-bold uk-heading-divider">Locations</p><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span
-                            class="uk-text-bold">Fresno, California</span>
+                        <p class="uk-text-bold uk-heading-divider">Locations</p>
+                        <span>
+                            <img src="/static/assets/mapicon.png" style="max-width: 45px;">
+                        </span>
+                        <span style="padding: 5px;"></span>
+                        <span class="uk-text-bold">Fresno, California</span>
                         <br>
-                        <div style="padding-left:55px;"><span class="uk-text-right">7545 N. Del Mar Ave, </span>
-                            <br><span class="uk-text-left">Suite 103, 104 & 204 </span>
-                            <br><span class="uk-text-right">Fresno, California </span>
-                            <br><span class="uk-text-right">93711</span>
-                            <br><span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span></div>
-                        <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Bakersfield,
-                            California</span>
+                        <div style="padding-left:55px;">
+                            <span class="uk-text-right">7545 N. Del Mar Ave, </span>
+                            <br>
+                            <span class="uk-text-left">Suite 103, 104 & 204 </span>
+                            <br>
+                            <span class="uk-text-right">Fresno, California </span>
+                            <br>
+                            <span class="uk-text-right">93711</span>
+                            <br>
+                            <span class="uk-text-right">
+                                <a href="tel:559-432-2003">1(559) 432-2003</a>
+                            </span>
+                        </div>
+                        <br>
+                        <span>
+                            <img src="/static/assets/mapicon.png" style="max-width: 45px;">
+                        </span>
+                        <span style="padding: 5px;"></span>
+                        <span class="uk-text-bold">Bakersfield, California</span>
                         <br>
                         <div style="padding-left:55px;"><span class="uk-text-right">5201 California Ave, </span>
                             <br><span class="uk-text-left">Suite 255 </span>
@@ -479,7 +463,8 @@
                             <br><span class="uk-text-left">Suite C-1</span>
                             <br><span class="uk-text-right">Modesto, California</span>
                             <br><span class="uk-text-right">95350</span>
-                            <br><span class="uk-text-right"><a href="tel:209-622-1058">1(209) 622-1058</a> </span></div>
+                            <br><span class="uk-text-right"><a href="tel:209-622-1058">1(209) 622-1058</a> </span>
+                        </div>
                     </div>
                     <div class="uk-width-1-3@m uk-width-1-1@s">
                         <br>
@@ -504,7 +489,7 @@
                                 quality care shows in every patient we serve. Let us show you
                                 what compassionate care truly means.</p>
                         </div>
-                        <div class="unnamed-grid" uk-grid>
+                        <div uk-grid>
                             <div class="uk-width-1-3@m uk-width-1-1@s"><a
                                     href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick"
                                     target="_blank" rel="nofollow"><img
@@ -518,71 +503,97 @@
                             </div>
                         </div><!-- end of bbb grid -->
                     </div>
-                    <script>
+                </div>
+                <script>
+                    var config = {
+                        maxRating: 100,
+                        showText: true,
+                        animate:		true,
+                        duration:		1000,
+                        ease:			"easeOutBounce",
+                        wrapperClass: "ratingbar_wrapper_custom", 
+                        innerClass: "ratingbar_inner_custom", 
+                        textClass: "ratingbar_text_custom",
+                        wrapperWidth: $(document).width() - 170,
+                    }
+                    var obj = $(".review_ratings").ratingbar(config)
+                    $(window).resize(function(e) {
+                        var w = $(document).width()  - 170
+                        $("#calc5 .ratingbar_wrapper_custom").attr('style', w)
+                        $("#calc4 .ratingbar_wrapper_custom").attr('style', w)
+                        $("#calc3 .ratingbar_wrapper_custom").attr('style', w)
+                        $("#calc2 .ratingbar_wrapper_custom").attr('style', w)
+                        $("#calc1 .ratingbar_wrapper_custom").attr('style', w)
+                        obj.ratingbar('update', config)
+                        
+                    })
+                    // useless function
+                    function update(w) {
                         var config = {
-                            maxRating: 100,
-                            showText: true,
-                            animate:		true,
-                            duration:		1000,
-                            ease:			"easeOutBounce",
-                            wrapperClass: "ratingbar_wrapper_custom", 
-                            innerClass: "ratingbar_inner_custom", 
-                            textClass: "ratingbar_text_custom",
-                            wrapperWidth: $(document).width() - 170,
+                            // maxRating: 100,
+                            // showText: true,
+                            // wrapperClass: "ratingbar_wrapper_custom", 
+                            // innerClass: "ratingbar_inner_custom", 
+                            // textClass: "ratingbar_text_custom",
+                            wrapperWidth: w,
                         }
-                        var obj = $('.review_ratings').ratingbar(config)
-                        $(window).resize(function(e) {
-                            var w = $(document).width()  - 170
-                            $("#calc5 .ratingbar_wrapper_custom").attr('style', w)
-                            $("#calc4 .ratingbar_wrapper_custom").attr('style', w)
-                            $("#calc3 .ratingbar_wrapper_custom").attr('style', w)
-                            $("#calc2 .ratingbar_wrapper_custom").attr('style', w)
-                            $("#calc1 .ratingbar_wrapper_custom").attr('style', w)
-                            obj.ratingbar('update', config)
-                            
-                        })
-                        // useless function
-                        function update(w) {
-                            var config = {
-                                // maxRating: 100,
-                                // showText: true,
-                                // wrapperClass: "ratingbar_wrapper_custom", 
-                                // innerClass: "ratingbar_inner_custom", 
-                                // textClass: "ratingbar_text_custom",
-                                wrapperWidth: w,
+                        obj.ratingbar(config)
+                        }
+
+                    function rejection(id) {
+                    
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/bd-admin/review/reject", true)
+                        xhr.setRequestHeader("Content-Type", "application/json")
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+
                             }
-                            obj.ratingbar(config)
-                            }
-
-                            function rejection(id) {
-                     
-                     var xhr = new XMLHttpRequest();
-                     xhr.open("POST", "/bd-admin/review/reject", true)
-                     xhr.setRequestHeader("Content-Type", "application/json")
-                     xhr.onreadystatechange = function() {
-                         if (xhr.readyState == 4 && xhr.status == 200) {
-
-                         }
-                     }
-                     
-                     var data = {review_id: parseInt('{{.Model.ID}}'), user_id: parseInt('{{$userID}}'), body: "val"}
-                     xhr.send(JSON.stringify(data))
-                   }
-             
-                    </script>
-                    <script>
-
-                        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-                        (function(){
+                        }
+                        
+                    var data = {review_id: parseInt(id), user_id: parseInt({{$userID}}), body: "val"}
+                    xhr.send(JSON.stringify(data))
+                    }
+                
+                    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+                    (function(){
                         var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
                         s1.async=true;
                         s1.src='https://embed.tawk.to/5d38b65d9b94cd38bbe91af2/default';
                         s1.charset='UTF-8';
-                        s1.setAttribute('crossorigin','*');
+                        s1.setAttribute('crossorigin', '*');
                         s0.parentNode.insertBefore(s1,s0);
-                        })();
-                    </script>
-                </div>
+                    })();
+
+                function featureReview(ID, featured) {
+                    console.log(featured)
+                    var xhr = new XMLHttpRequest(); 
+                    xhr.open("POST", "/bd-admin/review/feature", true)
+                    xhr.setRequestHeader("Content-Type", "application/json")
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                        
+                        }
+                    }
+                    var bool_value = featured == "true" ? true : false
+                    var data = {review_id: parseInt(ID), user_id: parseInt('{{$userID}}'), featured: bool_value}
+                    console.log(data)
+                    xhr.send(JSON.stringify(data))
+                }
+                function setDataFeatured(id) {
+                    console.log(id)
+                    var featured = document.getElementById("heart-"+id)
+                    console.log(featured)
+                    if (featured.dataset.featured == "false") {
+                        featured.childNodes[1].childNodes[1].setAttribute('fill', 'red')
+                        featured.dataset.featured = "true"
+                    } else {
+                        featured.dataset.featured = "false"
+                        featured.childNodes[1].childNodes[1].setAttribute('fill', 'white')
+                    }
+                        featureReview(id ,featured.dataset.featured)
+                }                         
+            </script>
             </footer>
         </div>
     </body>

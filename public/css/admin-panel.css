@@ -9,7 +9,10 @@ ul {
 }
 #admin-navbar .uk-navbar-nav > li > a {
             color: #ffffff;
-            margin-top: -20px;
+            height: 0px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid transparent;
+            
           
 }
 
@@ -17,8 +20,6 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 4px solid transparent;
-   
 }
 #admin-navbar .uk-navbar-nav > li > a:hover {
   color: #3cc2f1;
@@ -30,29 +31,28 @@ ul {
 }
 
 #admin-navbar .uk-navbar-center-right {
-  margin: 0;
-  margin-left: 250px;
+  margin-left: 0.5rem;
   position: initial;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 .uk-navbar-center-right > span {
-  padding-bottom: 30px;
-  margin-left: 55px;
-  margin-left: 70px;
-  padding-top: 10px;
+  justify-content: flex-end;
 }
+
 
 
 .uk-navbar-nav > li > a {
   height: initial;
   padding: 0;
+
 }
 
-.uk-parent.px1 > a {
-  padding-bottom: 0.7rem;
+.uk-parent > a {
+
+
 }
 
-span.uk-parent.px2 > a {
+span.uk-parent > a {
   color: white;
   text-decoration: none;
   
