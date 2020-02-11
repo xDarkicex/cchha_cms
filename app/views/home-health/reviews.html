@@ -221,15 +221,23 @@
                 </li>
             </ul>
             {{end}}
+            <div class="uk-section-primary">
+                <div class="uk-align-center">
+                    <ul class="uk-pagination">
+                        <li><a href="/bd-admin?limit=2&offset=2"><span uk-pagination-previous></span></a></li>
+                        <li><a href="/bd-admin?limit=2&offset=2"><span uk-pagination-next></span></a></li>
+                    </ul>
+                </div>
+            </div>
             {{if ge $count 1}}
             <ul id="js-filter" class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
             {{range .Data}}
-                <li id="review-{{.Model.ID}}" class="tag-{{.ExternalSiteName}}" uk-scrollspy="cls: uk-animation-scale-up uk-transform-origin-top-center; delay: 500; repeat: true">
-                    <div class="uk-card uk-card-default uk-padding-small reviews" id="review-{{.Model.ID}}">
-                        <div class="uk-card-body p2">
+                <li class="tag-{{.ExternalSiteName}}" uk-scrollspy="cls: uk-animation-scale-up uk-transform-origin-top-center; delay: 500; repeat: true">
+                    <div class="uk-section-primary uk-card-header" style="height: 20px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom: 1px solid rgba(0,0,0,0.2);">
+                            <div class="flex items-start items-baseline uk-flex-column">
                             {{if $IsSuperUser }}
                             <div>
-                                <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
+                                <ul class="uk-iconnav uk-position-right" style="top: 2px; right: 5px;">
                                     <li>
                                         <div class="px1">
                                             <span id="heart-{{.Model.ID}}" data-featured={{.Featured}}
@@ -241,10 +249,11 @@
                                     </li>
                                     <li>
                                         <div class="px1">
-                                            <a href="#modal-full-{{.Model.ID}}" uk-toggle>
+                                            
                                                 <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
+                                                <a href="#modal-full-{{.Model.ID}}" uk-toggle></a>
                                                 </span>
-                                            </a>
+                                           
                                         </div>
                                     </li>
                                     <li>
@@ -254,6 +263,12 @@
                                     </li>
                                 </ul>
                             </div>
+                                    
+                            {{end}}
+                            </div>
+                    </div>
+                    <div class="uk-card uk-card-default uk-padding-small reviews" id="review-{{.Model.ID}}">
+                        <div class="uk-card-body p2">
                             <script>
                                 (function() {
                                     let favorited = document.getElementById('heart-{{.Model.ID}}')
@@ -261,9 +276,8 @@
                                             favorited.childNodes[1].childNodes[1].setAttribute('fill', 'red')
                                         }
                                 }())
-                                document.addEventListener('DOMContentLoaded', star('{{.Rating}}',"#review-{{.Model.ID}}"))
+                                document.addEventListener('DOMContentLoaded', star('{{.Rating}}','#review-{{.Model.ID}}'))
                             </script>
-                            {{end}}
                             <div class="flex items-start items-baseline uk-flex-column">
                                 {{if ne .Title ""}}
                                 <div>
@@ -274,7 +288,7 @@
                                     <h3 class="h2 uk-text-capitalize" style="visibility: hidden;">Untitled</h3>
                                 </div>
                                 {{end}}
-                                <div>
+                            <div>
                                     <p class="uk-text-muted uk-text-small pl1">
                                         {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
                                     </p>
@@ -293,12 +307,10 @@
                             <p class="uk-text-meta" style="visibility: hidden;">No Referral</p>
                             {{end}}
                             <p class="truncate">{{.Body}}</p>
-                            {{if $IsSuperUser }}
                                 <div class="uk-flex uk-flex-right">
                                     <span class="uk-button uk-button-default"
                                         style="z-index: 999;" uk-toggle="target: #modal-{{.Model.ID}}">Read More</span>
                                 </div>
-                            {{end}}
                         </div>
                     </div>
 
@@ -314,7 +326,7 @@
                                         <p class="uk-custom" style="display: none">Anonymous review</p>
                                     </div>
                                     {{else}}
-                                         <h3 class="uk-modal-title">{{.Title}}</h3>
+                                         <h3 class="uk-text-capitalize uk-modal-title">{{.Title}}</h3>
                                     {{end}}                                 
                                     </div>
                                     <div>
@@ -349,7 +361,7 @@
                             <div class="uk-modal-header">
                                 <div class="flex uk-flex-wrap items-start items-baseline">
                                     <div>
-                                        <h3 class="uk-modal-title">{{.Title}}</h3>
+                                        <h3 class="uk-modal-title uk-text-capitalize">{{.Title}}</h3>
                                     </div>
                                     <div>
                                         <p class="uk-text-muted uk-text-small pl1">
@@ -364,7 +376,7 @@
                                 {{else}}
                                     <p class="uk-custom">Anonymous review</p>
                                 {{end}}
-                                <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                                <p class="uk-text-meta uk-text-uppercase"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
                                 <p>{{.Body}}</p>
                             </div>
                             <div class="uk-modal-footer uk-text-right">

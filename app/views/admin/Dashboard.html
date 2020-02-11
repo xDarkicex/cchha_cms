@@ -131,15 +131,12 @@
                     </li>
                 </ul>
             {{end}}
-            <div class="">
-              <ul class="uk-pagination">
-                  <li><a href="/bd-admin?limit=2&offset=2"><span uk-pagination-previous></span></a></li>
-                  <li><a href=""><span uk-pagination-next></span></a></li>
-              </ul>
-            </div>
+            
+          {{if ge $count 1}}
+          <div class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
           {{range .Data}}
           <div class="p1">
-            <div class="uk-card uk-card-default uk-padding-small reviews" id="review-{{.Model.ID}}">
+            <div class="uk-card uk-card-default uk-padding-small reviews">
               <div class="uk-card-body p2" >
                 <span class="uk-badge" style="background: red;">PENDING</span>
                 <div class="145" id="lucus">
@@ -151,8 +148,9 @@
                     </li>
                     <li>
                       <div class="px1">
-                        <a href="#modal-full-{{.Model.ID}}" uk-toggle>
+                        
                           <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
+                            <a href="#modal-full-{{.Model.ID}}" uk-toggle></a>
                           </span>
                         </a>
                       </div>
@@ -163,7 +161,7 @@
                       </div>
                     </li>
                   </ul>
-                </div>
+                
                 <script>
                     (function() {
                         let favorited = document.getElementById('heart-{{.Model.ID}}')
@@ -173,6 +171,10 @@
                     }())
                     document.addEventListener('DOMContentLoaded', star('{{.Rating}}',"#review-{{.Model.ID}}"))
                 </script>
+                </div>
+                <div id="review-{{.Model.ID}}">
+
+                </div>
                 {{if $count }}
                 <h3 class="h2" style="text-transform: capitalize;">{{.Title}}</h3>
                 {{else}}
@@ -322,7 +324,9 @@
                 </div>
               </div>
             </div>
+          </div>
             {{end}}
+          {{end}}
           </div>
         </div>
         <div class="uk-width-1-1 uk-padding">

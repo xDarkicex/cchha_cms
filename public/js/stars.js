@@ -6,7 +6,7 @@ function star(rating, tag) {
   var div = document.createElement("div")
   for (i = 0;i < rating;i++) {
     setTimeout(function (i) {
-      let INNER = t.querySelector("div")
+      let INNER = div
       if (i < rating) {
         let el = document.createElement("span")
         el.setAttribute('class', 'uk-icon ml2 rating-bar uk-animation-slide-left')

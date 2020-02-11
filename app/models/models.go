@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/xDarkicex/name_generator"
+	namer "github.com/xDarkicex/name_generator"
 
 	"github.com/xDarkicex/name_generator/dictionary"
 
@@ -30,6 +30,8 @@ func init() {
 	if err != nil {
 		log.Println("[Cause] ", errors.Cause(err), "\n[Details] ", errors.Details(err))
 	}
+	// var review Review
+	// db.Debug().Where("rating = 0").Unscoped().Delete(&review)
 	// only run on seeding
 	// should maybe add to flag
 	// seed()

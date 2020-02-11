@@ -27,9 +27,7 @@ func (a Admin) Index(w http.ResponseWriter, r *http.Request) {
 	f, _ := GetNamed(r, "Flash")
 
 	var count = 0
-	// spew.Dump(s.Values)
 	user := helpers.GetCurrentUser("user-id", s)
-
 	file, err := ioutil.ReadFile("./app/views/admin/Dashboard.html")
 	if err != nil {
 		helpers.HandleError(err)

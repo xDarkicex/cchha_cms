@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/xDarkicex/todos"
+	elephant "github.com/xDarkicex/todos"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"golang.org/x/text/number"
@@ -96,7 +96,6 @@ func Percent(total []int) map[int]float64 {
 	var percentages = make(map[int]float64)
 	var sum float64
 	for k, v := range dict {
-		fmt.Println(k, v)
 		sum += float64(v)
 		percentages[k] = toFixed((float64(v) / float64(len(total))), 2)
 	}
@@ -169,7 +168,7 @@ func (rev Reviews) Index(w http.ResponseWriter, r *http.Request) {
 			Four:  dict[4],
 			Five:  dict[5],
 		},
-		Avg: p.Sprintf("%v", meanPercise(temp)),
+		Avg: p.Sprintf("%.02f", meanPercise(temp)),
 
 		Percentages: Percentages{
 			One:   p.Sprintf("%v", number.Percent(percentages[1])),
@@ -341,7 +340,6 @@ func (rev Reviews) Create(w http.ResponseWriter, r *http.Request) {
 		Body:         "New review from user",
 	}
 	detail = models.CreateDetail(detail)
-	fmt.Println(detail)
 	review.Details = append(review.Details, detail)
 	models.UpdateReview(review)
 	s.Save(r, w)
