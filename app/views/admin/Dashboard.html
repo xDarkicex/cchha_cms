@@ -131,9 +131,14 @@
                     </li>
                 </ul>
             {{end}}
-            
-          {{if ge $count 1}}
           <div class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
+          {{if ge $count 1}}
+            <div class="">
+              <ul class="uk-pagination">
+                  <li><a href="/bd-admin?limit=2&offset=2"><span uk-pagination-previous></span></a></li>
+                  <li><a href=""><span uk-pagination-next></span></a></li>
+              </ul>
+            </div>
           {{range .Data}}
           <div class="p1">
             <div class="uk-card uk-card-default uk-padding-small reviews">

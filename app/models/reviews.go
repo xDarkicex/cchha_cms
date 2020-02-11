@@ -123,6 +123,7 @@ func GetApprovedReviews() (reviews []Review) {
 		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
 	}
 	reviews = append(reviews_fav, ordered_reviews...)
+	spew.Dump(reviews)
 	return reviews
 }
 
