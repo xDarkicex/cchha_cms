@@ -137,6 +137,8 @@
                   <li><a href=""><span uk-pagination-next></span></a></li>
               </ul>
             </div>
+          {{if ge $count 1}}
+          <div class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
           {{range .Data}}
           <div class="p1">
             <div class="uk-card uk-card-default uk-padding-small reviews" id="review-{{.Model.ID}}">
@@ -322,7 +324,9 @@
                 </div>
               </div>
             </div>
+          </div>
             {{end}}
+          {{end}}
           </div>
         </div>
         <div class="uk-width-1-1 uk-padding">
