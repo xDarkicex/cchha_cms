@@ -12,22 +12,29 @@
 
         <title>{{.Title}}</title>
         <!-- forgin imports -->
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-        {{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.3/js/uikit.min.js"></script> */}}
+        <link async href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.3/js/uikit.min.js"></script> -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133675222-1"></script>
-        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
         <!-- forgin imports end -->
 
 
         <!-- local imports -->
         <link rel="stylesheet""href="/static/css/admin-panel.css">
         <link rel="stylesheet""href="/static/css/stars.css">
-        <script src="/static/js/stars.js"></script>
+        <script src="/static/js/stars-reviews.js"></script>
         <link rel="icon" ype="image/png" href="/static/assets/favicon.png">
         <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="stylesheet" href="/static/css/hover-min.css">
         <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
-        <script src="/static/js/main.js"></script>
+        <!-- <script src="/static/js/main.js"></script> -->
         <link rel="stylesheet" href="/static/css/stars.css">
+        <link rel="stylesheet" href="/static/css/colorized.css">
+        <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit-icons.min.js"></script>
         <!-- local imports end -->
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -41,22 +48,23 @@
     </head>
     <body>
         {{$count := .Count}}
+        {{$countRejected := .CountRejected}}
         {{$userID := .User.Model.ID}}
         {{$user := print .User.FirstName " " .User.LastName}}
         {{if .Flashes}}
-            {{$CURRENT := GetNewestFlashes .Flashes}}
-            {{range $CURRENT}}
-                {{if eq .Type "Auth"}}
-                <script>
+        {{$CURRENT := GetNewestFlashes .Flashes}}
+        {{range $CURRENT}}
+        {{if eq .Type "Auth"}}
+        <script>
                     UIkit.notification("<span uk-icon='icon: warning'></span> {{.Message}}")
                 </script>
-                {{end}}
-                {{if eq .Type "reset"}}
-                <script>
+        {{end}}
+        {{if eq .Type "reset"}}
+        <script>
                     UIkit.notification("<span uk-icon='icon: check'></span> {{.Message}}")
                 </script>
-                {{end}}
-            {{end}}
+        {{end}}
+        {{end}}
         {{end}}
         <!-- end of flash loop -->
         {{$user := print .User.FirstName " " .User.LastName}}
@@ -115,22 +123,131 @@
                 </nav>
             </div>
             <div class="uk-padding"><span class="uk-badge">{{.User.Title}}</span></div>
+
             <div class="uk-width-1-1 uk-padding">
                 <h2 class="uk-heading-line uk-text-center"><span>Approved Reviews</span></h2>
             </div>
+
             {{if le $count 1}}
-                <div class="uk-padding uk-child-width-1-1@m uk-child-width-1-1@s uk-grid-match" uk-grid>
-            {{else}}
+            <div class="uk-padding uk-child-width-1-1@m uk-child-width-1-1@s uk-grid-match" uk-grid>
+                {{else}}
                 <div class="uk-padding uk-child-width-1-2@m uk-child-width-1-1@s uk-grid-match" uk-grid>
-            {{end}}
-                {{range .Approved}}
+                    {{end}}
+                    {{range .Reviews}}
                     <div class="review">
-                        <div class="uk-card uk-card-default uk-padding-small" id="review-{{.Model.ID}}">
-                            
-                            <div class="uk-card-body p2">
-                            <span class="uk-badge">Approved</span>
+                        <div class="uk-card uk-card-default uk-card-colorized">
+
+                            <div class="uk-section-primary uk-section-colorized" style="height: 35px;">
+                                <div>
+                                    <ul class="uk-iconnav uk-iconnav-colorized">
+                                        <!-- <li class="px1">
+                                            <div>
+                                                <button
+                                                    id="heart-{{.Model.ID}}"
+                                                    data-featured="{{.Featured}}"
+                                                    onClick="setDataFeatured({{.Model.ID}}, false)"
+                                                    class="uk-button-danger uk-align-center uk-button-accepted" type="button"
+                                                    uk-tooltip="title: promote review; delay: 500;">
+                                                    <i class="fas fa-thumbs-up"></i>
+
+                                                </button>
+                                            </div>
+                                        </li> -->
+                                        <!-- <li class="px1">
+                                            <div>
+                                                <button
+                                                    id="heart-{{.Model.ID}}"
+                                                    data-featured={{.Featured}}
+                                                    onClick="setDataFeatured({{.Model.ID}}, true)"
+                                                    class="uk-button-danger uk-align-center uk-button-rejected" type="button"
+                                                    uk-tooltip="title: demote review; delay: 500;">
+                                                    <i class="fas fa-thumbs-down"></i>
+                                                </button>
+                                            </div>
+                                        </li> -->
+                                        <li class="px1">
+                                            <div>
+                                                <a href="#modal-full-{{.Model.ID}}" style="color: rgba(255,255,255,0.8);" uk-toggle>
+                                                    <button
+                                                        class="uk-button-danger uk-align-center uk-button-expand" type="button"
+                                                        id="expand-{{.Model.ID}}"
+                                                        uk-tooltip="title: FULL SCREEN; delay: 500;">
+                                                        <i class="fas fa-expand"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </li>
+                                        <li class="px1">
+                                            <div>
+                                                <button
+                                                    class="uk-button-danger uk-align-center uk-button-delete"
+                                                    type="button"
+                                                    uk-toggle="target: #deleteReview-{{.Model.ID}}"
+                                                    uk-tooltip="title: DELETE; delay: 500;">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="uk-card-body" id="review-{{.Model.ID}}">
+                                <div class="uk-badges">
+
+                                    {{ if not .Pending }}
+                                    {{if .Featured }}
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-feature-on"
+                                        id="accept-reject-control-{{.Model.ID}}" data-status="featured"
+                                        data-featured="{{.Featured}}">Featured
+                                    </span>
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-accepted"
+                                        id="accept-reject-control-{{.Model.ID}}" data-status="accepted">Accepted
+                                    </span>
+                                    {{else}}
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-feature-off"
+                                        id="accept-reject-control-{{.Model.ID}}" data-status="featured" data-featured='false'>Featured
+                                    </span>
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-accepted"
+                                        id="accept-reject-control-{{.Model.ID}}" data-status="accepted">Accepted
+                                    </span>
+                                    {{end}}
+                                    {{else}}
+
+                                    {{if .Featured}}
+
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-feature-on"
+                                        id="accept-reject-control-{{.Model.ID}}" data-status="featured"
+                                        data-featured="{{.Featured}}">Featured
+                                    </span>
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-rejected"
+                                        id="accept-reject-control-{{.Model.ID}}"
+                                        data-featured="{{.Featured}}"
+                                        data-status="rejected">Rejected
+                                    </span>
+                                    {{else}}
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-feature-off"
+                                        id="accept-reject-control-{{.Model.ID}}" data-status="featured" data-featured='false'>Featured
+                                    </span>
+                                    <span
+                                        class="uk-badge uk-badge-colorized uk-badge-rejected"
+                                        id="accept-reject-control-{{.Model.ID}}" data-featured='false' data-status="rejected">Rejected
+                                    </span>
+                                    {{end}}
+                                    {{end}}
+                                </div>
                                 <script>
-                                    document.addEventListener('DOMContentLoaded', star('{{.Rating}}', "#review-{{.Model.ID}}"))
+                                    document.addEventListener('DOMContentLoaded', () => {
+                                        star('{{.Rating}}', '#review-{{.Model.ID}}')
+                                        
+                                    })
+                                    
                                 </script>
                                 {{if $count }}
                                 <h3>{{.Title}}</h3>
@@ -139,14 +256,97 @@
                                 <p class="uk-text-lead uk-text-center@s uk-text-middle">Please Contact your system Admin for more information</p>
                                 {{end}}
                                 <p class="uk-custom">{{.Username}}</p>
-                                <p class="uk-text-meta review-source"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                                <p class="uk-text-meta review-source">
+                                    <a
+                                        style="color:white!important; text-transform: capitalize!important;"
+                                        href="{{.ExternalLink}}">{{.ExternalSiteName}}
+                                    </a>
+                                </p>
                                 <p>{{.Body}}</p>
-                                <div class="uk-flex">
-                                    <button class="uk-button uk-button-danger" type="button" uk-toggle="target: #deleteReview-{{.Model.ID}}"><span uk-icon="close"></span>Delete</button>
-                                    <button class="uk-button uk-button-default" uk-toggle="target: #rejectReview-{{.Model.ID}}" type="button">Reject</button>
+
+                            </div>
+                        </div>
+                        <div id="modal-full-{{.Model.ID}}" class="uk-modal uk-modal-full" style="background: white;" uk-modal>
+                            <div class="uk-modal-dialog uk-modal-body uk-card-colorized">
+                                <button type="button" class="uk-modal-close-default uk-close" uk-close></button>
+                                <div class="uk-modal-header">
+                                    {{if not .Title }}
+                                    <div class="uk-section-muted">
+                                        <p class="uk-custom" style="display: none">Anonymous review</p>
+                                    </div>
+                                    {{else}}
+                                    <h2 class="uk-text-capitalize uk-modal-title">{{.Title}}</h2>
+                                    {{end}}
+                                    <div>
+                                        <p class="uk-text-muted uk-text-small pl1">
+                                            {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="uk-container">
+                                    {{if eq .Username "Anonymous review"}}
+                                    <div class="uk-section-muted">
+                                        <p class="uk-custom">{{.Username}}</p>
+                                    </div>
+                                    {{else}}
+                                    <div class="uk-section-muted">
+                                        <p class="uk-custom" style="display: none;">Anonymous review</p>
+                                    </div>
+                                    {{end}}
+                                    <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                                    <div class="uk-section-muted">
+                                        <div class="uk-section-default">
+                                            <p>{{.Body}}</p>
+                                        </div>
+                                    </div>
+
+                                    <p class="h2">Replay to {{if .Username }}{{.Username }}{{else}}User Review{{end}}</p>
+
+                                    <hr>
+                                    <form class="uk-form" id="reply-email-{{.Model.ID}}"
+                                        name="reply-email-{{.Model.ID}}"
+                                        action="/bd-admin/review/response" method="post">
+                                        <div class="uk-margin">
+                                            <input class="uk-input" type="text" name="title" placeholder="title">
+                                        </div>
+                                        <div id="editor-{{.Model.ID}}"></div>
+                                        <input type="hidden" value="{{.Email}}"
+                                            name="contact_email" />
+                                        <input type="hidden" value="{{.Username}}"
+                                            name="contact_name" />
+                                        <div class="uk-margin-top">
+                                            <div class="g-recaptcha"
+                                                data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv">
+                                            </div>
+                                        </div>
+                                        <div class="uk-width1-1 pt2">
+                                            <div class="uk-form-custom">
+                                                <button
+                                                    class="uk-button uk-button-primary"
+                                                    type="submit" for="#reply-email-{{.Model.ID}}">Reply
+                                                    <span uk-icon="icon:mail"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <style>
+                                        .ck-editor__editable_inline {
+                                            min-height: 300px;
+                                        }
+                                    </style>
+                                    <script>
+                                
+                                        ClassicEditor
+                                            .create( document.querySelector( '#editor-{{.Model.ID}}' ) )
+                                            .catch( error => {
+                                                console.error( error );
+                                            } );
+                                    </script>
                                 </div>
                             </div>
                         </div>
+
                         <div class="uk-modal" id="deleteReview-{{.Model.ID}}" uk-modal>
                             <div class="uk-modal-dialog">
                                 <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -154,8 +354,12 @@
                                     <h2 class="uk-modal-title">Review: {{.Title}}</h2>
                                 </div>
                                 <div class="uk-modal-body" style="border-radius: 50px;">
-                                    <p>Notes about Review Deletion.</p>
-                                    <textarea class="uk-textarea" placeholder="Notes" rows="5" style="resize:none;" name="note" id="deleteText-{{.Model.ID}}"></textarea>
+                                    <div class="uk-form-custom">
+                                        <p class="uk-form-label">Notes about Review Deletion.</p>
+                                        <div id="deleteText-{{.Model.ID}}" name="note">
+
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="uk-modal-footer">
                                     <div class="uk-section-muted uk-padding">
@@ -166,6 +370,18 @@
                                         <button class="uk-button-danger uk-button uk-align-right delete-{{.Model.ID}}" onClick="deleteReview('{{.Model.ID}}')" disabled>
                                             <span class="uk-icon" uk-icon="icon: trash"></span>
                                         </button>
+                                        <style>
+                                            .ck-editor__editable_inline {
+                                                min-height: 300px;
+                                            }
+                                        </style>
+                                        <script>
+                                            ClassicEditor
+                                                .create( document.querySelector( '#deleteText-{{.Model.ID}}' ) )
+                                                .catch( error => {
+                                                    console.error( error );
+                                                } );
+                                        </script>
                                         <script>
                                             document.querySelector('.checkboxForDelete-{{.Model.ID}}').addEventListener('change', function(e) {
                                                 var deleteButton = document.querySelector('.delete-{{.Model.ID}}')
@@ -178,15 +394,13 @@
                                                     deleteButton.classList.add("uk-button-disabled")
                                                     deleteButton.classList.remove("uk-button-default")
                                                 }
-                                                
-
                                             })
-                                                                                      
                                         </script>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="uk-modal" id="rejectReview-{{.Model.ID}}" uk-modal>
                             <div class="uk-modal-dialog">
                                 <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -199,288 +413,374 @@
                                 <div class="uk-modal-body">
                                     <p>Reason for Rejection.</p>
                                     <form class="uk-form" id="rejectReview-{{.Model.ID}}" name="rejectReview-{{.Model.ID}}" action="/bd-admin/review/reject" method="post">
-                                        <textarea class="uk-textarea" placeholder="Reason for removal from apporved list" rows="5" style="resize:none;" name="contact_body"
-                                            id="rejectText-{{.Model.ID}}"></textarea>
+                                        <div id="rejectText-{{.Model.ID}}"></div>
                                         <input type="hidden" value="{{.Email}}" name="contact_email" />
                                         <input type="hidden" value="{{.Username}}" name="contact_name" />
                                         <div class="uk-align-left uk-margin-top">
                                             {{/* <div class="g-recaptcha" data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div> */}}
                                         </div>
+                                        <div class="uk-form-custom">
+                                            <button type="submit"
+                                                class="uk-button-default uk-button"
+                                                name="rejectReview-{{.Model.ID}}"
+                                                onclick="rejection('{{.Model.ID}}')">Reject
+                                            </button>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="uk-modal-footer">
-                                    <button type="submit"
-                                        class="uk-button-default uk-button"
-                                        name="rejectReview-{{.Model.ID}}"
-                                        onclick="rejection('{{.Model.ID}}')">Reject
+                                    <p>Testing now</p>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            .ck-editor__editable_inline {
+                                min-height: 300px;
+                            }
+                        </style>
+                        <script>
+                            ClassicEditor
+                                .create( document.querySelector( '#editor-{{.Model.ID}}' ) )
+                                .catch( error => {
+                                    console.error( error );
+                                } );
+                        </script>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+            {{/* <div class="uk-padding">
+                <div class="uk-width-1-1 uk-padding">
+                    <h2 class="uk-heading-line uk-text-center"><span>Rejected Reviews</span></h2>
+                    <p class="uk-text-center uk-text-bold">Pending Deletion</p>
+                </div>
+            </div>
+            {{/* {{if le $countRejected 1 }}
+            <div class="uk-padding uk-child-width-1-1@m uk-child-width-1-1@s uk-grid-match" uk-grid>
+                {{else}}
+                <div class="uk-padding uk-child-width-1-2@m uk-child-width-1-1@s uk-grid-match" uk-grid>
+                    {{end}}
+                    {{range .Rejected}}
+                    <div class="246">
+                        <div class="uk-card uk-card-default uk-card-colorized">
+                            <div class="uk-section-primary uk-section-colorized" style="height: 35px;">
+                                <div>
+                                    <ul class="uk-iconnav uk-iconnav-colorized">
+                                        <li class="px1">
+                                            <div class="280">
+                                                <button id="heart-{{.Model.ID}}" data-featured={{.Featured}}
+                                                    onClick="setDataFeatured({{.Model.ID}});"
+                                                    class="uk-button-danger uk-align-center uk-button-favorited" type="button" uk-tooltip="title: promote to featured review; delay: 500;">
+                                                    <i class="fas fa-thumbs-up"></i>
+                                                </button>
+                                            </div>
+                                        </li>
+                                        <li class="px1">
+                                            <div>
+                                                <a href="#modal-full-{{.Model.ID}}" style="color: rgba(255,255,255,0.8);" uk-toggle>
+                                                    <button class="uk-button-danger uk-align-center uk-button-expand" type="button" id="expand-{{.Model.ID}}" uk-tooltip="title: open full
+                                                        sceen;
+                                                        delay: 500;">
+                                                        <i class="fas fa-expand"></i>
+                                                    </button>
+                                                </a>
+                                            </span>
+
+                                        </div>
+                                    </li>
+                                    <li class="px1">
+                                        <div>
+                                            <button class="uk-button-danger uk-align-center uk-button-delete" type="button" uk-toggle="target: #deleteReview-{{.Model.ID}}" uk-tooltip="title: delete
+                                                review; delay: 500;"><i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="uk-card-body" id="review-{{.Model.ID}}">
+                            {{ if eq .Pending false }}
+                            <span
+                                class="uk-badge uk-badge-colorized"
+                                id="ar-control-{{.Model.ID}}" data-status="accepted">Accepted</span>
+                            {{else}}
+                            <span
+                                class="uk-badge uk-badge-colorized"
+                                id="ar-control-{{.Model.ID}}" data-status="rejected">Rejected</span>
+                            {{end}}
+                            <script>
+                                            document.addEventListener('DOMContentLoaded', star('{{.Rating}}', '#review-{{.Model.ID}}'))
+                                        </script>
+                            {{if ge $count 1}}
+                            <h3 style="color: white; text-transform: capitalize;">Review: {{.Title}}</h3>
+                            {{else}}
+                            <h2 class="uk-text-lead uk-text-center@s uk-text-middle" style="color: white; text-transform: capitalize;">{{.Title}}</h2>
+                            <p class="uk-text-lead uk-text-center@s uk-text-middle">Please Contact your system Admin for more information</p>
+                            {{end}}
+                            <p class="uk-custom">{{.Username}}</p>
+                            <p class="uk-text-meta review-source" style="color: white; text-transform: capitalize;"><a href="{{.ExternalLink}}" style="color: white; text-transform:
+                                    capitalize;">{{.ExternalSiteName}}</a></p>
+                            <p>{{.Body}}</p>
+
+                        </div>
+                    </div>
+                    <div class="uk-modal" id="deleteReview-{{.Model.ID}}" uk-modal>
+                        <div class="uk-modal-dialog">
+                            <button class="uk-modal-close-default" type="button" uk-close></button>
+                            <div class="uk-modal-header">
+                                <h2 class="uk-modal-title">Review: {{.Title}}</h2>
+                            </div>
+                            <div class="uk-modal-body" style="border-radius: 50px;">
+                                <p>Notes about Review Deletion.</p>{{$deleteText := print "deleteText-" .Model.ID}}
+                                <textarea class="uk-textarea" placeholder="Notes" rows="5" style="resize:none;" name="note" id="deleteText"></textarea>
+                            </div>
+                            <div class="uk-modal-footer">
+                                <div class="uk-section-muted uk-padding">
+                                    <p class="uk-text-meta">By Checking the box below you agree to all terms and conditions.</p>
+                                    <label class="checkboxes IsChecked" for="deleted">
+                                        <input class="uk-checkbox checkboxForDelete-{{.Model.ID}}" type="checkbox" name="deleted">
+                                    </label>
+
+                                    <button class="uk-button-danger uk-button uk-align-right delete {{$deleteText}}" onClick="deleteReview('{{.Model.ID}}')">
+                                        <span clas="uk-icon" uk-icon="icon: trash"></span>
                                     </button>
+                                    <script>
+                                        var check = document.querySelector('.checkboxForDelete-{{.Model.ID}}')
+                                        console.log(check)                                                
+                                    </script>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {{end}}
-                </div>
-                <div class="uk-padding"></div>
-                <div class="uk-width-1-1 uk-padding">
-                    <h2 class="uk-heading-line uk-text-center"><span>Rejected Reviews</span></h2>
-                    {{/* <p class="uk-text-center uk-text-bold">Pending Deletion</p> */}}
-                </div>
-            {{/* Starting Second Loop */}}
-                {{if le $count 1}}
-                <div class="uk-padding uk-child-width-1-1@m uk-child-width-1-1@s uk-grid-match" uk-grid>
-                    {{else}}
-                    <div class="uk-padding uk-child-width-1-2@m uk-child-width-1-1@s uk-grid-match" uk-grid>
-                        {{end}}
-                        {{range .Rejected}}
-                        {{.Pending}} I expect true
-                        <div class="246">
-                            <div class="uk-card uk-card-default">
-                                <div class="uk-card-body">
-                                    <p class="rating">{{.Rating}}</p>
-                                    {{if le $count 1}}
-                                    <h3>{{.Title}}</h3>
-                                    {{else}}
-                                    <h2 class="uk-text-lead uk-text-center@s uk-text-middle">{{.Title}}</h2>
-                                    <p class="uk-text-lead uk-text-center@s uk-text-middle">Please Contact your system Admin for more information</p>
-                                    {{end}}
-                                    <span class="hidden">{{.Model.ID}}</span>
-                                    <p class="uk-custom">{{.Username}}</p>
-                                    <p class="uk-text-meta review-source"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
-                                    <p>{{.Body}}</p>
-                                    <div class="uk-flex">
-                                        <button class="uk-button uk-button-danger" type="button" uk-toggle="target: #deleteReview-{{.Model.ID}}"><span uk-icon="close"></span>Delete</button>
-                                        <button class="uk-button uk-button-default" uk-toggle="target: #rejectReview-{{.Model.ID}}" type="button">Reject</button>
-                                    </div>
-                                </div>
+                    <div class="uk-modal" id="rejectReview-{{.Model.ID}}" uk-modal>
+                        <div class="uk-modal-dialog">
+                            <button class="uk-modal-close-default" type="button" uk-close></button>
+                            <div class="uk-modal-header">
+                                <h2 class="uk-modal-title">Review: {{.Title}}</h2>
+                                <p class="uk-text-meta">Customer Email: <span id="email">{{.Email}}</span></p>
+                                <p class="uk-text-meta">Customer Name: <span id="username">{{.Username}}</span></p>
+                                <div id="html_element"></div>
                             </div>
-                            <div class="uk-modal" id="deleteReview-{{.Model.ID}}" uk-modal>
-                                <div class="uk-modal-dialog">
-                                    <button class="uk-modal-close-default" type="button" uk-close></button>
-                                    <div class="uk-modal-header">
-                                        <h2 class="uk-modal-title">Review: {{.Title}}</h2>
+                            <div class="uk-modal-body">
+                                <p>Reason for Rejection.</p>{{$rejectText := print "rejectText-" .Model.ID}}
+                                <form class="uk-form" id="rejectReview-{{.Model.ID}}" name="rejectReview-{{.Model.ID}}" action="/bd-admin/review/reject" method="post">
+                                    <textarea class="uk-textarea" placeholder="Email" rows="5" style="resize:none;" name="contact_body" id="{{$rejectText}}"></textarea>
+                                    <input type="hidden" value="{{.Email}}" name="contact_email" />
+                                    <input type="hidden" value="{{.Username}}" name="contact_name" />
+                                    <div class="uk-padding">
+                                        <div class="g-recaptcha" data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div>
                                     </div>
-                                    <div class="uk-modal-body" style="border-radius: 50px;">
-                                        <p>Notes about Review Deletion.</p>{{$deleteText := print "deleteText-" .Model.ID}}
-                                        <textarea class="uk-textarea" placeholder="Notes" rows="5" style="resize:none;" name="note" id="deleteText"></textarea>
-                                    </div>
-                                    <div class="uk-modal-footer">
-                                        <div class="uk-section-muted uk-padding">
-                                            <p class="uk-text-meta">By Checking the box below you agree to all terms and conditions.</p>
-                                            <label class="checkboxes IsChecked" for="deleted">
-                                                <input class="uk-checkbox checkboxForDelete-{{.Model.ID}}" type="checkbox" name="deleted">
-                                            </label>
-                                            
-                                            <button class="uk-button-danger uk-button uk-align-right delete {{$deleteText}}" onClick="deleteReview('{{.Model.ID}}')" >
-                                                <span clas="uk-icon" uk-icon="icon: trash"></span>
-                                            </button>
-                                            <script>
-                                                var check = document.querySelector('.checkboxForDelete-{{.Model.ID}}')
-                                                console.log(check)                                                
-                                            </script>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="uk-modal" id="rejectReview-{{.Model.ID}}" uk-modal>
-                                <div class="uk-modal-dialog">
-                                    <button class="uk-modal-close-default" type="button" uk-close></button>
-                                    <div class="uk-modal-header">
-                                        <h2 class="uk-modal-title">Review: {{.Title}}</h2>
-                                        <p class="uk-text-meta">Customer Email: <span id="email">{{.Email}}</span></p>
-                                        <p class="uk-text-meta">Customer Name: <span id="username">{{.Username}}</span></p>
-                                        <div id="html_element"></div>
-                                    </div>
-                                    <div class="uk-modal-body">
-                                        <p>Reason for Rejection.</p>{{$rejectText := print "rejectText-" .Model.ID}}
-                                        <form class="uk-form" id="rejectReview-{{.Model.ID}}" name="rejectReview-{{.Model.ID}}"     action="/bd-admin/review/reject" method="post">
-                                            <textarea class="uk-textarea" placeholder="Email" rows="5" style="resize:none;" name="contact_body" id="{{$rejectText}}"></textarea>
-                                            <input type="hidden" value="{{.Email}}" name="contact_email" />
-                                            <input type="hidden" value="{{.Username}}" name="contact_name" />
-                                            <div class="uk-padding">
-                                                <div class="g-recaptcha" data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="uk-modal-footer">
+                                    <div class="uk-form-content">
                                         <div class="uk-padding">
                                             <button type="submit" class="uk-button-default uk-button" name="rejectReview-{{.Model.ID}}" onclick="rejection('{{.Model.ID}}')">Reject</button>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
+                            </div>
+                            <div class="uk-modal-footer">
+
                             </div>
                         </div>
-                        {{end}}
                     </div>
-
-                    <script>
-                        
-                        function deleteReview(ID) {
-                            var xhr = new XMLHttpRequest(); 
-                            xhr.open("POST", "/bd-admin/review/delete", true)
-                            xhr.setRequestHeader("Content-Type", "application/json")
-                            xhr.onreadystatechange = function () {
-                                if (xhr.readyState == 4 && xhr.status == 200) {
-                                
-                                }
-                            }
-                            var deleted = document.querySelector('deleteReview-'+ID+'input[name="deleted"]').value
-                            let note = document.getElementById('deleteText').value
-                            var data = {review_id: parseInt(ID), user_id: parseInt('{{$userID}}'), body: "Review Removed from website by" + "{{$user}}"}
-                            return 
-                            xhr.send(JSON.stringify(data))
-                        }
-                        function rejection(id) {
-                            var xhr = new XMLHttpRequest();
-                            xhr.open("POST", "/bd-admin/review/reject", true)
-                            xhr.setRequestHeader("Content-Type", "application/json")
-                            xhr.onreadystatechange = function() {
-                                if (xhr.readyState == 4 && xhr.status == 200) {
-
-                                }
-                            }
-                            let note = document.getElementById("rejectText-"+id).value
-                            var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note}
-                            xhr.send(JSON.stringify(data)) 
-                        }
-                        function submitApproval(id) {
-                            let note = document.getElementById("approveReview-"+id).value
-                            var xhr = new XMLHttpRequest(); 
-                            xhr.open("POST", "/bd-admin/review/approved", true)
-                            xhr.setRequestHeader("Content-Type", "application/json")
-                            xhr.onreadystatechange = function () {
-                            if (xhr.readyState == 4 && xhr.status == 200) {
-                            
-                                    }
-                                }
-                                var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note}
-                                xhr.send(JSON.stringify(data))
-                            }
-                            {{/* function deleteReview(id) {
-
-                                var xhr = new XMLHttpRequest(); 
-                                xhr.open("POST", "/bd-admin/review/delete", true)
-                                xhr.setRequestHeader("Content-Type", "application/json")
-                                xhr.onreadystatechange = function () {
-                                if (xhr.readyState == 4 && xhr.status == 200) {
-                                
-                                    }
-                                }
-                                
-
-                                var deleted = document.querySelector("deleteReview-"+id+" input[name='deleted']").value
-                                let note = document.getElementById('deleteText').value
-                                console.log(note)
-                                var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note}
-                                xhr.send(JSON.stringify(data))
-                            }
-                            var modals = []  
-                            var checkboxes = []
-                            document.addEventListener('DOMContentLoaded', function(e) {
-                                var reviews = document.querySelectorAll('.review')
-                            reviews.forEach(review => {
-                                mods = review.querySelectorAll('.uk-modal')
-                                modals.push(mods)
-                                modals.forEach(modal => {
-                                    checkboxes.push(modal[0].querySelectorAll('input.checkboxForDelete'))
-                                    checkboxes.forEach(checkbox => {
-                                    
-                                    
-                                    checkbox[0].addEventListener('change', (e) => {
-                                        check = e.target.checked
-                                            console.log(check)
-                                        var deleteButton = document.querySelector("button.uk-button.delete")
-                                        if (check == true) {
-                                            deleteButton.disabled = false
-                                            deleteButton.classList.remove("uk-button-disabled")
-                                            deleteButton.classList.add("uk-button-default")
-                                        } else {
-                                            deleteButton.disabled = true
-                                            deleteButton.classList.add("uk-button-disabled")
-                                            deleteButton.classList.remove("uk-button-default")
-                                        }
-                                        }) 
-                                    }) 
-                                })
-                            })
-                        }) */}}
-                        
-                              
-                                function rejection(id) {
-                                    var xhr = new XMLHttpRequest();
-                                    xhr.open("POST", "/bd-admin/review/reject", true)
-                                    xhr.setRequestHeader("Content-Type", "application/json")
-                                    xhr.onreadystatechange = function() {
-                                        if (xhr.readyState == 4 && xhr.status == 200) {
-
-                                        }
-                                    }
-                                    let note = document.getElementById("rejectText-"+id).value
-                                    var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: note }
-                                    xhr.send(JSON.stringify(data)) 
-                                }
-                            </script>
-                    <footer class="uk-container uk-padding">
-                        <div uk-grid>
-                            <div class="uk-width-1-1 uk-text-center"><img src="/static/assets/cchha.svg" style="max-height: 100px;" alt="Compassionate Care Home Health Agency Logo"></div>
-                            <div class="uk-width-1-3@m uk-width-1-1@s">
-                                <p class="uk-text-bold uk-heading-divider">Locations</p><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span
-                                    class="uk-text-bold">Fresno, California</span>
-                                <br>
-                                <div style="padding-left:55px;"><span class="uk-text-right">7545 N. Del Mar Ave, </span>
-                                    <br><span class="uk-text-left">Suite 103, 104 & 204 </span>
-                                    <br><span class="uk-text-right">Fresno, California </span>
-                                    <br><span class="uk-text-right">93711</span>
-                                    <br><span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span></div>
-                                <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Bakersfield,
-                                    California</span>
-                                <br>
-                                <div style="padding-left:55px;"><span class="uk-text-right">5201 California Ave, </span>
-                                    <br><span class="uk-text-left">Suite 255 </span>
-                                    <br><span class="uk-text-right">Bakersfield, California </span>
-                                    <br><span class="uk-text-right">93309</span>
-                                    <br><span class="uk-text-right"><a href="tel:661-846-2833">1(661) 846-2833</a></span></div>
-                                <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Modesto,
-                                    California
-                                </span>
-                                <br>
-                                <div style="padding-left:55px;"><span class="uk-text-right">1165 Scenic Drive,</span>
-                                    <br><span class="uk-text-left">Suite C-1</span>
-                                    <br><span class="uk-text-right">Modesto, California</span>
-                                    <br><span class="uk-text-right">95350</span>
-                                    <br><span class="uk-text-right"><a href="tel:209-622-1058">1(209) 622-1058</a> </span></div>
-                            </div>
-                            <div class="uk-width-1-3@m uk-width-1-1@s">
-                                <br>
-                                <ul class="uk-list uk-text-meta">
-                                    <li><span uk-icon="icon: clock"></span><span class="uk-padding-small uk-text-right">Office Hours: Monday - Friday, 8AM to 5PM</span></li>
-                                    <li><span uk-icon="icon: comment"></span><span class="uk-padding-small uk-text-right">Referrals accepted 7 days a week</span></li>
-                                    <li><span uk-icon="icon: phone"></span><span class="uk-padding-small">Phone: <a href="tel:559-432-2003">1(559) 432-2003</a></span></li>
-                                    <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all referrals to: 1(559) 899-0967</span></li>
-                                    <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all MD orders to: 1(877) 868-6528</span></li>
-                                    <li><span uk-icon="icon: mail"></span><span class="uk-padding-small">Email: <a href="mailto:info@cchha.com">info@cchha.com</a></span></li>
-                                    <li> <a
-                                            href="https://www.facebook.com/Compassionate-Care-Home-Health-Agency-1975186136031240/?__tn__=%2Cd%2CP-R&amp;eid=ARCKp7hOtHDDRD0Nr_ZBAj73umHxBCwXFsTwD9eemai1IOX6rLQ55Y6ivxE8wFiSEqEKlah4F-laj66D"><span
-                                                uk-icon="icon: facebook"> </span><span class="uk-padding-small">Facebook</span></a></li>
-                                    <li> <a href="https://www.instagram.com/compassionatecarehh/"><span uk-icon="icon: instagram"></span><span class="uk-padding-small">Instagram</span></a></li>
-                                </ul>
-                            </div>
-                            <div class="uk-width-1-3@m uk-width-1-1@s uk-text-center">
-                                <p class="uk-text-bold">We Believe in Compassionate Care</p>
-                                <p>We have been serving the Central Valley community for over fifteen years, and our commitment to providing the highest quality care shows in every patient we
-                                    serve. Let us show you what compassionate care truly means.</p>
-                                <div uk-grid>
-
-                                    <div class="uk-width-1-3@m uk-width-1-1@s">
-                                        <a href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick" target="_blank"
-                                            rel="nofollow"><img src="https://seal-cencal.bbb.org/seals/blue-seal-120-61-bbb-89049202.png" style="border: 0;" alt="Compassionate Care Home Health
-                                                Agency, LLC BBB Business Review" /></a>
-                                    </div>
-                                    <div class="uk-width-1-3@m uk-width-1-1@s"><img src="/static/assets/ACHC-logo-65.png" style="margin-top:10px;"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </footer>
                 </div>
-            </body>
-        </html>
+                {{end}}
+            </div>*/}}
+            <script>
+                var badges = document.querySelectorAll('.uk-badges')
+                badges.forEach(badge => {
+                    
+                    if (badge.childNodes[1].dataset.status == "featured") {
+                        console.log(badge.childNodes[1], "inside featured")
+                        badge.childNodes[1].addEventListener('click', (e) => {
+                        var t = e.target;
+                        console.log(t, t.dataset)
+                        var state = [true, false]
+                        console.log(bool_value, t.dataset.featured)
+                        var bool_value = t.dataset.featured == "true" ? true : false
+                        if (bool_value == true) {
+                            
+                            t.classList.remove('uk-badge-feature-on')
+                            t.classList.add('uk-badge-feature-off')
+                            t.dataset.featured = status[1]
+                            setDataFeatured(t.id.split("-")[3], false)
+                        } else {
+                            t.classList.remove('uk-badge-feature-off')
+                            t.classList.add('uk-badge-feature-on')
+                            t.dataset.featured = status[0]
+                            setDataFeatured(t.id.split("-")[3], true)
+                        }
+                            console.log(t, "feature on")
+                        })
+                    }
+
+                    if (badge.childNodes[3].dataset.status != "featured") {
+                    badge.childNodes[3].addEventListener('click', (e) => {
+                    var t = e.target;
+                    var status = ['accepted', 'rejected']
+                    if (t.dataset.status == "rejected") {
+                        t.dataset.status = status[0]
+                        t.classList.remove('uk-badge-rejected')
+                        t.classList.add('uk-badge-accepted')
+                        t.innerText = "Accepted"
+                        submitApproval(t.id.split("-")[3], "sent from admin panel from "+'{{$user}}')
+                        
+                    } else {
+                        t.dataset.status = status[1]
+                        t.classList.remove('uk-badge-accepted')
+                        t.classList.add('uk-badge-rejected')
+                        t.innerText = "Rejected"
+                        
+                        rejection(t.id.split("-")[3], "sent from admin panel from "+'{{$user}}')
+                    }
+                   
+                    console.log(t.dataset.status)    
+                    })
+                    }
+                
+            })
+
+            function setDataFeatured(id, value) {
+                featureReview(id ,value)
+            }
+            function featureReview(id, featured) {
+              var xhr = new XMLHttpRequest(); 
+              xhr.open("POST", "/bd-admin/review/feature", true)
+              xhr.setRequestHeader("Content-Type", "application/json")
+              xhr.onreadystatechange = function () {
+                  if (xhr.readyState == 4 && xhr.status == 200) {
+                  
+                  }
+              }
+              var bool_value = featured == true ? true : false
+              console.log(bool_value)
+              var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), featured: bool_value}
+              console.log(data)
+              xhr.send(JSON.stringify(data))
+            }
+            function deleteReview(ID) {
+                UIkit.modal.confirm('Are you sure!').then(function() {
+                    
+                    var xhr = new XMLHttpRequest(); 
+                    xhr.open("POST", "/bd-admin/review/delete", true)
+                    xhr.setRequestHeader("Content-Type", "application/json")
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                        
+                        }
+                    }
+                    let note = document.getElementById('deleteText').value
+                    var data = {review_id: parseInt(ID), user_id: parseInt('{{$userID}}'), body: "Review Removed from website by " + "{{$user}}"}
+                    console.log(data)
+                    UIkit.notification('<span uk-icon="icon:check"></span> review deleted',"warning")
+                    return 
+                    xhr.send(JSON.stringify(data))
+                }, function () {
+                    UIkit.notification('<span uk-icon="icon:check"></span> review unchanged', "primary")
+                });
+            }
+            function rejection(id, notes) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/bd-admin/review/reject", true)
+                    xhr.setRequestHeader("Content-Type", "application/json")
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+
+                        }
+                    }
+                    
+                    console.log(id)
+                    var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: notes}
+                    xhr.send(JSON.stringify(data)) 
+                }
+                function submitApproval(id, notes) {
+                        console.log(id)
+                    var xhr = new XMLHttpRequest(); 
+                    xhr.open("POST", "/bd-admin/review/approve", true)
+                    xhr.setRequestHeader("Content-Type", "application/json")
+                    xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                    
+                        }
+                    }
+                            
+                    var data = {review_id: parseInt(id), user_id: parseInt('{{$userID}}'), body: notes}
+                    xhr.send(JSON.stringify(data))
+                }
+                    
+            </script>
+            <footer class="uk-container uk-padding">
+                <div uk-grid>
+                    <div class="uk-width-1-1 uk-text-center">
+                        <img src="/static/assets/cchha.svg"
+                            style="max-height: 100px;"
+                            alt="Compassionate Care Home Health Agency Logo">
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s">
+                        <p class="uk-text-bold uk-heading-divider">Locations</p>
+                        <span>
+                            <img src="/static/assets/mapicon.png" style="max-width: 45px;">
+                        </span>
+                        <span style="padding: 5px;"></span>
+                        <span class="uk-text-bold">
+                            Fresno, California
+                        </span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">7545 N. Del Mar Ave, </span>
+                            <br><span class="uk-text-left">Suite 103, 104 & 204 </span>
+                            <br><span class="uk-text-right">Fresno, California </span>
+                            <br><span class="uk-text-right">93711</span>
+                            <br><span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span></div>
+                        <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Bakersfield,
+                            California</span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">5201 California Ave, </span>
+                            <br><span class="uk-text-left">Suite 255 </span>
+                            <br><span class="uk-text-right">Bakersfield, California </span>
+                            <br><span class="uk-text-right">93309</span>
+                            <br><span class="uk-text-right"><a href="tel:661-846-2833">1(661) 846-2833</a></span></div>
+                        <br><span><img src="/static/assets/mapicon.png" style="max-width: 45px;"></span><span style="padding: 5px;"></span><span class="uk-text-bold">Modesto,
+                            California
+                        </span>
+                        <br>
+                        <div style="padding-left:55px;"><span class="uk-text-right">1165 Scenic Drive,</span>
+                            <br><span class="uk-text-left">Suite C-1</span>
+                            <br><span class="uk-text-right">Modesto, California</span>
+                            <br><span class="uk-text-right">95350</span>
+                            <br><span class="uk-text-right"><a href="tel:209-622-1058">1(209) 622-1058</a> </span></div>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s">
+                        <br>
+                        <ul class="uk-list uk-text-meta">
+                            <li><span uk-icon="icon: clock"></span><span class="uk-padding-small uk-text-right">Office Hours: Monday - Friday, 8AM to 5PM</span></li>
+                            <li><span uk-icon="icon: comment"></span><span class="uk-padding-small uk-text-right">Referrals accepted 7 days a week</span></li>
+                            <li><span uk-icon="icon: phone"></span><span class="uk-padding-small">Phone: <a href="tel:559-432-2003">1(559) 432-2003</a></span></li>
+                            <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all referrals to: 1(559) 899-0967</span></li>
+                            <li><span uk-icon="icon: file"></span><span class="uk-padding-small">Fax all MD orders to: 1(877) 868-6528</span></li>
+                            <li><span uk-icon="icon: mail"></span><span class="uk-padding-small">Email: <a href="mailto:info@cchha.com">info@cchha.com</a></span></li>
+                            <li> <a
+                                    href="https://www.facebook.com/Compassionate-Care-Home-Health-Agency-1975186136031240/?__tn__=%2Cd%2CP-R&amp;eid=ARCKp7hOtHDDRD0Nr_ZBAj73umHxBCwXFsTwD9eemai1IOX6rLQ55Y6ivxE8wFiSEqEKlah4F-laj66D"><span
+                                        uk-icon="icon: facebook"> </span><span class="uk-padding-small">Facebook</span></a></li>
+                            <li> <a href="https://www.instagram.com/compassionatecarehh/"><span uk-icon="icon: instagram"></span><span class="uk-padding-small">Instagram</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="uk-width-1-3@m uk-width-1-1@s uk-text-center">
+                        <p class="uk-text-bold">We Believe in Compassionate Care</p>
+                        <p>We have been serving the Central Valley community for over fifteen years, and our commitment to providing the highest quality care shows in every patient we
+                            serve. Let us show you what compassionate care truly means.</p>
+                        <div uk-grid>
+
+                            <div class="uk-width-1-3@m uk-width-1-1@s">
+                                <a href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick" target="_blank"
+                                    rel="nofollow"><img src="https://seal-cencal.bbb.org/seals/blue-seal-120-61-bbb-89049202.png" style="border: 0;" alt="Compassionate Care Home Health
+                                        Agency, LLC BBB Business Review" /></a>
+                            </div>
+                            <div class="uk-width-1-3@m uk-width-1-1@s"><img src="/static/assets/ACHC-logo-65.png" style="margin-top:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </footer>
+        </div>
+    </body>
+</html>

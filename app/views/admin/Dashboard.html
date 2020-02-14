@@ -17,19 +17,27 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.min.js"></script> for phone numbers -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-    {{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.3/js/uikit.min.js"></script> */}}
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133675222-1"></script>
     <!-- forgin imports end -->
     <!-- local imports -->
     <link rel="icon" ype="image/png" href="/static/assets/favicon.png">
     <link rel="stylesheet" href="/static/css/admin-panel.css">
     <link rel="stylesheet" href="/static/css/stars.css">
+    
     <script type="text/javascript" src="/static/js/stars.js"></script>
     <link rel="stylesheet" href="/static/css/main.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
     
+
     <link rel="stylesheet" type="text/css" href="/static/css/ratingbar.css" />
-    <script type="text/javascript" src="/static/js/main.js"></script>
+
     <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
+    <script type="text/javascript" src="/static/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
+   
+    <link href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit-icons.js"></script>
     <!-- local imports end -->
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -113,96 +121,86 @@
       <div class="uk-width-1-1 uk-padding">
         <h1 class="uk-text-center uk-heading-line">{{if ne $count 0}}<span class="uk-badge" style="background: red;"> PENDING {{$count}}</span>
           {{else}}
-            No Pending Reviews
+          No Pending Reviews
           {{end}}
         </h1>
       </div>
-          {{if eq $count 0}}
-                <div class="uk-child-width-1-1@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
-                    <li>
-                        <div class="p1">
-                            <div class="uk-card uk-card-default uk-padding-small reviews">
-                                <div class="uk-card-body p2 uk-grid-match" uk-grid>
-                                    <h2 class="uk-text-lead uk-text-center@s uk-text-center"style="transform: capitilize">{{.Title}}</h2>
-                                    <p class="uk-text-lead uk-text-center@s uk-text-middle"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            {{end}}
-          <div class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
-          {{if ge $count 1}}
-            <div class="">
-              <ul class="uk-pagination">
-                  <li><a href="/bd-admin?limit=2&offset=2"><span uk-pagination-previous></span></a></li>
-                  <li><a href=""><span uk-pagination-next></span></a></li>
-              </ul>
-            </div>
+      <div class="uk-section-primary">
+        <div class="uk-align-center">
+          <ul class="uk-pagination">
+            <li><a href="/bd-admin?limit=2&offset=2"><span uk-pagination-previous></span></a></li>
+            <li><a href="/bd-admin?limit=2&offset=2"><span uk-pagination-next></span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      {{if le $count 1}}
+      <div class="uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
+        {{else}}
+        {{if le $count 0}}
+        <h1>No reviews Found!</h1>
+        {{end}}
+        <div class="uk-child-width-1-2@m p2 uk-grid-match" uk-grid>
+          {{end}}
           {{range .Data}}
-          <div class="p1">
-            <div class="uk-card uk-card-default uk-padding-small reviews">
-              <div class="uk-card-body p2" >
-                <span class="uk-badge" style="background: red;">PENDING</span>
-                <div class="145" id="lucus">
-                  <ul class="uk-iconnav uk-position-right" style="top: 10px; right: 15px;">
-                    <li>
-                      <div class="px1">
-                        <span id="heart-{{.Model.ID}}" uk-icon="icon: heart; ratio: 1" onClick="setDataFeatured('{{.Model.ID}}')" data-featured="{{.Featured}}"></span>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="px1">
-                        
-                          <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
-                            <a href="#modal-full-{{.Model.ID}}" uk-toggle></a>
-                          </span>
+          <div class="tag-{{.ExternalSiteName}}" uk-scrollspy="cls: uk-animation-scale-up uk-transform-origin-top-center; delay: 500; repeat: true">
+            <div class="uk-section-primary" style="height: 30px; border-top-left-radius:10px; border-top-right-radius: 10px; border-bottom: 1px solid rgba(0,0,0,0.2);">
+              <div>
+                <ul class="uk-iconnav" style="justify-content: flex-end; position: unset;">
+                  <li>
+                    <div class="px1">
+                      <span id="heart-{{.Model.ID}}" data-featured={{.Featured}}
+                        onClick="setDataFeatured({{.Model.ID}});"
+                        uk-icon="icon: heart; ratio: 1">
+                      </span>
+
+                    </div>
+                  </li>
+                  <li>
+                    <div class="px1">
+                      <a href="#modal-full-{{.Model.ID}}" style="color: rgba(225,225,225,0.8);" uk-toggle>
+                        <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
                         </a>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="px1">
-                        <span uk-icon="icon: close" onclick="rejection('{{.Model.ID}}')"></span>
-                      </div>
-                    </li>
-                  </ul>
-                
+                      </span>
+
+                    </div>
+                  </li>
+                  <li>
+                    <div class="px1">
+                      <span uk-icon="icon: close" onclick="rejection({{.Model.ID}})"></span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="uk-card uk-card-default uk-padding-small reviews" id="review-{{.Model.ID}}">
+              <div class="uk-card-body p2">
                 <script>
                     (function() {
                         let favorited = document.getElementById('heart-{{.Model.ID}}')
+                        console.log(favorited)
                             if (favorited.dataset.featured == "true") {
-                                favorited.childNodes[0].childNodes[1].setAttribute('fill', 'red')
+                                favorited.childNodes[1].childNodes[1].setAttribute('fill', 'red')
+                            } else {
+                              favorited.childNodes[1].childNodes[1].setAttribute('fill', 'white')
                             }
-                    }())
-                    document.addEventListener('DOMContentLoaded', star('{{.Rating}}',"#review-{{.Model.ID}}"))
+                      }())
+                    document.addEventListener('DOMContentLoaded', star('{{.Rating}}','#review-{{.Model.ID}}'))
                 </script>
+                <h3 class="h2" style="text-transform: capitalize;">{{if .Title }}{{.Title}}{{else}}Untitled{{end}}</h3>
+                <div>
+                  <p class="uk-text-muted uk-text-small">
+                    {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
+                  </p>
                 </div>
-                <div id="review-{{.Model.ID}}">
+                <p class="uk-custom">{{if .Username }}{{.Username}}{{else}}User Review{{end}}</p>
+                <p class="review-source uk-text-muted"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                <p class="truncate">{{.Body}}</p>
 
-                </div>
-                {{if $count }}
-                <h3 class="h2" style="text-transform: capitalize;">{{.Title}}</h3>
-                {{else}}
-                <h2 class="uk-text-lead uk-text-center@s uk-text-middle" style="text-transform: capitalize;">{{.Title}}</h2>
-                <p class="uk-text-lead uk-text-center@s uk-text-middle">Please
-                  Contact your System Administrator</p>
-                <br>
-                <p class="uk-text-lead uk-text-center@s uk-text-middle
-                  uk-text-meta review-source"><a href="mainto: admin@cchha.com">System
-                    Administrator</a></p>
-                {{end}}
-                <p class="uk-custom">{{.Username}}</p>
-                {{if ne .ExternalSiteName ""}}
-                  <p class="uk-text-meta review-source"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
-                  {{else}}
-                  <p class="uk-text-meta review-source"><a href="#"></href>No Referral</a></p>
-                  {{end}}
-                <p style="text-transform: capitalize;">{{.Body}}</p>
-                {{if $count }}
                 <div class="uk-flex">
-                  <button class="uk-button uk-button-default" uk-toggle="target: #rejectReview-{{.Model.ID}}" type="button">Reject</button>
-                  <button class="uk-button uk-button-default" uk-toggle="target: #approveReview-{{.Model.ID}}" type="button">Approve</button>
-                  {{end}}
+                  <button class="uk-button uk-button-danger mr1" uk-toggle="target: #rejectReview-{{.Model.ID}}" type="button" uk-tooltip="title: Reject Review; delay: 400;"><i class="fas fa-thumbs-down" ></i></button>
+                  <button class="uk-button-primary uk-button mr1" onClick="submitApproval('{{.Model.ID}}')" uk-tooltip="title: Approve Review; delay: 400;"><i class="fas fa-thumbs-up"></i></button>
                 </div>
               </div>
               <div class="uk-modal" id="rejectReview-{{.Model.ID}}" uk-modal>
@@ -220,309 +218,339 @@
                       <textarea class="uk-textarea" name="reasonForRejection" placeholder="short description of violation" rows="3"
                         style="resize:none;" id="rejectText-{{.Model.ID}}"></textarea>
                     </div>
-                    <p class="h2">Replay to {{.Username}}.</p>
-                    <hr>
-                    <form class="uk-form" id="rejectReview-email-{{.Model.ID}}"
-                      name="rejectReview-{{.Model.ID}}"
-                      action="/bd-admin/review/reject" method="post">
-                      <div class="uk-margin">
-                        <input class="uk-input" type="text" name="title" placeholder="title">
-                      </div>
-                      <textarea class="uk-textarea" placeholder="Email" rows="5"
-                        style="resize:none;" name="contact_body"
-                        id="replyText-{{.Model.ID}}"></textarea>
-                      <input type="hidden" value="{{.Email}}"
-                        name="contact_email" />
-                      <input type="hidden" value="{{.Username}}"
-                        name="contact_name" />
-                      <div class="uk-align-left uk-margin-top">
-                        <div class="g-recaptcha"
-                          data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv">
-                        </div>
-                      </div>
-                      <button class="uk-button uk-button-primary" type="submit" for="#rejectReview-email-{{.Model.ID}}">Reply<span uk-icon="icon:mail"></span></button>
-                    </form>
+                    <style>
+                      .ck-editor__editable_inline {
+                          min-height: 120px;
+                      }
+                      </style>
+                    <script>
+                      
+                      ClassicEditor
+                          .create( document.querySelector( '#rejectText-{{.Model.ID}}' ) )
+                          .catch( error => {
+                              console.error( error );
+                          } );
+                      </script>
+
                   </div>
                   <div class="uk-modal-footer">
-                    <span uk-icon="icon:minus-circle"></span>
-                    <button type="submit" class="uk-button-default uk-button"
+                    
+                    <button type="submit" class="uk-button-danger uk-button"
                       name="rejectReview-{{.Model.ID}}"
-                      onclick="rejection('{{ .Model.ID }}, #rejectText-{{.Model.ID}}')">Reject</button>
-                    <button class="uk-button uk-button-primary" type="submit" for="#rejectReview-{{.Model.ID}}">Reply<span uk-icon="icon:mail"></span></button>
+                      onclick="rejection('{{ .Model.ID }}', '#rejectText-{{.Model.ID}}')">Submit<span  uk-icon="icon:check" class="pl1"></span></button>
                   </div>
                 </div>
               </div>
-
-              <div class="uk-modal" id="deleteReview-{{.Model.ID}}" uk-modal>
-                <div class="uk-modal-dialog">
-                  <button class="uk-modal-close-default" type="button" uk-close></button>
+              <div id="modal-full-{{.Model.ID}}" class="uk-modal uk-modal-full" style="background: white;" uk-modal>
+                <div class="uk-modal-dialog uk-modal-body">
+                  <button type="button" class="uk-modal-close-default uk-close" uk-close></button>
                   <div class="uk-modal-header">
-                    <h2 class="uk-modal-title" style="text-transform: capitalize;">Review: {{.Title}}</h2>
+                    {{if not .Title }}
+                    <div class="uk-section-muted">
+                      <p class="uk-custom" style="display: none">Anonymous review</p>
+                    </div>
+                    {{else}}
+                      <h2 class="uk-text-capitalize uk-modal-title">{{.Title}}</h2>
+                    {{end}}
+                    <div>
+                      <p class="uk-text-muted uk-text-small pl1">
+                        {{ToDate .Model.CreatedAt}} {{ToTime .Model.CreatedAt}}
+                      </p>
+                    </div>
+                    
                   </div>
-                  <div class="uk-modal-body" style="border-radius: 50px;">
-                    <p>Reason for Deletion</p>
-                    <textarea class="uk-textarea" placeholder="Note about deletion" rows="5"
-                      style="resize:none;" name="note" id="deleteText"></textarea>
+
+                  
+
+                    <div class="uk-container">
+                      {{if eq .Username "Anonymous review"}}
+                      <div class="uk-section-muted">
+                        <p class="uk-custom">{{.Username}}</p>
+                      </div>
+                      {{else}}
+                      <div class="uk-section-muted">
+                        <p class="uk-custom" style="display: none;">Anonymous review</p>
+                      </div>
+                      {{end}}
+                      <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                      <div class="uk-section-muted">
+                        <div class="uk-section-default">
+                          <p>{{.Body}}</p>
+                        </div>
+                      </div>
+
+                      <p class="h2">Replay to {{if .Username }}{{.Username }}{{else}}User Review{{end}}</p>
+
+                      <hr>
+                      <form class="uk-form" id="reply-email-{{.Model.ID}}"
+                        name="reply-email-{{.Model.ID}}"
+                        action="/bd-admin/review/response" method="post">
+                        <div class="uk-margin">
+                          <input class="uk-input" type="text" name="title" placeholder="title">
+                        </div>
+                        <!-- <textarea rows="10" cols="80" name="contact_body-{{.Model.ID}}" id="contact_body-{{.Model.ID}}">
+                          This is my textarea to be replaced with CKEditor.
+                        </textarea> -->
+                        <div id="editor-{{.Model.ID}}">
+
+                        </div>
+
+                        <input type="hidden" value="{{.Email}}"
+                          name="contact_email" />
+                        <input type="hidden" value="{{.Username}}"
+                          name="contact_name" />
+                        <div class="uk-margin-top">
+                          <div class="g-recaptcha"
+                            data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv">
+                          </div>
+                        </div>
+                        <div class="uk-width1-1 pt2">
+                          <button class="uk-button uk-button-primary" type="submit" for="#reply-email-{{.Model.ID}}">Reply<span uk-icon="icon:mail"></span></button>
+                        </div>
+
+                      </form>
+                      <style>
+                        .ck-editor__editable_inline {
+                            min-height: 300px;
+                        }
+                        </style>
+                      <script>
+                        
+                        ClassicEditor
+                            .create( document.querySelector( '#editor-{{.Model.ID}}' ) )
+                            .catch( error => {
+                                console.error( error );
+                            } );
+                        </script>
+                        
+                  
+                    </div>
                   </div>
-                  <div class="uk-modal-footer">
-                    <div class="uk-section-muted uk-padding">
-                      <p class="uk-text-meta">By Checking the box below you
-                        agree to all terms and conditions.</p>
-                      <label class="checkboxes IsChecked" for="deleted">
-                        <input class="uk-checkbox checkboxForDelete"
-                          type="checkbox" name="deleted">
-                      </label>
-                      <button class="uk-button-danger uk-button uk-align-right" 
-                        onclick="deleteReview('{{.Model.ID}}, #deleteReview-{{.Model.ID}}')" disabled>
+                </div>
+                <div class="uk-modal" id="deleteReview-{{.Model.ID}}" uk-modal>
+                  <div class="uk-modal-dialog">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header">
+                      <h2 class="uk-modal-title" style="text-transform: capitalize;">Review: {{.Title}}</h2>
+                    </div>
+                    <div class="uk-modal-body" style="border-radius: 50px;">
+                      <p>Reason for Deletion</p>
+                      <textarea class="uk-textarea" placeholder="Note about deletion" rows="5"
+                        style="resize:none;" name="note" id="deleteText"></textarea>
+                    </div>
+                    <div class="uk-modal-footer">
+                      <div class="uk-section-muted uk-padding">
+                        <p class="uk-text-meta">By Checking the box below you
+                          agree to all terms and conditions.</p>
+                        <label class="checkboxes IsChecked" for="deleted">
+                          <input class="uk-checkbox checkboxForDelete"
+                            type="checkbox" name="deleted">
+                        </label>
+                        <button class="uk-button-danger uk-button uk-align-right"
+                          onclick="deleteReview('{{.Model.ID}}, #deleteReview-{{.Model.ID}}')" disabled>
                           <span uk-icon="icon: trash"></span>
                         </button>
 
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="uk-modal" id="approveReview-{{.Model.ID}}" uk-modal>
-                <div class="uk-modal-dialog">
-                  <button class="uk-modal-close-default" type="button"
-                    uk-close></button>
-                  <div class="uk-modal-header">
-                    <h2 class="uk-modal-title" style="text-transform: capitalize;">Review: {{.Title}}</h2>
-                    <p class="uk-text-meta">Customer Email: <span id="email">{{.Email}}</span></p>
-                    <p class="uk-text-meta">Customer Name: <span
-                        id="username">{{.Username}}</span></p>
-                    <div id="html_element"></div>
-                  </div>
-                  <div class="uk-modal-body">
-                    <p>Respond to customer Reviews.</p>
-                    <form class="uk-form" id="emailReply-{{.Model.ID}}"
-                      name="emailReply-{{.Model.ID}}"
-                      action="/bd-admin/review/response" method="post">
-                      <textarea class="uk-textarea" placeholder="Email"
-                        rows="5" style="resize:none;" name="contact_body"
-                        id="approvedText-{{.Model.ID}}"></textarea>
-                      <input type="hidden" value="{{.Email}}"
-                        name="contact_email" />
-                      <input type="hidden" value="{{.Username}}"
-                        name="contact_name" />
-                      <input type="hidden" value="{{$user}}"
-                        name="contact_sender" />
-                      <input type="hidden" value="{{$userPhone}}"
-                        name="contact_sender_phone" />
-                      <input type="hidden" value="{{$userTitle}}"
-                        name="contact_sender_title" />
-                      <div class="uk-align-left uk-margin-top">
-                        <div class="g-recaptcha"
-                          data-sitekey="6Ldyv7UUAAAAAC0uWC7PTIBdowvM2yhw4hmLI-Lv"></div>
+                        </div>
                       </div>
-                      <button type="submit" form="emailReply-{{.Model.ID}}"
-                        for="emailReply-{{.Model.ID}}" class="uk-button
-                        uk-button-default reply">Reply</button>
-                    </form>
-                  </div>
-                  <div class="uk-modal-footer">
-                    <div class="uk-padding">
-                      <button class="uk-button-default uk-button"
-                        onClick="submitApproval('{{.Model.ID}}')">Approve
-                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
             {{end}}
-          {{end}}
           </div>
-        </div>
-        <div class="uk-width-1-1 uk-padding">
-          <h1 class="uk-text-center uk-heading-line"><span>Add External Review</span></h1>
-        </div>
-        <div class="uk-flex-center uk-flex">
-          <form class="uk-padding uk-grid-small" uk-grid
-            action="/bd-admin/review/create" method="POST">
-            <div class="uk-width-1-1">
-              <div class="uk-flex uk-flex-center stars">
-                <input class="star starRating" type="checkbox" value="1"
-                  name="rating">
-                <input class="star starRating" type="checkbox" value="2"
-                  name="rating">
-                <input class="star starRating" type="checkbox" value="3"
-                  name="rating">
-                <input class="star starRating" type="checkbox" value="4"
-                  name="rating">
-                <input class="star starRating" type="checkbox" value="5"
-                  name="rating">
-              </div>
-              <br>
-            </div>
-            <div class="uk-width-1-2">
-              <div class="uk-inline uk-width-1-1">
-                <span class="uk-form-icon" uk-icon="icon: user"></span>
-                <input class="uk-input" type="text" placeholder="Full Name"
-                  name="review_name" required>
-              </div>
-            </div>
-            <div class="uk-width-1-2">
-              <div class="uk-inline uk-width-1-1">
-                <input class="uk-input" type="text" placeholder="External Site Name" name="external_site_name" required>
-              </div>
-            </div>
-            <div class="uk-width-1-1">
-              <div class="uk-inline uk-width-1-1">
-                <input class="uk-input" type="text" placeholder="External Site Link" name="external_site_link" required>
-              </div>
-            </div>
-            <div class="uk-width-1-1">
-              <div class="uk-inline uk-width-1-1">
-                <input class="uk-input" type="text" placeholder="Review Title"
-                  name="review_title">
-              </div>
-            </div>
-            <div class="uk-width-1-1">
-              <textarea class="uk-textarea" placeholder="Review" rows="5"
-                style="resize:none; overflow-x:hidden;" name="review_body"
-                required></textarea>
-            </div>
-            <div class="uk-width-1-3">
-              <input class="uk-input" type="submit">
-            </div>
-          </form>
-        </div>
-      </div>
 
-      <footer class="uk-container uk-padding">
-        <div class="uk-grid uk-width-1-1@m 467" uk-grid>
-          <div class="uk-width-1-1 uk-text-center">
-            <img src="/static/assets/cchha.svg" style="max-height: 100px;"
-              alt="Compassionate Care Home Health Agency Logo">
+          <div class="uk-width-1-1 uk-padding">
+            <h1 class="uk-text-center uk-heading-line"><span>Add External Review</span></h1>
           </div>
-          <div class="uk-width-1-3@m">
-            <p class="uk-text-bold uk-heading-divider">Locations</p>
-            <div uk-grid class="uk-grid">
+          <div class="uk-flex-center uk-flex">
+            <form class="uk-padding uk-grid-small" uk-grid
+              action="/bd-admin/review/create" method="POST">
+              <div class="uk-width-1-1">
+                <div class="uk-flex uk-flex-center stars">
+                  <input class="star starRating" type="checkbox" value="1"
+                    name="rating">
+                  <input class="star starRating" type="checkbox" value="2"
+                    name="rating">
+                  <input class="star starRating" type="checkbox" value="3"
+                    name="rating">
+                  <input class="star starRating" type="checkbox" value="4"
+                    name="rating">
+                  <input class="star starRating" type="checkbox" value="5"
+                    name="rating">
+                </div>
+                <br>
+              </div>
+              <div class="uk-width-1-2">
+                <div class="uk-inline uk-width-1-1">
+                  <span class="uk-form-icon" uk-icon="icon: user"></span>
+                  <input class="uk-input" type="text" placeholder="Full Name"
+                    name="review_name" required>
+                </div>
+              </div>
+              <div class="uk-width-1-2">
+                <div class="uk-inline uk-width-1-1">
+                  <input class="uk-input" type="text" placeholder="External Site Name" name="external_site_name" required>
+                </div>
+              </div>
+              <div class="uk-width-1-1">
+                <div class="uk-inline uk-width-1-1">
+                  <input class="uk-input" type="text" placeholder="External Site Link" name="external_site_link" required>
+                </div>
+              </div>
+              <div class="uk-width-1-1">
+                <div class="uk-inline uk-width-1-1">
+                  <input class="uk-input" type="text" placeholder="Review Title"
+                    name="review_title">
+                </div>
+              </div>
+              <div class="uk-width-1-1">
+                <textarea class="uk-textarea" placeholder="Review" rows="5"
+                  style="resize:none; overflow-x:hidden;" name="review_body"
+                  required></textarea>
+              </div>
+              <div class="uk-width-1-3">
+                <input class="uk-input" type="submit">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <footer class="uk-container uk-padding">
+          <div class="uk-grid uk-width-1-1@m 467" uk-grid>
+            <div class="uk-width-1-1 uk-text-center">
+              <img src="/static/assets/cchha.svg" style="max-height: 100px;"
+                alt="Compassionate Care Home Health Agency Logo">
+            </div>
+            <div class="uk-width-1-3@m">
+              <p class="uk-text-bold uk-heading-divider">Locations</p>
+              <div uk-grid class="uk-grid">
+                <div class="uk-width-1-1@m">
+                  <span>
+                    <img src="/static/assets/mapicon.png" style="max-width:
+                      45px;">
+                  </span>
+                  <span style="padding: 5px; margin-bottom: 20px;"
+                    class="uk-text-bold">Fresno, California</span>
+                  <div style="padding-left:55px;">
+                    <span class="uk-text-right">7545 N. Del Mar Ave, </span>
+                    <br>
+                    <span>Suite 103, 104 & 204 </span>
+                    <br>
+                    <span class="uk-text-right">Fresno, California </span>
+                    <br>
+                    <span class="uk-text-right">93711</span>
+                    <br>
+                    <span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span>
+                  </div>
+                </div>
+              </div>
               <div class="uk-width-1-1@m">
                 <span>
-                  <img src="/static/assets/mapicon.png" style="max-width:
-                    45px;">
+                  <img src="/static/assets/mapicon.png" style="max-width: 45px;">
                 </span>
                 <span style="padding: 5px; margin-bottom: 20px;"
-                  class="uk-text-bold">Fresno, California</span>
+                  class="uk-text-bold">Bakersfield, California</span>
                 <div style="padding-left:55px;">
-                  <span class="uk-text-right">7545 N. Del Mar Ave, </span>
+                  <span class="uk-text-right">5201 California Ave, </span>
                   <br>
-                  <span>Suite 103, 104 & 204 </span>
+                  <span>Suite 255 </span>
                   <br>
-                  <span class="uk-text-right">Fresno, California </span>
+                  <span class="uk-text-right">Bakersfield, California </span>
                   <br>
-                  <span class="uk-text-right">93711</span>
-                  <br>
-                  <span class="uk-text-right"><a href="tel:559-432-2003">1(559) 432-2003</a></span>
-                </div>
-              </div>
-            </div>
-            <div class="uk-width-1-1@m">
-              <span>
-                <img src="/static/assets/mapicon.png" style="max-width: 45px;">
-              </span>
-              <span style="padding: 5px; margin-bottom: 20px;"
-                class="uk-text-bold">Bakersfield, California</span>
-              <div style="padding-left:55px;">
-                <span class="uk-text-right">5201 California Ave, </span>
-                <br>
-                <span>Suite 255 </span>
-                <br>
-                <span class="uk-text-right">Bakersfield, California </span>
-                <br>
-                <span class="uk-text-right">93309</span>
-                <br>
-                <span class="uk-text-right">
-                  <a href="tel:661-846-2833">1(661) 846-2833</a>
-                </span>
-
-              </div>
-              <div class="uk-width-1-1@m">
-                <span><img src="/static/assets/mapicon.png" style="max-width:
-                    45px;"></span>
-                <span style="padding: 5px; margin-bottom: 20px;"
-                  class="uk-text-bold">Modesto, California </span>
-                <div style="padding-left:55px;">
-                  <span class="uk-text-right">1165 Scenic Drive,</span>
-                  <br>
-                  <span>Suite C-1</span>
-                  <br>
-                  <span class="uk-text-right">Modesto, California</span>
-                  <br>
-                  <span class="uk-text-right">95350</span>
+                  <span class="uk-text-right">93309</span>
                   <br>
                   <span class="uk-text-right">
-                    <a href="tel:209-622-1058">1(209) 622-1058</a>
+                    <a href="tel:661-846-2833">1(661) 846-2833</a>
                   </span>
+
+                </div>
+                <div class="uk-width-1-1@m">
+                  <span><img src="/static/assets/mapicon.png" style="max-width:
+                      45px;"></span>
+                  <span style="padding: 5px; margin-bottom: 20px;"
+                    class="uk-text-bold">Modesto, California </span>
+                  <div style="padding-left:55px;">
+                    <span class="uk-text-right">1165 Scenic Drive,</span>
+                    <br>
+                    <span>Suite C-1</span>
+                    <br>
+                    <span class="uk-text-right">Modesto, California</span>
+                    <br>
+                    <span class="uk-text-right">95350</span>
+                    <br>
+                    <span class="uk-text-right">
+                      <a href="tel:209-622-1058">1(209) 622-1058</a>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="uk-width-1-3@m uk-width-1-1@s">
-              <br>
-              <ul class="uk-list uk-text-meta">
-                <li><span uk-icon="icon: clock"></span><span
-                    class="uk-padding-small uk-text-right">Office Hours: Monday
-                    - Friday, 8AM to 5PM</span></li>
-                <li><span uk-icon="icon: comment"></span><span
-                    class="uk-padding-small uk-text-right">Referrals accepted 7
-                    days a week</span></li>
-                <li><span uk-icon="icon: phone"></span><span
-                    class="uk-padding-small">Phone: <a href="tel:559-432-2003">1(559)
-                      432-2003</a></span></li>
-                <li><span uk-icon="icon: file"></span><span
-                    class="uk-padding-small">Fax all referrals to: 1(559)
-                    899-0967</span></li>
-                <li><span uk-icon="icon: file"></span><span
-                    class="uk-padding-small">Fax all MD orders to: 1(877)
-                    868-6528</span></li>
-                <li><span uk-icon="icon: mail"></span><span
-                    class="uk-padding-small">Email: <a
-                      href="mailto:info@cchha.com">info@cchha.com</a></span></li>
-                <li> <a
-                    href="https://www.facebook.com/Compassionate-Care-Home-Health-Agency-1975186136031240/?__tn__=%2Cd%2CP-R&amp;eid=ARCKp7hOtHDDRD0Nr_ZBAj73umHxBCwXFsTwD9eemai1IOX6rLQ55Y6ivxE8wFiSEqEKlah4F-laj66D"><span
-                      uk-icon="icon: facebook"> </span><span
-                      class="uk-padding-small">Facebook</span></a></li>
-                <li> <a href="https://www.instagram.com/compassionatecarehh/"><span
-                      uk-icon="icon: instagram"></span><span
-                      class="uk-padding-small">Instagram</span></a></li>
-              </ul>
-            </div>
-            <div class="uk-width-1-3@m uk-width-1-1@s uk-text-center">
-              <p class="uk-text-bold">We Believe in Compassionate Care</p>
-              <p>
-                We have been serving the Central Valley community for over
-                fifteen years, and our commitment to providing the highest
-                quality care shows in every patient we serve. Let us show you
-                what compassionate care truly means.
-              </p>
-            </div>
-            <div uk-grid>
-              <div class="uk-width-1-3@m uk-width-1-1@s"><a
-                  href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick"
-                  target="_blank" rel="nofollow"><img
-                    src="https://seal-cencal.bbb.org/seals/blue-seal-120-61-bbb-89049202.png"
-                    style="border: 0;" alt="Compassionate Care Home Health
-                    Agency, LLC BBB Business Review" /></a>
+              <div class="uk-width-1-3@m uk-width-1-1@s">
+                <br>
+                <ul class="uk-list uk-text-meta">
+                  <li><span uk-icon="icon: clock"></span><span
+                      class="uk-padding-small uk-text-right">Office Hours: Monday
+                      - Friday, 8AM to 5PM</span></li>
+                  <li><span uk-icon="icon: comment"></span><span
+                      class="uk-padding-small uk-text-right">Referrals accepted 7
+                      days a week</span></li>
+                  <li><span uk-icon="icon: phone"></span><span
+                      class="uk-padding-small">Phone: <a href="tel:559-432-2003">1(559)
+                        432-2003</a></span></li>
+                  <li><span uk-icon="icon: file"></span><span
+                      class="uk-padding-small">Fax all referrals to: 1(559)
+                      899-0967</span></li>
+                  <li><span uk-icon="icon: file"></span><span
+                      class="uk-padding-small">Fax all MD orders to: 1(877)
+                      868-6528</span></li>
+                  <li><span uk-icon="icon: mail"></span><span
+                      class="uk-padding-small">Email: <a
+                        href="mailto:info@cchha.com">info@cchha.com</a></span></li>
+                  <li> <a
+                      href="https://www.facebook.com/Compassionate-Care-Home-Health-Agency-1975186136031240/?__tn__=%2Cd%2CP-R&amp;eid=ARCKp7hOtHDDRD0Nr_ZBAj73umHxBCwXFsTwD9eemai1IOX6rLQ55Y6ivxE8wFiSEqEKlah4F-laj66D"><span
+                        uk-icon="icon: facebook"> </span><span
+                        class="uk-padding-small">Facebook</span></a></li>
+                  <li> 
+                    <a href="https://www.instagram.com/compassionatecarehh/">
+                      <span uk-icon="icon: instagram"></span>
+                      
+                      <span class="uk-padding-small">Instagram</span>
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <div class="uk-width-1-3@m uk-width-1-1@s"><img
-                  src="/static/assets/ACHC-logo-65.png"
-                  style="margin-top:10px;">
+              <div class="uk-width-1-3@m uk-width-1-1@s uk-text-center">
+                <p class="uk-text-bold">We Believe in Compassionate Care</p>
+                <p>
+                  We have been serving the Central Valley community for over
+                  fifteen years, and our commitment to providing the highest
+                  quality care shows in every patient we serve. Let us show you
+                  what compassionate care truly means.
+                </p>
+              </div>
+              <div uk-grid>
+                <div class="uk-width-1-3@m uk-width-1-1@s">
+                  <a href="https://www.bbb.org/us/ca/fresno/profile/home-health-care/compassionate-care-home-health-agency-llc-1066-89049202/#sealclick"
+                      target="_blank" rel="nofollow">
+                    <img src="https://seal-cencal.bbb.org/seals/blue-seal-120-61-bbb-89049202.png" style="border: 0;" alt="Compassionate Care Home Health Agency, LLC BBB Business Review" />
+                  </a>
+                </div>
+                <div class="uk-width-1-3@m uk-width-1-1@s">
+                  <img src="/static/assets/ACHC-logo-65.png" style="margin-top:10px;">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </footer>
-            <script>
+        </footer>
+        <script>
           function setDataFeatured(id) {
             let featured = document.getElementById("heart-"+id)
             if (featured.dataset.featured == "false") {
-                featured.childNodes[0].childNodes[1].setAttribute('fill', 'red')
+                featured.childNodes[1].childNodes[0].setAttribute('fill', 'red')
                 featured.dataset.featured = true
             } else {
                 featured.dataset.featured = false
-                featured.childNodes[0].childNodes[1].setAttribute('fill', 'white')
+                featured.childNodes[1].childNodes[0].setAttribute('fill', 'white')
             }
                 featureReview(id ,featured.dataset.featured)
             } 
@@ -542,7 +570,7 @@
             }
                                       
             function submitApproval(id) {
-              let note = document.getElementById('"approveText-"'+'id').value
+            
               var xhr = new XMLHttpRequest(); 
               xhr.open("POST", "/bd-admin/review/approve", true)
               xhr.setRequestHeader("Content-Type", "application/json")

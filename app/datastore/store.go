@@ -25,3 +25,7 @@ func Connect() *gorm.DB {
 	}
 	return db
 }
+func (s *Store) Copy() Store {
+	_store := *s
+	return _store
+}

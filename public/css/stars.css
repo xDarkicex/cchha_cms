@@ -5,7 +5,7 @@ span.rating-bar svg{
 span.rating-bar svg > polygon {
   fill: rgb(237, 253, 5);
   
-  stroke: rgba(31, 30, 16, 0.507)!important;
+  stroke: rgba(31, 30, 16, 0.507);
   stroke-width: 1;
 }
 
@@ -43,7 +43,29 @@ span.rating-bar svg > polygon {
   
   
 }
-.bar-data {
+#review_scores td.bar-data {
   display: flex;
   flex-flow: row-reverse;
+  padding: 15px 5px;
+}
+#review_scores td.bar-data .rating {
+  white-space: nowrap;
+}
+
+.star-bar-small {
+  
+  margin-top: -20px;
+  margin-bottom: -20px;
+}
+
+.star-bar-small > span > svg {
+  width: 35px;
+  height: 35px;
+  
+}
+
+.star-bar-small > span > svg > polygon {
+  fill: #ff69b4;
+  stroke: white;
+  stroke-opacity: 1;
 }

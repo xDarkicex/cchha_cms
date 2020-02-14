@@ -24,3 +24,22 @@
 		}
 		b.WriteString(date[2])
 		return b.String()
+
+	<div class="uk-card uk-card-default" style="color: white;background: rgb(55,225,227);background: linear-gradient(230deg, rgba(55,225,227,1) 0%, rgba(107,123,251,1) 100%);"> </div>
+
+	<div class="uk-section-primary" style="height: 35px;background: #0F2027;  /* fallback for old browsers */background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */border-top-left-radius:10px;border-top-right-radius: 10px;border-bottom: 1px solid rgba(0,0,0,0.4);margin-top: -10px;"> </div>
+
+
+		<span class="uk-badge" style="
+    color: white;
+    width: 90px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: 30px;
+    border: 1px solid rgba(225,225,225,0.4);
+    background: rgb(11,17,61);
+    background: linear-gradient(0deg, rgba(11,17,61,0.3) 0%, rgba(55,211,220,0.2) 15%, rgba(11,17,61,0.5) 53%, rgba(55,211,220,1) 77%, rgba(11,17,61,0.3) 100%);
+    /* background: rgba(0,0,0,0.5); */
+    box-shadow: 0 0 7px 1px rgba(0,0,0,0.8);
+    ">Rejected</span>

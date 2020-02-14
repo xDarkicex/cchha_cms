@@ -18,11 +18,16 @@
         <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="/static/js/jquery.ratingbar.js"></script>
         <script type="text/javascript" src="/static/js/jquery.easing.1.3.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.0/dist/js/uikit-icons.min.js"></script>
+        
         <link rel="stylesheet" href="/static/css/main.css">
         <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
-        <script src="/static/js/main.js"></script>
-        <script src="/static/js/stars.js"></script>
+        <script src="/static/js/stars-reviews.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit-icons.js"></script>
+        
+        
+        
+        
         <!-- <script src="/static/js/animate.js"></script> -->
         <!-- Facebook Pixel Code -->
         <script>
@@ -109,49 +114,49 @@
             </div>
             <div class="uk-width-1-1">
                 <div>
-                    <h1 class="bold pl4 pt2"">Reviews</h1>
+                    <h1 class="uk-heading-line"><span>Reviews</span></h1>
                     <div class="pl4 pr4">
-                        <hr>
+                        {{/* <hr> */}}
                     </div>
                 </div>
             </div>
-            <div class="uk-width-1-1 pl2 pr2">
+            <div class="uk-width-1-1 pr2">
                 <!-- uk-animation-fade -->
                 <table id="review_scores" class="uk-table uk-table-hover mx-auto uk-animation-fade">
                     <caption><p class="uk-text-center" style="font-family:'Open Sans', sans-serif; margin: 0px;line-height: 30px;">{{.Calc.Avg}} Average Rating out of {{.Count}} reviews.</p></caption>
                     <tbody>
                         <tr onClick="window.location= '/home-health/reviews/5'">
-                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">5 Star</p></td>
+                            <td class="bar-data" style="line-height: 30px;"><p class="rating">5 Star</p></td>
                             <td id="calc5" class="review_ratings">{{.Calc.Percentages.Five}}</td>
                             <td>{{.Calc.Total.Five}}</td>
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/4'" style="line-height: 30px;">
-                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">4 Star</p></td>
+                            <td class="bar-data" style="line-height: 30px;"><p class="rating">4 Star</p></td>
                             <td id="calc4" class="review_ratings">{{.Calc.Percentages.Four}}</td>
                             <td>{{.Calc.Total.Five}}</td>
                             <!-- <td class="mrn4 pt1">{{.Calc.Percentages.Four}}</td> -->
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/3'" style="line-height: 30px;">
-                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">3 Star</p></td>
+                            <td class="bar-data" style="line-height: 30px;"><p class="rating">3 Star</p></td>
                             <td id="calc3" class="review_ratings">{{.Calc.Percentages.Three}}</td>
                             <td>{{.Calc.Total.Five}}</td>
                             
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/2'" style="line-height: 30px;">
-                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">2 Star</p></td>
+                            <td class="bar-data" style="line-height: 30px;"><p class="rating">2 Star</p></td>
                             <td id="calc2" class="review_ratings">{{.Calc.Percentages.Two}}</td>
                             <td>{{.Calc.Total.Two}}</td>
                         </tr>
                         <tr onClick="window.location= '/home-health/reviews/1'" style="line-height: 30px;">
-                            <td class="bar-data mxn2" style="line-height: 30px;"><p class="rating">1 Star</p></td>
+                            <td class="bar-data" style="line-height: 30px;"><p class="rating">1 Star</p></td>
                             <td id="calc1" class="review_ratings">{{.Calc.Percentages.One}}</td>
                             <td>{{.Calc.Total.One}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <div id="options" uk-filter="#js-filter">
+            
+            <div id="options" uk-filter="target: #js-filter">
                 <div style="padding-left: 40px;" class="uk-tile uk-tile-secondary">
                     <ul class="uk-subnav uk-subnav-pill">
                         <li class="uk-active" uk-filter-control>
@@ -204,9 +209,9 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+           
             {{if eq $count 0}}
-            <ul class="uk-child-width-1-1@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
+            <ul id="js-filter" class="uk-child-width-1-1@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
                 <li>
                     <div class="p1">
                         <div class="uk-card uk-card-default uk-padding-small reviews">
@@ -232,7 +237,7 @@
             {{if ge $count 1}}
             <ul id="js-filter" class="uk-child-width-1-2@m uk-child-width-1-1@m p2 uk-grid-match" uk-grid>
             {{range .Data}}
-                <li class="tag-{{.ExternalSiteName}}" uk-scrollspy="cls: uk-animation-scale-up uk-transform-origin-top-center; delay: 500; repeat: true">
+                <li class="tag-{{.ExternalSiteName}}" uk-scrollspy="cls: uk-animation-scale-up uk-animation-fade uk-transform-origin-top-center; delay: 500; repeat: true">
                     <div class="uk-section-primary uk-card-header" style="height: 20px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom: 1px solid rgba(0,0,0,0.2);">
                             <div class="flex items-start items-baseline uk-flex-column">
                             {{if $IsSuperUser }}
@@ -250,9 +255,9 @@
                                     <li>
                                         <div class="px1">
                                             
-                                                <span id="expand-{{.Model.ID}}" uk-icon="icon: expand">
-                                                <a href="#modal-full-{{.Model.ID}}" uk-toggle></a>
-                                                </span>
+                                                
+                                                <a href="#modal-full-{{.Model.ID}}" uk-toggle="target: #modal-full-{{.Model.ID}};" style="color: rgba(225,225,225, 0.8);"><span id="expand-{{.Model.ID}}" uk-icon="icon: expand"></span></a>
+                                                
                                            
                                         </div>
                                     </li>
@@ -265,19 +270,12 @@
                             </div>
                                     
                             {{end}}
+                            
                             </div>
                     </div>
                     <div class="uk-card uk-card-default uk-padding-small reviews" id="review-{{.Model.ID}}">
                         <div class="uk-card-body p2">
-                            <script>
-                                (function() {
-                                    let favorited = document.getElementById('heart-{{.Model.ID}}')
-                                        if (favorited.dataset.featured == "true") {
-                                            favorited.childNodes[1].childNodes[1].setAttribute('fill', 'red')
-                                        }
-                                }())
-                                document.addEventListener('DOMContentLoaded', star('{{.Rating}}','#review-{{.Model.ID}}'))
-                            </script>
+                            
                             <div class="flex items-start items-baseline uk-flex-column">
                                 {{if ne .Title ""}}
                                 <div>
@@ -294,17 +292,26 @@
                                     </p>
                                 </div>
                             </div>
-
+                            <script>
+                                (function() {
+                                    let favorited = document.getElementById('heart-{{.Model.ID}}')
+                                    
+                                        if (favorited.dataset.featured == "true") {
+                                            favorited.childNodes[1].childNodes[0].setAttribute('fill', 'red')
+                                        }
+                                }())
+                                document.addEventListener('DOMContentLoaded', star('{{.Rating}}','#review-{{.Model.ID}}'))
+                            </script>
                             {{if ne .Username ""}}
                             <p class="uk-custom">{{.Username}}</p>
                             {{else}}
-                            <p class="uk-custom" style="visibility: hidden;">Anonymous review</p>
+                            <p class="uk-custom" >Review</p>
                             {{end}}
 
                             {{if ne .ExternalSiteName ""}}
-                            <p class="uk-text-meta"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
+                            <p class="uk-text-meta review-source"><a href="{{.ExternalLink}}">{{.ExternalSiteName}}</a></p>
                             {{else}}
-                            <p class="uk-text-meta" style="visibility: hidden;">No Referral</p>
+                            <p class="uk-text-meta review-source" style="visibility: hidden;">No Referral</p>
                             {{end}}
                             <p class="truncate">{{.Body}}</p>
                                 <div class="uk-flex uk-flex-right">
@@ -388,6 +395,7 @@
             {{end}} <!-- range -->
 
             </ul>
+            </div>
             {{end}} <!-- if count > 1 -->
             <div class="uk-width-1-1 uk-padding">
                 <h1 class="uk-text-center uk-heading-line"><span>Leave Us A Review</span></h1>
@@ -536,7 +544,7 @@
                         $("#calc3 .ratingbar_wrapper_custom").attr('style', w)
                         $("#calc2 .ratingbar_wrapper_custom").attr('style', w)
                         $("#calc1 .ratingbar_wrapper_custom").attr('style', w)
-                        obj.ratingbar('update', config)
+                       update(w)
                         
                     })
                     // useless function
@@ -549,7 +557,7 @@
                             // textClass: "ratingbar_text_custom",
                             wrapperWidth: w,
                         }
-                        obj.ratingbar(config)
+                        obj.ratingbar('update', config)
                         }
 
                     function rejection(id) {
@@ -595,13 +603,13 @@
                 function setDataFeatured(id) {
                     console.log(id)
                     var featured = document.getElementById("heart-"+id)
-                    console.log(featured)
+                    
                     if (featured.dataset.featured == "false") {
-                        featured.childNodes[1].childNodes[1].setAttribute('fill', 'red')
+                        featured.childNodes[1].childNodes[0].setAttribute('fill', 'red')
                         featured.dataset.featured = "true"
                     } else {
                         featured.dataset.featured = "false"
-                        featured.childNodes[1].childNodes[1].setAttribute('fill', 'white')
+                        featured.childNodes[1].childNodes[0].setAttribute('fill', 'white')
                     }
                         featureReview(id ,featured.dataset.featured)
                 }                         

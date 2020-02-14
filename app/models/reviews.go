@@ -53,43 +53,50 @@ func GetSeedReviews() (details []Detail) {
 	return review.Details
 }
 
-func GetApprovedReviewsByUser(id uint) (reviews []Review) {
-	err := db.Preload("Details").Where("pending = ?", false).Where("user_id = ?", id).Order("rating desc").Find(&reviews).Error
+func GetReviewsByUser(id uint) (reviews []Review) {
+	var reviews_fav = []Review{}
+	var ordered_reviews = []Review{}
+	err := db.Debug().Preload("Details").Where("user_id = $1 and featured = $2", id, true).Order("featured desc").Find(&reviews_fav).Error
 	if err != nil {
 		pc, fn, line, _ := runtime.Caller(1)
 		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
 	}
+	err = db.Debug().Preload("Details").Where("user_id = $1 and featured = $2", id, false).Order("rating desc").Find(&ordered_reviews).Error
+	if err != nil {
+		pc, fn, line, _ := runtime.Caller(1)
+		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
+	}
+	reviews = append(reviews_fav, ordered_reviews...)
 	return reviews
 }
-
-// , id, db.Select("*").Table("reviews").Where("pending = ?", true).QueryExpr()).Row()
-// 	results := []Review{}
-// 	err := row.Scan(&results).Error
-// db.Debug().Where("pending = $1", true).Table("reviews").Find(&r)
-// 	db.Debug().Select("user_id, review_id, reviewer_id").Where("user_id = $1", id).Find(&result)
-// db.Debug().Table("reviews").Preload("Details").Where("user_id = $1 and reviews.pending = $2", id, true).Find(&r)
-// db.Debug().Table("review_details").Where("")
-// if err != nil {
-// 	pc, fn, line, _ := runtime.Caller(1)
-// 	log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
-// // }
-// err := db.Table("reviews").Preload("Details").Where("pending = ?", true).Where("details.user_id = ?", id).Order("rating desc").Find(&reviews).Error
 func GetRejectedReviewsByUser(id uint) (reviews []Review) {
-	// result := []Detail{}
-	// r := []Review{}
-
-	return nil
-	// return reviews
+	var r []Review
+	err := db.Preload("Details").Where("pending = $1 and user_id = $2", true, id).Order("rating desc").Find(&r).Error
+	if err != nil {
+		pc, fn, line, _ := runtime.Caller(1)
+		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
+	}
+	return r
 }
 
 func GetApprovedReviewsSorted(num int) (reviews []Review) {
 	ordered_reviews := []Review{}
-	err := db.Preload("Details").Where("rating = $1", num).Not("pending = $2", true).Order("rating desc").Find(&ordered_reviews).Error
+	ordered_reviews_2 := []Review{}
+
+	//second in array
+	err := db.Preload("Details").Where("rating = $1 AND pending = $2", num, false).Not("featured = ?", true).Order("rating desc").Find(&ordered_reviews).Error
 	if err != nil {
 		pc, fn, line, _ := runtime.Caller(1)
 		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
 	}
-	return ordered_reviews
+	// first value
+	err = db.Preload("Details").Where("featured = $1 AND rating = $2", true, num).Not("pending = $3", true).Order("rating desc").Find(&ordered_reviews_2).Error
+	if err != nil {
+		pc, fn, line, _ := runtime.Caller(1)
+		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
+	}
+	reviews = append(ordered_reviews_2, ordered_reviews...)
+	return reviews
 }
 
 func GetPendingReviews() (reviews []Review) {
@@ -123,7 +130,6 @@ func GetApprovedReviews() (reviews []Review) {
 		log.Printf("[error] in %s[%s:%d]\n %v\n", runtime.FuncForPC(pc).Name(), fn, line, err)
 	}
 	reviews = append(reviews_fav, ordered_reviews...)
-	spew.Dump(reviews)
 	return reviews
 }
 

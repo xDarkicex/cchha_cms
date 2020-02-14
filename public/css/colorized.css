@@ -1,0 +1,198 @@
+:root {
+  --faded-black: rgba(0,0,0,0.5);
+  --faded-white: rgba(255,255,255,0.5);
+  --google-green-light: #64FFDA;
+  --google-blue-light: #40C4FF;
+  --google-teal-light: #18FFFF;
+  --google-green: #1de9b6;
+  --google-green-secondary: #6effe8;
+  --google-yellow: #ffff8d;
+  --google-yellow-secondary: #ffffbf;
+  --google-red: #ff5252;
+  --google-burgandy: #930014;
+  --google-burgandy-secondary: #f99991;
+  --google-red-secondary: #ff867f;
+  --scale-on-hover: scale(1.04);
+
+}
+
+.uk-card-colorized {
+  color: white!important;
+  box-shadow: 0  0 15px 2px var(--faded-black);
+  color: var(--faded-black);
+  background: var(--google-green-light);
+  background: linear-gradient(-160deg, var(--google-green-light) 0%, var(--google-blue-light));
+}
+.uk-iconnav-colorized {
+  justify-content: flex-end;
+  padding: 5px;
+}
+
+.uk-button-favorited, .uk-button-expand, .uk-button-delete {
+  cursor: pointer;
+}
+.uk-button-accepted { 
+  color:var(--faded-black);
+  transition: all .2s linear;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 1px solid var(--faded-white);
+  
+  /* background: rgb(63,251,206); */
+  background: var(--google-green);
+}
+.uk-button-accepted:hover { 
+  color: var(--faded-black);
+  background: var(--google-green-light);
+  transform: var(--scale-on-hover);
+}
+.uk-button-feature { 
+  color:var(--faded-black);
+  transition: all .2s linear;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 1px solid var(--faded-white);
+  
+  /* background: rgb(63,251,206); */
+  background: var(--google-yellow);
+}
+.uk-button-feature:hover { 
+  color: var(--faded-black);
+  background: var(--google-yellow);
+  transform: var(--scale-on-hover);
+}
+
+.uk-button-rejected {
+  color:var(--faded-black);
+  transition: all .2s linear;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 1px solid var(--faded-white);
+  background: var(--google-red);
+  
+  /* background: rgb(63,251,206); */
+}
+.uk-button-rejected:hover {
+  color: var(--faded-black);
+  background: var(--google-red-secondary);
+  transform: var(--scale-on-hover);
+}
+
+.uk-button-expand {
+  color: var(--faded-black); 
+  transition: all .2s linear;
+  height: 25px; 
+  width: 25px; 
+  border-radius: 50%; 
+  border: 1px solid var(--faded-white); 
+  background: var(--google-yellow);
+}
+.uk-button-expand:hover {
+  color: var(--faded-black);
+  background: var(--google-yellow-secondary);
+  transform: var(--scale-on-hover);
+}
+
+.uk-button-delete {
+  color: var(--faded-black);
+  transition: all .2s linear;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 1px solid var(--faded-white);
+  background: var(--google-red);
+}
+.uk-button-delete:hover {
+  color: var(--faded-black);
+  background: var(--google-red-secondary);
+  transform: var(--scale-on-hover);
+}
+
+.uk-badge-colorized {
+  user-select: none; 
+  transition: all .2s linear;
+  color: white;
+
+  width: 90px;
+  height: 20px;
+  position: relative;
+  top: -65px;;
+  left: 0px;
+  border: 1px solid var(--faded-white);
+  
+  text-shadow: 0 0 2px 2px var(--faded-white);
+}
+
+.uk-badge {
+  background-color: transparent!important;
+}
+
+.uk-badge-accepted {
+  background: var(--google-blue-light)!important;
+}
+.uk-badge-rejected {
+  background: var(--google-red-secondary)!important;
+}
+
+.uk-badge-feature-on {
+  color: var(--faded-black);
+  background: var(--google-yellow)!important;
+}
+.uk-badge-feature-on:hover {
+  color: var(--faded-black);
+  background: var(--google-yellow)!important;
+}
+.uk-badge-feature-off {
+  color: var(--faded-white);
+  background: transparent!important;
+}
+.uk-badge-feature-off:hover {
+  color: var(--faded-white);
+  background: transparent!important;
+}
+
+.uk-badge-colorized:hover {
+  text-shadow: 0 0 20px rgba(0,0,0,0.5);
+  
+}
+.uk-badge-colorized-large { 
+  width: 170px; 
+}
+
+.uk-badge-featured {
+  height: 20px; 
+  width: 20px; 
+  top: 0;
+  border-radius: 50%; 
+  color: var(--faded-black)!important;
+  background: var(--google-red-secondary)!important;
+  left: 10px;
+}
+
+
+
+.uk-badge-featured:hover {
+  color: var(--google-yellow-secondary)!important;
+  transform: var(--scale-on-hover);
+}
+
+.uk-section-colorized {
+  height: 35px;
+  background: #0F2027;
+  background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);
+  background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: 1px solid var(--faded-black);
+  margin-top: -10px;
+}
+
+.uk-stars {
+  background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+  border: 1px solid rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px 2px rgba(0,0,0,0.3);
+  border-radius: 50px;
+}

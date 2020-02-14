@@ -46,12 +46,9 @@ ul {
   padding: 0;
 
 }
-
-.uk-parent > a {
-
-
+#options > div > ul > li {
+  border-bottom: 3px solid transparent;
 }
-
 span.uk-parent > a {
   color: white;
   text-decoration: none;

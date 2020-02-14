@@ -9,23 +9,25 @@ function star(rating, tag) {
       let INNER = div
       if (i < rating) {
         let el = document.createElement("span")
-        el.setAttribute('class', 'uk-icon ml2 rating-bar uk-animation-slide-left')
+        el.setAttribute('class', 'uk-icon mr1 rating-bar uk-animation-slide-left')
         el.setAttribute('uk-icon', 'star')
         INNER.appendChild(el);
       }
       else return
     }, i * ANIMATION_STAR_SPEED, i)
   }
-  t.prepend(div)
+  t.prepended(div)
 }
 
 
 document.addEventListener('DOMContentLoaded', function () {
   let reviews = document.querySelectorAll('.uk-card')
   reviews.forEach(review => {
-    let r = review.querySelector('.uk-card-body').querySelector('.uk-text-meta > a')
+    let temp = review.childNodes[2].querySelector('.review-source')
+    temp.classList.add("uk-link-reset")
+    var r = review.childNodes[2].querySelector('.review-source > a')
     if (r !== null) {
-      r.innerText = r.innerText.replace(/-/g, " ").toUpperCase()
+      r.innerHTML = r.innerHTML.replace(/-/g, " ").toUpperCase()
     }
 
   })

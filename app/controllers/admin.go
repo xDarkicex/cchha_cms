@@ -145,21 +145,10 @@ func (a Admin) Edit(w http.ResponseWriter, r *http.Request) {
 // Show ...
 func (a Admin) Show(w http.ResponseWriter, r *http.Request) {
 	s, _ := GetNamed(r, "current-session")
-	// userID := chi.URLParam(r, "userID")
-	// sql := fmt.Sprintf("id = '%s'", userID)
-	// exists, err := models.GetUser(sql)
-	// if err != nil {
-	// 	helpers.HandleError(errors.New(errors.Details(err)))
-	// }
 	user := helpers.GetCurrentUser("user-id", s)
-	// if exists.ID != user.ID {
-	// 	http.Redirect(w, r, "/", 302)
-	// 	return
-	// }
 
-	fmt.Println(user.ID, "<< in admin controller ===")
-	rejected := models.GetRejectedReviewsByUser(user.ID)
-	reviews := models.GetApprovedReviewsByUser(user.ID)
+	// rejected := models.GetRejectedReviewsByUser(user.ID
+	reviews := models.GetReviewsByUser(user.ID)
 
 	file, err := ioutil.ReadFile("./app/views/admin/show-user.html")
 	if err != nil {
@@ -168,16 +157,14 @@ func (a Admin) Show(w http.ResponseWriter, r *http.Request) {
 	}
 	t := template.Must(template.New("admin/show").Funcs(funcMAP).Parse(string(file)))
 	fmt.Println(reviews)
-	fmt.Println(rejected)
 	details := models.GetDetails()
 	s.Save(r, w)
 	err = t.Execute(w, map[string]interface{}{
-		"Title":    "Admin Profile",
-		"User":     user,
-		"Approved": reviews,
-		"Rejected": rejected,
-		"Notes":    details,
-		"Count":    len(reviews),
+		"Title":   "Admin Profile",
+		"User":    user,
+		"Reviews": reviews,
+		"Notes":   details,
+		"Count":   len(reviews),
 	})
 	if err != nil {
 		helpers.HandleError(err)

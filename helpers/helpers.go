@@ -10,7 +10,6 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	gs "github.com/gorilla/sessions"
 
 	elephant "github.com/xDarkicex/todos"
@@ -38,18 +37,16 @@ func SetCookie(name string, value interface{}, s *gs.Session) {
 }
 
 func GetCurrentUser(name string, s *gs.Session) models.User {
+	var user models.User
 	id, ok := s.Values[name].(uint)
 	if !ok {
 		HandleError(errors.NewForbidden(errors.New("unauthorized"), "Route Protected"))
 		return models.User{}
 	}
-	spew.Dump(s.Values)
-	fmt.Println(id)
 	user, err := models.GetUser(fmt.Sprintf("id = %d", id))
 	if err != nil {
 		fmt.Println(err, "<<<", "\n[cause]", errors.Cause(err), "\n[Details]", errors.Details(err), "\n[stack]", errors.ErrorStack(err))
-		// HandleError(err)
-		return models.User{}
+		return user
 	}
 	return user
 }
@@ -116,10 +113,6 @@ func HTTPS(w http.ResponseWriter, r *http.Request) {
 
 // IsEmpty will return true is key is nil
 func IsEmpty(key string) bool {
-	// if key == "" {
-	// 	return true
-	// }
-	// return false
 	return key == ""
 }
 
